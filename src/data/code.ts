@@ -1,5 +1,10 @@
 import { codeFileSchema, type CodeFile } from "@/types/content";
 import type { z } from "zod";
+import type { Lang } from "@/i18n/config";
+import { localizeById, localizeOne } from "@/i18n/localize";
+import { EN_CODE_FILES, EN_REPOSITORY_DESCRIPTIONS } from "@/data/en/code";
+import { EN_FIGURES } from "@/data/en/figures";
+import { FIGURES } from "./figures";
 import {
   RF_MODEL_EXCERPT,
   REMATING_MODEL_EXCERPT,
@@ -248,6 +253,17 @@ const RAW_CODE_FILES: z.input<typeof codeFileSchema>[] = [
 
 export const CODE_FILES: CodeFile[] = RAW_CODE_FILES.map((c) => codeFileSchema.parse(c));
 export const getCodeFile = (id: string) => CODE_FILES.find((c) => c.id === id);
+export const codeFilesIn = (lang: Lang) => localizeById(CODE_FILES, EN_CODE_FILES, lang);
+export const codeFileIn = (lang: Lang, id: string) => codeFilesIn(lang).find((c) => c.id === id);
+
+/** Thesis figures (alt text, captions) in a language. */
+export const figuresIn = (lang: Lang) => localizeById(FIGURES, EN_FIGURES, lang);
+export const figureIn = (lang: Lang, id?: string) => figuresIn(lang).find((f) => f.id === id);
+
+/** Repositories with their description in a language. */
+export function repositoriesIn(lang: Lang) {
+  return Object.values(REPOSITORIES).map((r) => localizeOne<{ name: string; url: string; description: string }>(r, { description: EN_REPOSITORY_DESCRIPTIONS[r.name] }, lang));
+}
 
 /** Thesis repository tree, by chapter folder (verbatim folder names). */
 export const THESIS_TREE = [

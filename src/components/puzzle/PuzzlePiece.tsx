@@ -1,7 +1,11 @@
-import Link from "next/link";
-import { BookOpen, FlaskConical, Microscope, Presentation, type LucideIcon } from "lucide-react";
+"use client";
+
+
+import Link from "@/i18n/Link";
+import { BrainCircuit, Bug, ChartScatter, ChartSpline, Cpu, Dna, Leaf, Network, Sigma, type LucideIcon } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
-import { a11y } from "@/i18n";
+import { copy } from "@/i18n/config";
+import { useA11y, useLang } from "@/i18n/client";
 import { ToolIcon } from "@/components/interactions/tool-icons";
 import { CELL, FAMILY_FILL, FLIGHT, delayFor } from "@/components/puzzle/constants";
 import type { PuzzleSlot } from "@/components/puzzle/board";
@@ -10,7 +14,18 @@ type PieceProps = { slot: PuzzleSlot; tools: number; dim: boolean; onHover: (id:
 
 /** Short on-piece labels; the caption always gives the full name. */
 const SHORT: Record<string, string> = { tensorflow: "TF / Keras", boosting: "XGB / LGBM" };
-const AXIS_ICON: Record<string, LucideIcon> = { recherche: Microscope, publications: BookOpen, projets: FlaskConical, transmettre: Presentation };
+const DOMAIN_ICON: Record<string, LucideIcon> = {
+  mathematiques: Sigma,
+  statistiques: ChartScatter,
+  biologie: Dna,
+  ecologie: Leaf,
+  populations: ChartSpline,
+  biocontrole: Bug,
+  modelisation: Network,
+  donnees: BrainCircuit,
+  calcul: Cpu,
+};
+const PROJECT = copy({ fr: ["Votre", "projet"], en: ["Your", "project"] });
 
 /** Content sits between the tab zones: icon in the middle band, label in the 67–79 band. */
 const ICON = { x: 34, y: 25, size: 32 };
@@ -53,21 +68,21 @@ export function PuzzlePiece({ slot, tools, dim, onHover }: PieceProps) {
       </Placed>
     );
   }
-  if (slot.kind === "axis") return <AxisPiece slot={slot} tools={tools} dim={dim} onHover={onHover} />;
+  if (slot.kind === "domain") return <DomainPiece slot={slot} tools={tools} dim={dim} onHover={onHover} />;
   return <ProjectPiece slot={slot} tools={tools} onHover={onHover} />;
 }
 
-function AxisPiece({ slot, tools, dim, onHover }: PieceProps) {
-  if (slot.kind !== "axis") return null;
+function DomainPiece({ slot, tools, dim, onHover }: PieceProps) {
+  if (slot.kind !== "domain") return null;
   const a = slot.item;
-  const Icon = AXIS_ICON[a.id] ?? BookOpen;
+  const Icon = DOMAIN_ICON[a.id] ?? Sigma;
   return (
     <Placed slot={slot} tools={tools} dim={dim}>
-      <Link href={a.href} className="pz-link" onPointerEnter={() => onHover(a.id)} onPointerLeave={() => onHover(null)} onFocus={() => onHover(a.id)} onBlur={() => onHover(null)}>
+      <Link href={a.href} aria-label={a.label} className="pz-link" onPointerEnter={() => onHover(a.id)} onPointerLeave={() => onHover(null)} onFocus={() => onHover(a.id)} onBlur={() => onHover(null)}>
         <path d={slot.path} className="pz-shape fill-stone" />
         <Icon x={ICON.x + 2} y={ICON.y + 1} width={28} height={28} strokeWidth={1.4} className="text-accent-deep" aria-hidden />
         <text x={50} y={LABEL_Y} textAnchor="middle" className="pz-axis">
-          {a.label}
+          {a.short}
         </text>
       </Link>
     </Placed>
@@ -76,14 +91,16 @@ function AxisPiece({ slot, tools, dim, onHover }: PieceProps) {
 
 /** The empty centre: the piece the visitor brings. */
 function ProjectPiece({ slot, tools, onHover }: Omit<PieceProps, "dim">) {
+  const a11y = useA11y();
+  const [first, second] = PROJECT[useLang()];
   return (
     <Placed slot={slot} tools={tools} dim={false}>
       <Link href="/contact" aria-label={a11y.votreProjet} className="pz-link pz-project" onPointerEnter={() => onHover("projet")} onPointerLeave={() => onHover(null)} onFocus={() => onHover("projet")} onBlur={() => onHover(null)}>
         <path d={slot.path} className="pz-slot" />
         <text x={50} y={47} textAnchor="middle" className="pz-project-text">
-          <tspan x={50}>Votre</tspan>
+          <tspan x={50}>{first}</tspan>
           <tspan x={50} dy={19}>
-            projet
+            {second}
           </tspan>
         </text>
       </Link>

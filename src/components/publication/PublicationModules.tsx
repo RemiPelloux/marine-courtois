@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import { ArrowRight } from "lucide-react";
 import { Equation } from "@/components/scientific/Equation";
 import { ModelExplorerSection } from "@/components/scientific/ModelExplorerSection";
@@ -7,11 +7,17 @@ import { FishAquarium } from "@/components/fish/FishAquarium";
 import { HollingExplorer } from "@/components/fish/HollingExplorer";
 import { FunctionalResponseData } from "@/components/fish/FunctionalResponseData";
 import { MediaFigure } from "@/components/ui/MediaFigure";
-import { getMedia } from "@/data/media";
+import { getMediaIn } from "@/data/media";
 import type { Depth } from "@/data/publication-depth";
+import { copy, type Lang } from "@/i18n/config";
 
-function Figures({ ids }: { ids: string[] }) {
-  const media = ids.map(getMedia).filter((m) => m !== undefined);
+const COPY = copy({
+  fr: { abm: "Le projet\u00a0: modèle individu-centré et application", fish: "Le projet\u00a0: données, scripts R et visualisations" },
+  en: { abm: "The project: individual-based model and app", fish: "The project: data, R scripts and visualisations" },
+});
+
+function Figures({ ids, lang }: { ids: string[]; lang: Lang }) {
+  const media = ids.map((id) => getMediaIn(lang, id)).filter((m) => m !== undefined);
   return (
     <div className="grid gap-8 md:grid-cols-2">
       {media.map((m) => (
@@ -30,11 +36,12 @@ function ProjectLink({ href, label }: { href: string; label: string }) {
 }
 
 /** The interactive pieces attached to each reading depth, by article. */
-export function modulesFor(module: Depth["module"]) {
+export function modulesFor(module: Depth["module"], lang: Lang) {
+  const t = COPY[lang];
   if (module === "rf") {
     return {
       understand: <ModelExplorerSection initialTab="fertilite" />,
-      deepen: <Figures ids={["fig-ch3-dynamics", "fig-ch3-sensitivity"]} />,
+      deepen: <Figures ids={["fig-ch3-dynamics", "fig-ch3-sensitivity"]} lang={lang} />,
     };
   }
   if (module === "abm") {
@@ -44,9 +51,9 @@ export function modulesFor(module: Depth["module"]) {
         <>
           <ModelExplorerSection initialTab="accouplements" />
           <div className="mt-12">
-            <Figures ids={["fig-ch4-abm", "fig-ch4-first-last"]} />
+            <Figures ids={["fig-ch4-abm", "fig-ch4-first-last"]} lang={lang} />
           </div>
-          <ProjectLink href="/projets/modele-individu-centre" label="Le projet : modèle individu-centré et application" />
+          <ProjectLink href="/projets/modele-individu-centre" label={t.abm} />
         </>
       ),
     };
@@ -57,8 +64,8 @@ export function modulesFor(module: Depth["module"]) {
     deepen: (
       <div className="space-y-14">
         <FunctionalResponseData />
-        <Figures ids={["jae-graphical-abstract"]} />
-        <ProjectLink href="/projets/reponses-fonctionnelles" label="Le projet : données, scripts R et visualisations" />
+        <Figures ids={["jae-graphical-abstract"]} lang={lang} />
+        <ProjectLink href="/projets/reponses-fonctionnelles" label={t.fish} />
       </div>
     ),
   };

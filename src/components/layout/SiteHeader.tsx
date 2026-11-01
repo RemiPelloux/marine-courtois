@@ -1,7 +1,6 @@
 "use client";
 
-import { a11y } from "@/i18n";
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
@@ -10,6 +9,9 @@ import { NAV_ITEMS, RESEARCHER } from "@/data/researcher";
 import { Monogram } from "@/components/ui/Monogram";
 import { cn } from "@/lib/utils/cn";
 import { ProtectedEmail } from "@/components/interactions/ProtectedEmail";
+import { LangSwitch } from "@/components/layout/LangSwitch";
+import { useA11y, useLang } from "@/i18n/client";
+import { frenchPath } from "@/i18n/paths";
 
 type NavItem = (typeof NAV_ITEMS)[number];
 
@@ -30,7 +32,7 @@ function useMobileMenu() {
 }
 
 function useIsActive() {
-  const pathname = usePathname();
+  const pathname = frenchPath(usePathname());
   return (item: NavItem) => item.match.some((m) => pathname === m || pathname.startsWith(`${m}/`));
 }
 
@@ -45,6 +47,7 @@ export function SiteHeader() {
         <HomeLink onNavigate={close} />
         <DesktopNav />
         <span className="hidden h-7 w-px bg-rule xl:block" aria-hidden />
+        <LangSwitch className="ml-auto xl:ml-0" />
         <ContactLink />
         <MenuToggle open={open} onToggle={() => setOpen((v) => !v)} />
       </div>
@@ -54,18 +57,20 @@ export function SiteHeader() {
 }
 
 function HomeLink({ onNavigate }: { onNavigate: () => void }) {
+  const lang = useLang();
+  const a11y = useA11y();
   return (
     <Link
       href="/"
-      className="group flex items-center gap-4"
-      aria-label={`${RESEARCHER.displayName} — accueil`}
+      className="group flex min-w-0 items-center gap-4"
+      aria-label={`${RESEARCHER.displayName} — ${a11y.accueil}`}
       onClick={onNavigate}
     >
-      <Monogram className="h-10 w-auto md:h-11" />
+      <Monogram className="h-10 w-auto shrink-0 md:h-11" />
       <span className="hidden h-9 w-px bg-rule sm:block" aria-hidden />
-      <span className="hidden flex-col sm:flex">
+      <span className="hidden min-w-0 flex-col whitespace-nowrap sm:flex">
         <span className="font-serif text-[1.45rem] leading-none">{RESEARCHER.displayName}</span>
-        <span className="label mt-1.5 text-xs text-ink/80">{RESEARCHER.discipline}</span>
+        <span className="label mt-1.5 truncate text-xs text-ink/80 xl:hidden">{RESEARCHER.discipline[lang]}</span>
       </span>
     </Link>
   );
@@ -73,9 +78,10 @@ function HomeLink({ onNavigate }: { onNavigate: () => void }) {
 
 function DesktopNav() {
   const isActive = useIsActive();
+  const a11y = useA11y();
   return (
     <nav aria-label={a11y.navigationPrincipale} className="ml-auto hidden xl:block">
-      <ul className="flex items-center gap-6 2xl:gap-8">
+      <ul className="flex items-center gap-5 2xl:gap-8">
         {NAV_ITEMS.map((item) => (
           <DesktopNavItem key={item.href} item={item} active={isActive(item)} />
         ))}
@@ -86,6 +92,7 @@ function DesktopNav() {
 
 function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
   const reduce = useReducedMotion();
+  const lang = useLang();
   return (
     <li className="relative">
       <Link
@@ -96,7 +103,7 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
           active ? "text-ink" : "text-ink/85",
         )}
       >
-        {item.label}
+        {item.label[lang]}
       </Link>
       {active && (
         <motion.span
@@ -113,7 +120,7 @@ function ContactLink() {
   return (
     <Link
       href="/contact"
-      className="group ml-auto hidden items-center gap-2 rounded-[3px] bg-ink px-4 py-2.5 font-serif text-[1.05rem] text-paper transition-colors hover:bg-accent-deep active:scale-[0.98] sm:inline-flex xl:ml-0"
+      className="group hidden items-center gap-2 rounded-[3px] bg-ink px-4 py-2.5 font-serif text-[1.05rem] text-paper transition-colors hover:bg-accent-deep active:scale-[0.98] sm:inline-flex"
     >
       Contact
       <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
@@ -122,13 +129,14 @@ function ContactLink() {
 }
 
 function MenuToggle({ open, onToggle }: { open: boolean; onToggle: () => void }) {
+  const a11y = useA11y();
   return (
     <button
       type="button"
-      className="ml-auto inline-flex size-11 items-center justify-center rounded-[3px] border border-ink/70 sm:ml-0 xl:hidden"
+      className="inline-flex size-11 items-center justify-center rounded-[3px] border border-ink/70 xl:hidden"
       aria-expanded={open}
       aria-controls="menu-mobile"
-      aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+      aria-label={open ? a11y.fermerMenu : a11y.ouvrirMenu}
       onClick={onToggle}
     >
       {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
@@ -138,6 +146,7 @@ function MenuToggle({ open, onToggle }: { open: boolean; onToggle: () => void })
 
 function MobileMenu({ open, onNavigate }: { open: boolean; onNavigate: () => void }) {
   const reduce = useReducedMotion();
+  const a11y = useA11y();
   return (
     <AnimatePresence>
       {open && (
@@ -161,6 +170,7 @@ function MobileMenu({ open, onNavigate }: { open: boolean; onNavigate: () => voi
 
 function MobileNavList({ onNavigate }: { onNavigate: () => void }) {
   const isActive = useIsActive();
+  const lang = useLang();
   return (
     <ul className="divide-y divide-rule border-y border-rule">
       {NAV_ITEMS.map((item, i) => (
@@ -172,7 +182,7 @@ function MobileNavList({ onNavigate }: { onNavigate: () => void }) {
             className="flex items-baseline gap-5 py-4"
           >
             <span className="tabular-nums text-xs text-accent-deep">{String(i + 1).padStart(2, "0")}</span>
-            <span className={cn("font-serif text-4xl", isActive(item) && "italic text-accent-deep")}>{item.label}</span>
+            <span className={cn("font-serif text-4xl", isActive(item) && "italic text-accent-deep")}>{item.label[lang]}</span>
           </Link>
         </li>
       ))}

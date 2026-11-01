@@ -1,6 +1,6 @@
 "use client";
 
-import { a11y } from "@/i18n";
+import { useA11y, useLang } from "@/i18n/client";
 import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cn } from "@/lib/utils/cn";
@@ -13,10 +13,10 @@ export type { ExplorerContent } from "./explorer/PanelLayout";
 
 export type ExplorerTab = "fertilite" | "accouplements" | "dynamique";
 
-const TABS: { id: ExplorerTab; label: string; n: string }[] = [
-  { id: "fertilite", label: "Fertilité résiduelle", n: "01" },
-  { id: "accouplements", label: "Accouplements multiples", n: "02" },
-  { id: "dynamique", label: "Dynamique des populations", n: "03" },
+const TABS: { id: ExplorerTab; label: { fr: string; en: string } }[] = [
+  { id: "fertilite", label: { fr: "Fertilité résiduelle", en: "Residual fertility" } },
+  { id: "accouplements", label: { fr: "Accouplements multiples", en: "Multiple mating" } },
+  { id: "dynamique", label: { fr: "Dynamique des populations", en: "Population dynamics" } },
 ];
 
 /** Deep link: /laboratoire#modele-fertilite | #modele-accouplements | #modele-dynamique */
@@ -64,6 +64,7 @@ function TabUnderline({ reduce }: { reduce: boolean | null }) {
 }
 
 function TabButton({ t, i, active, reduce, onSelect, onKey, setRef }: TabButtonProps) {
+  const lang = useLang();
   return (
     <button
       ref={setRef}
@@ -80,7 +81,7 @@ function TabButton({ t, i, active, reduce, onSelect, onKey, setRef }: TabButtonP
         active ? "text-paper" : "text-paper/60 hover:text-paper",
       )}
     >
-      <span className="font-serif text-2xl md:text-[1.7rem]">{t.label}</span>
+      <span className="font-serif text-2xl md:text-[1.7rem]">{t.label[lang]}</span>
       {active && <TabUnderline reduce={reduce} />}
     </button>
   );
@@ -101,6 +102,7 @@ function useTabKeyboard(setTab: (t: ExplorerTab) => void) {
 
 function ExplorerTabList({ tab, setTab, reduce }: { tab: ExplorerTab; setTab: (t: ExplorerTab) => void; reduce: boolean | null }) {
   const { refs, onKey } = useTabKeyboard(setTab);
+  const a11y = useA11y();
   return (
     <div role="tablist" aria-label={a11y.modeles} className="grid border-y border-paper/25 sm:grid-cols-3">
       {TABS.map((t, i) => (

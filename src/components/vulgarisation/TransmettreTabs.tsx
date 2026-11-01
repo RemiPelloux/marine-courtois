@@ -1,18 +1,27 @@
-import Link from "next/link";
-import { a11y } from "@/i18n";
+import Link from "@/i18n/Link";
+import { copy } from "@/i18n/config";
+import { getA11y, getLang } from "@/i18n/server";
 import { cn } from "@/lib/utils/cn";
 
-const TABS = [
-  { href: "/vulgarisation", label: "Vulgarisation" },
-  { href: "/enseignement", label: "Enseignement" },
-];
+const TABS = copy({
+  fr: [
+    { href: "/vulgarisation", label: "Vulgarisation" },
+    { href: "/enseignement", label: "Enseignement" },
+  ],
+  en: [
+    { href: "/vulgarisation", label: "Outreach" },
+    { href: "/enseignement", label: "Teaching" },
+  ],
+});
 
 /** "Transmettre" groups two pages; this bar switches between them. */
-export function TransmettreTabs({ current }: { current: "/vulgarisation" | "/enseignement" }) {
+export async function TransmettreTabs({ current }: { current: "/vulgarisation" | "/enseignement" }) {
+  const lang = await getLang();
+  const a11y = await getA11y();
   return (
     <nav aria-label={a11y.sousNavigationTransmettre} className="site-gutter mx-auto max-w-site">
       <ul className="flex gap-8 border-b border-ink/15">
-        {TABS.map((t) => (
+        {TABS[lang].map((t) => (
           <li key={t.href}>
             <Link
               href={t.href}

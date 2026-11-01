@@ -1,5 +1,8 @@
 import { capabilitySchema, toolSchema, type Capability, type Tool } from "@/types/content";
 import type { z } from "zod";
+import type { Lang } from "@/i18n/config";
+import { localizeById } from "@/i18n/localize";
+import { EN_CAPABILITIES, EN_TOOLS } from "@/data/en/tools";
 
 /**
  * Software actually imported in Marine's public notebooks and scripts
@@ -50,7 +53,7 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
     name: "Mesa",
     family: "calcul",
     role: "Cadre de modélisation individu-centrée (agents, ordonnanceur, collecte de données)",
-    evidence: ["script_ABM_batchrun.py"],
+    evidence: ["script_ABM_batchrun.py", "Notebook_ABM.ipynb"],
   },
   {
     id: "pandas",
@@ -81,7 +84,7 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
     name: "seaborn",
     family: "visualisation",
     role: "Visualisation des distributions de sorties du modèle individu-centré",
-    evidence: ["ABM_model_output.ipynb"],
+    evidence: ["ABM_model_output.ipynb", "Notebook_ABM.ipynb", "Appendix_Comparison_ABM_1.ipynb"],
   },
   {
     id: "python-control",
@@ -108,6 +111,7 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
 
 export const TOOLS: Tool[] = RAW_TOOLS.map((t) => toolSchema.parse(t));
 export const getTool = (id: string) => TOOLS.find((t) => t.id === id);
+export const toolsIn = (lang: Lang) => localizeById(TOOLS, EN_TOOLS, lang);
 
 const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
   {
@@ -120,6 +124,7 @@ const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
     evidenceLabel: "Article de modélisation mathématique, Bulletin of Mathematical Biology (2025)",
     publicationIds: ["pub-2025-residual-fertility"],
     researchSlugs: ["fertilite-residuelle", "technique-insecte-sterile"],
+    projectIds: ["modele-equations-differentielles"],
     toolIds: ["python", "sympy"],
     visual: "equations",
     links: [
@@ -135,8 +140,9 @@ const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
       "Étudier le comportement des modèles et les effets de paramètres importants sur les dynamiques des populations.",
     stage: "formaliser",
     evidenceLabel: "Recherches mathématiques sur la TIS et thèse de doctorat (chapitres 2 à 4)",
-    publicationIds: ["these-2025", "pub-2025-residual-fertility"],
-    researchSlugs: ["technique-insecte-sterile", "fertilite-residuelle"],
+    publicationIds: ["these-2025", "pub-2025-residual-fertility", "pub-2026-polyandry"],
+    researchSlugs: ["technique-insecte-sterile", "fertilite-residuelle", "accouplements-multiples"],
+    projectIds: ["modele-equations-differentielles", "explorateur-de-modeles"],
     toolIds: ["scipy", "sympy", "python-control"],
     visual: "phase",
     links: [
@@ -154,6 +160,7 @@ const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
     evidenceLabel: "Dépôt GitLab public de la thèse",
     publicationIds: ["these-2025"],
     researchSlugs: ["strategies-de-lachers", "fertilite-residuelle"],
+    projectIds: ["modele-equations-differentielles", "modele-individu-centre", "reproductibilite-these"],
     toolIds: ["python", "jupyter", "numpy", "scipy", "matplotlib", "pandas"],
     visual: "distribution",
     links: [{ label: "thesisData sur GitLab", url: "https://gitlab.com/marinecourtois/thesisData" }],
@@ -168,7 +175,8 @@ const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
     evidenceLabel: "Article PLOS Computational Biology (2026) et dépôt sit_remating_abm",
     publicationIds: ["pub-2026-polyandry"],
     researchSlugs: ["modelisation-individu-centree", "accouplements-multiples"],
-    toolIds: ["mesa", "numpy", "pandas", "seaborn"],
+    projectIds: ["modele-individu-centre"],
+    toolIds: ["python", "mesa", "numpy", "pandas", "seaborn"],
     visual: "agents",
     links: [
       { label: "Article (DOI)", url: "https://doi.org/10.1371/journal.pcbi.1014212" },
@@ -185,7 +193,8 @@ const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
     evidenceLabel: "Article Journal of Animal Ecology (2026) et analyse de sensibilité de la thèse",
     publicationIds: ["pub-2026-functional-response", "pub-2025-residual-fertility"],
     researchSlugs: ["ecologie-des-invasions", "fertilite-residuelle"],
-    toolIds: ["statsmodels", "scipy", "pandas"],
+    projectIds: ["reponses-fonctionnelles", "modele-equations-differentielles"],
+    toolIds: ["r", "statsmodels", "scipy", "pandas"],
     visual: "sensitivity",
     links: [
       { label: "Article (DOI)", url: "https://doi.org/10.1111/1365-2656.70232" },
@@ -201,7 +210,8 @@ const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
     evidenceLabel: "Dépôt de la thèse et jeux de données publiés",
     publicationIds: ["these-2025", "pub-2026-polyandry", "pub-2026-functional-response"],
     researchSlugs: ["modelisation-individu-centree", "ecologie-des-invasions"],
-    toolIds: ["gitlab", "jupyter", "python"],
+    projectIds: ["reproductibilite-these", "modele-individu-centre", "reponses-fonctionnelles"],
+    toolIds: ["gitlab", "jupyter", "python", "r"],
     visual: "repository",
     links: [
       { label: "thesisData", url: "https://gitlab.com/marinecourtois/thesisData" },
@@ -212,3 +222,4 @@ const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
 ];
 
 export const CAPABILITIES: Capability[] = RAW_CAPABILITIES.map((c) => capabilitySchema.parse(c));
+export const capabilitiesIn = (lang: Lang) => localizeById(CAPABILITIES, EN_CAPABILITIES, lang);

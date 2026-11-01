@@ -1,8 +1,5 @@
-/**
- * French UI strings (accessibility labels and interface text).
- * An English dictionary can be added as locales/en.ts with the same keys.
- */
-export const a11y = {
+/** French accessibility labels and interface strings. English mirrors these keys in en.ts. */
+export const fr = {
   indexDesPublications: "Index des publications",
   axesDeRecherche: "Axes de recherche",
   axesVoisins: "Axes voisins",
@@ -44,6 +41,10 @@ export const a11y = {
   mettreEnEvidenceLesOutils: "Mettre en évidence les outils",
   revealEmail: "Afficher l'adresse électronique",
   copyEmail: "Copier l'adresse électronique",
+  langue: "Langue",
+  ouvrirMenu: "Ouvrir le menu",
+  fermerMenu: "Fermer le menu",
+  accueil: "accueil",
 } as const;
 
-export type A11yKey = keyof typeof a11y;
+export type A11yKey = keyof typeof fr;

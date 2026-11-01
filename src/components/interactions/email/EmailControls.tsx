@@ -2,8 +2,14 @@
 
 import type { RefObject } from "react";
 import { Check, Copy, MousePointerClick } from "lucide-react";
-import { a11y } from "@/i18n";
+import { copy } from "@/i18n/config";
+import { useA11y, useLang } from "@/i18n/client";
 import { cn } from "@/lib/utils/cn";
+
+const COPY = copy({
+  fr: { show: "Cliquer pour afficher", copy: "Copier", copied: "Copiée" },
+  en: { show: "Click to show", copy: "Copy", copied: "Copied" },
+});
 
 interface Look {
   large: boolean;
@@ -12,6 +18,8 @@ interface Look {
 
 /** Full-surface trigger over the particle field, with its "click to show" tag in the corner. */
 export function RevealButton({ large, dark, onReveal }: Look & { onReveal: () => void }) {
+  const a11y = useA11y();
+  const t = COPY[useLang()];
   return (
     <button
       type="button"
@@ -27,7 +35,7 @@ export function RevealButton({ large, dark, onReveal }: Look & { onReveal: () =>
         )}
       >
         <MousePointerClick className={large ? "size-4" : "size-3.5"} aria-hidden />
-        Cliquer pour afficher
+        {t.show}
       </span>
     </button>
   );
@@ -67,6 +75,8 @@ interface CopyButtonProps {
 }
 
 function CopyButton({ buttonRef, done, copied, onCopy, dark }: CopyButtonProps) {
+  const a11y = useA11y();
+  const t = COPY[useLang()];
   return (
     <button
       ref={buttonRef}
@@ -80,7 +90,7 @@ function CopyButton({ buttonRef, done, copied, onCopy, dark }: CopyButtonProps) 
       )}
     >
       {copied ? <Check className="size-3.5" aria-hidden /> : <Copy className="size-3.5" aria-hidden />}
-      {copied ? "Copiée" : "Copier"}
+      {copied ? t.copied : t.copy}
     </button>
   );
 }

@@ -1,11 +1,43 @@
 "use client";
 
-import { a11y } from "@/i18n";
+import { copy } from "@/i18n/config";
+import { useA11y, useLang } from "@/i18n/client";
 import Image from "next/image";
 import { useMemo, useState, type ReactNode } from "react";
 import { ArrowUpRight, FileCode2, FileText, FolderClosed, Database, Archive } from "lucide-react";
 import type { CodeFile, Figure } from "@/types/content";
 import { cn } from "@/lib/utils/cn";
+
+const COPY = copy({
+  fr: {
+    title: "Explorateur de code",
+    open: "Ouvrir sur GitLab",
+    newTab: "(nouvel onglet)",
+    verbatim: "extrait verbatim",
+    excerptOf: (path: string) => `Extrait de ${path}`,
+    description: "Description",
+    thesis: "Thèse",
+    chapter: (n: number) => `Chapitre ${n}`,
+    kernel: "Noyau",
+    imports: "Bibliothèques importées",
+    noFigure: "Aucune figure exportée par cet extrait : ouvrez le fichier complet sur GitLab.",
+    figure: "Figure produite",
+  },
+  en: {
+    title: "Code explorer",
+    open: "Open on GitLab",
+    newTab: "(new tab)",
+    verbatim: "verbatim excerpt",
+    excerptOf: (path: string) => `Excerpt from ${path}`,
+    description: "Description",
+    thesis: "Thesis",
+    chapter: (n: number) => `Chapter ${n}`,
+    kernel: "Kernel",
+    imports: "Imported libraries",
+    noFigure: "No figure exported by this excerpt: open the full file on GitLab.",
+    figure: "Figure produced",
+  },
+});
 
 const KIND_ICON = { notebook: FileCode2, script: FileCode2, data: Database, document: FileText, archive: Archive };
 
@@ -58,6 +90,7 @@ export function CodeExplorer({ files, figures, fileUrls, repositories }: CodeExp
   const file = files.find((f) => f.id === active)!;
   const fig = figures.find((f) => f.id === file.figureIds[0]);
   const tree = useMemo(() => buildTree(files), [files]);
+  const a11y = useA11y();
 
   return (
     <div className="on-dark overflow-hidden rounded-[4px] border border-ink bg-antibes text-paper">
@@ -76,15 +109,16 @@ export function CodeExplorer({ files, figures, fileUrls, repositories }: CodeExp
 }
 
 function ExplorerBar({ file, url }: { file: CodeFile; url: string | undefined }) {
+  const t = COPY[useLang()];
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-paper/15 px-4 py-2.5">
-      <span className="label text-mist">Explorateur de code</span>
+      <span className="label text-mist">{t.title}</span>
       <span className="mono-meta truncate text-xs text-paper/70">
         {file.repository} / {file.path}
       </span>
       <a href={url} target="_blank" rel="noopener noreferrer" className="mono-meta ml-auto inline-flex items-center gap-1 py-1 text-xs text-paper underline underline-offset-4 hover:text-accent-light">
-        Ouvrir sur GitLab <ArrowUpRight className="size-3" aria-hidden />
-        <span className="sr-only">(nouvel onglet)</span>
+        {t.open} <ArrowUpRight className="size-3" aria-hidden />
+        <span className="sr-only">{t.newTab}</span>
       </a>
     </div>
   );
@@ -93,6 +127,7 @@ function ExplorerBar({ file, url }: { file: CodeFile; url: string | undefined })
 type NavState = { active: string; onSelect: (id: string) => void; fileUrls: Record<string, string> };
 
 function FileNavigator({ tree, nav }: { tree: [string, CodeFile[]][]; nav: NavState }) {
+  const a11y = useA11y();
   return (
     <nav aria-label={a11y.fichiersDesDepots} className="max-h-[34rem] overflow-y-auto border-b border-paper/15 p-3 lg:border-r lg:border-b-0">
       {tree.map(([folder, fs]) => (
@@ -153,15 +188,16 @@ function NavFileLink({ file: f, url }: { file: CodeFile; url: string | undefined
 }
 
 function CodeViewer({ file }: { file: CodeFile }) {
+  const t = COPY[useLang()];
   const lines = file.excerpt?.code.split("\n") ?? [];
   return (
     <div className="min-w-0 border-b border-paper/15 lg:border-b-0">
       <div className="flex items-baseline justify-between gap-3 border-b border-paper/10 px-4 py-2">
         <p className="font-serif text-lg">{file.excerpt?.label}</p>
-        <p className="mono-meta text-xs text-mist">extrait verbatim</p>
+        <p className="mono-meta text-xs text-mist">{t.verbatim}</p>
       </div>
       <div className="max-h-[30rem] overflow-auto">
-        <pre className="code-block p-4" tabIndex={0} aria-label={`Extrait de ${file.path}`}>
+        <pre className="code-block p-4" tabIndex={0} aria-label={t.excerptOf(file.path)}>
           <code>
             {lines.map((l, i) => (
               <span key={i} className="grid grid-cols-[2.2rem_1fr]">
@@ -180,33 +216,34 @@ function CodeViewer({ file }: { file: CodeFile }) {
 }
 
 function FileFacts({ file }: { file: CodeFile }) {
+  const t = COPY[useLang()];
   return (
     <dl className="space-y-3 text-sm">
       <div>
-        <dt className="label text-mist">Description</dt>
+        <dt className="label text-mist">{t.description}</dt>
         <dd className="mt-1 text-paper/85">{file.description}</dd>
       </div>
       {file.chapter && (
         <div>
-          <dt className="label text-mist">Thèse</dt>
-          <dd className="mt-1">Chapitre {file.chapter}</dd>
+          <dt className="label text-mist">{t.thesis}</dt>
+          <dd className="mt-1">{t.chapter(file.chapter)}</dd>
         </div>
       )}
       {file.pythonVersion && (
         <div>
-          <dt className="label text-mist">Noyau</dt>
+          <dt className="label text-mist">{t.kernel}</dt>
           <dd className="mt-1 font-mono text-xs">Python {file.pythonVersion}</dd>
         </div>
       )}
-      {file.imports.length > 0 && <ImportList imports={file.imports} />}
+      {file.imports.length > 0 && <ImportList imports={file.imports} label={t.imports} />}
     </dl>
   );
 }
 
-function ImportList({ imports }: { imports: string[] }) {
+function ImportList({ imports, label }: { imports: string[]; label: string }) {
   return (
     <div>
-      <dt className="label text-mist">Bibliothèques importées</dt>
+      <dt className="label text-mist">{label}</dt>
       <dd className="mt-1.5 flex flex-wrap gap-1.5">
         {imports.map((i) => (
           <span key={i} className="rounded-[2px] border border-paper/20 px-1.5 py-0.5 font-mono text-xs">
@@ -219,10 +256,11 @@ function ImportList({ imports }: { imports: string[] }) {
 }
 
 function FileFigure({ fig }: { fig: Figure | undefined }) {
-  if (!fig) return <p className="text-xs text-paper/60">Aucune figure exportée par cet extrait — ouvrez le fichier complet sur GitLab.</p>;
+  const t = COPY[useLang()];
+  if (!fig) return <p className="text-xs text-paper/60">{t.noFigure}</p>;
   return (
     <figure>
-      <p className="label mb-2 text-mist">Figure produite</p>
+      <p className="label mb-2 text-mist">{t.figure}</p>
       <div className="rounded-[2px] bg-paper p-1.5">
         <Image src={fig.src} alt={fig.alt} width={fig.width} height={fig.height} className="h-auto w-full" sizes="19rem" />
       </div>
@@ -232,6 +270,7 @@ function FileFigure({ fig }: { fig: Figure | undefined }) {
 }
 
 function RepositoryLinks({ repositories }: { repositories: Repository[] }) {
+  const t = COPY[useLang()];
   return (
     <div className="grid gap-px border-t border-paper/15 bg-paper/15 sm:grid-cols-2">
       {repositories.map((r) => (
@@ -241,6 +280,7 @@ function RepositoryLinks({ repositories }: { repositories: Repository[] }) {
             <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
           </p>
           <p className="mt-1 text-xs text-paper/70">{r.description}</p>
+          <span className="sr-only">{t.newTab}</span>
         </a>
       ))}
     </div>

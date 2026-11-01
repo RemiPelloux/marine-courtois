@@ -53,7 +53,7 @@ describe("career timeline geometry", () => {
 });
 
 describe("toolkit", () => {
-  const all = groupToolkit().flatMap((f) => f.tools);
+  const all = groupToolkit("fr").flatMap((f) => f.tools);
   it("includes every published-code tool and every declared tool exactly once", () => {
     expect(all).toHaveLength(TOOLS.length + DECLARED_TOOLS.length);
     expect(new Set(all.map((t) => t.id)).size).toBe(all.length);
@@ -74,7 +74,7 @@ describe("toolkit", () => {
 
 describe("Toolkit", () => {
   it("highlights the declared tools and dims the others", () => {
-    render(<Toolkit families={groupToolkit()} />);
+    render(<Toolkit families={groupToolkit("fr")} />);
     expect(screen.getByRole("status")).toHaveTextContent(`${TOOLS.length + DECLARED_TOOLS.length} outils`);
     const declared = screen.getByRole("button", { name: "Également utilisés" });
     fireEvent.click(declared);
@@ -85,7 +85,7 @@ describe("Toolkit", () => {
     expect(screen.getByTestId("tool-mysql")).toHaveAttribute("data-dim", "false");
   });
   it("returns to every tool at full strength", () => {
-    render(<Toolkit families={groupToolkit()} />);
+    render(<Toolkit families={groupToolkit("fr")} />);
     fireEvent.click(screen.getByRole("button", { name: "Dans le code publié" }));
     expect(screen.getByTestId("tool-power-bi")).toHaveAttribute("data-dim", "true");
     fireEvent.click(screen.getByRole("button", { name: "Tous" }));

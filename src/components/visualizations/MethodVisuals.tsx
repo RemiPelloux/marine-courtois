@@ -1,11 +1,33 @@
-import { a11y } from "@/i18n";
 import { scaleLinear, line } from "d3";
+import { copy, type Lang } from "@/i18n/config";
+import { a11yFor } from "@/i18n/locales";
 import { simulateRF } from "@/lib/scientific/residual-fertility";
 
 /**
  * Server-rendered method figures (no client JS). Data are computed at build
  * time from the ported models; paths draw in with CSS (disabled with reduced motion).
  */
+
+const COPY = copy({
+  fr: {
+    bifurcation: (sc: number) =>
+      `Diagramme de bifurcation : la branche stable d'équilibres positifs et la branche instable se rejoignent en un point nœud-col pour une densité de mâles stériles S_c ≈ ${sc} ; au-delà, seul l'équilibre nul subsiste.`,
+    stable: "stable",
+    unstable: "instable",
+    sigmaUnit: "σ (ind./j)",
+    half: "δ = 0,5 %",
+    one: "δ = 1 %",
+  },
+  en: {
+    bifurcation: (sc: number) =>
+      `Bifurcation diagram: the stable branch of positive equilibria and the unstable branch meet at a saddle-node point for a sterile male density S_c ≈ ${sc}; beyond it, only the zero equilibrium remains.`,
+    stable: "stable",
+    unstable: "unstable",
+    sigmaUnit: "σ (ind./day)",
+    half: "δ = 0.5 %",
+    one: "δ = 1 %",
+  },
+});
 
 const W = 420;
 const H = 280;
@@ -74,12 +96,13 @@ function plotScales(xMax: number, yMax: number) {
  * (thesisData, Chapter 2, fig_chapter2_thesis.ipynb): S(F) with r = 6, p = 0.5,
  * μF = μM = 0.5, β = 0.01.
  */
-export function BifurcationVisual({ className }: { className?: string }) {
+export function BifurcationVisual({ className, lang = "fr" }: { className?: string; lang?: Lang }) {
+  const t = COPY[lang];
   const { unstable, stable, fold } = bifurcationBranches();
   const Sc = fold[0];
   const { x, y, l } = plotScales(230, 520);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className={className} role="img" aria-label={`Diagramme de bifurcation : la branche stable d'équilibres positifs et la branche instable se rejoignent en un point nœud-col pour une densité de mâles stériles S_c ≈ ${Math.round(Sc)} ; au-delà, seul l'équilibre nul subsiste.`}>
+    <svg viewBox={`0 0 ${W} ${H}`} className={className} role="img" aria-label={t.bifurcation(Math.round(Sc))}>
       <Axes x={x} y={y} xLabel="S" yLabel="F*" xt={[0, 50, 100, 150, 200]} yt={[0, 250, 500]} />
       <path d={`M${x(0)},${y(0)}H${x(230)}`} stroke="currentColor" strokeWidth={2.4} />
       <path d={l(stable) ?? ""} fill="none" stroke="currentColor" strokeWidth={2} style={drawStyle(700)} className="motion-reduce:[animation:none]" />
@@ -90,17 +113,17 @@ export function BifurcationVisual({ className }: { className?: string }) {
         S_c
       </text>
       <g className="tabular-nums text-[10px]" fill="currentColor" fillOpacity={0.75}>
-        <text x={x(20)} y={y(470)}>stable</text>
-        <text x={x(110)} y={y(60)}>instable</text>
+        <text x={x(20)} y={y(470)}>{t.stable}</text>
+        <text x={x(110)} y={y(60)}>{t.unstable}</text>
       </g>
     </svg>
   );
 }
 
-const SCENARIO_STYLES = [
+const scenarioStyles = (lang: Lang) => [
   { dash: undefined, color: "currentColor", label: "δ = 0" },
-  { dash: "5 4", color: "var(--viz-accent)", label: "δ = 0,5 %" },
-  { dash: undefined, color: "var(--viz-accent)", label: "δ = 1 %" },
+  { dash: "5 4", color: "var(--viz-accent)", label: COPY[lang].half },
+  { dash: undefined, color: "var(--viz-accent)", label: COPY[lang].one },
 ];
 
 /** Female density after 300 days against σ, one curve per residual-fertility level δ. */
@@ -120,32 +143,33 @@ function scenarioCurves() {
  * female density after 300 days as a function of release intensity σ, for
  * three levels of cost-free residual fertility δ.
  */
-export function ScenarioComparisonVisual({ className }: { className?: string }) {
+export function ScenarioComparisonVisual({ className, lang = "fr" }: { className?: string; lang?: Lang }) {
+  const styles = scenarioStyles(lang);
   const curves = scenarioCurves();
   const { x, y, l } = plotScales(5000, 1000);
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className={className} role="img" aria-label={a11y.scenarioComparisonChart}>
-      <Axes x={x} y={y} xLabel="σ (ind./j)" yLabel="F(300)" xt={[0, 2500, 5000]} yt={[0, 500, 1000]} />
+    <svg viewBox={`0 0 ${W} ${H}`} className={className} role="img" aria-label={a11yFor(lang).scenarioComparisonChart}>
+      <Axes x={x} y={y} xLabel={COPY[lang].sigmaUnit} yLabel="F(300)" xt={[0, 2500, 5000]} yt={[0, 500, 1000]} />
       {curves.map((c, i) => (
         <path
           key={i}
           d={l(c) ?? ""}
           fill="none"
-          style={{ stroke: SCENARIO_STYLES[i].color, ...(SCENARIO_STYLES[i].dash ? {} : drawStyle(900, i * 0.3)) }}
+          style={{ stroke: styles[i].color, ...(styles[i].dash ? {} : drawStyle(900, i * 0.3)) }}
           strokeWidth={i === 0 ? 1.8 : 2}
-          strokeDasharray={SCENARIO_STYLES[i].dash}
+          strokeDasharray={styles[i].dash}
           className="motion-reduce:[animation:none]"
         />
       ))}
-      <ScenarioLegend />
+      <ScenarioLegend styles={styles} />
     </svg>
   );
 }
 
-function ScenarioLegend() {
+function ScenarioLegend({ styles }: { styles: ReturnType<typeof scenarioStyles> }) {
   return (
     <g className="tabular-nums text-[10px]">
-      {SCENARIO_STYLES.map((s, i) => (
+      {styles.map((s, i) => (
         <g key={s.label} transform={`translate(${W - M.right - 92},${M.top + 10 + i * 16})`}>
           <path d="M0,0H18" style={{ stroke: s.color }} strokeWidth={2} strokeDasharray={s.dash} />
           <text x={24} dy="0.35em" fill="currentColor">

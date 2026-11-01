@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import { ArrowRight } from "lucide-react";
 import { onScroll } from "animejs";
 import { useRef, ViewTransition, type CSSProperties } from "react";
-import { a11y } from "@/i18n";
+import { copy } from "@/i18n/config";
+import { useLang } from "@/i18n/client";
+import { SpeciesText } from "@/components/ui/Species";
 import type { RailFigure, RailItem } from "@/data/research-rail";
 import { useAnimeScope } from "@/hooks/useAnimeScope";
 
@@ -21,6 +23,23 @@ export function railShift(count: number): number {
 }
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
+
+const COPY = copy({
+  fr: {
+    label: "Les travaux en figures",
+    axis: (letter: string) => `Axe ${letter}`,
+    read: "Lire le détail",
+    colon: "\u00a0:",
+    figure: "Figure de la thèse",
+  },
+  en: {
+    label: "The work in figures",
+    axis: (letter: string) => `Area ${letter}`,
+    read: "Read the detail",
+    colon: ":",
+    figure: "Thesis figure",
+  },
+});
 
 /**
  * Vertical scroll drives the track sideways while the viewport stays pinned.
@@ -76,13 +95,14 @@ function railRenderer({ track, bar, counter, figures }: RailParts, count: number
 
 export function ResearchRail({ items, headingLevel = "h3" }: { items: RailItem[]; headingLevel?: "h2" | "h3" }) {
   const root = useRef<HTMLElement>(null);
+  const t = COPY[useLang()];
   useAnimeScope(root, pinRail);
   return (
-    <section ref={root} aria-label={a11y.axesDeRecherche} data-count={items.length} className="rail" style={{ "--rail-n": items.length } as CSSProperties}>
+    <section ref={root} aria-label={t.label} data-count={items.length} className="rail" style={{ "--rail-n": items.length } as CSSProperties}>
       <div className="rail-viewport">
         <ol className="rail-track">
-          {items.map((t) => (
-            <RailPanel key={t.slug} t={t} H={headingLevel} />
+          {items.map((item) => (
+            <RailPanel key={item.slug} t={item} H={headingLevel} />
           ))}
         </ol>
         <div className="rail-meter site-gutter" aria-hidden>
@@ -99,44 +119,55 @@ export function ResearchRail({ items, headingLevel = "h3" }: { items: RailItem[]
 }
 
 function RailPanel({ t, H }: { t: RailItem; H: "h2" | "h3" }) {
+  const c = COPY[useLang()];
   return (
     <li className="rail-panel">
       <div className="flex min-w-0 flex-col">
-        <span className="font-serif text-[3.4rem] leading-none text-accent-deep italic tabular-nums" aria-hidden>
-          {t.index}
-        </span>
+        <p className="flex items-baseline gap-4">
+          <span className="font-serif text-[3.4rem] leading-none text-accent-deep italic" aria-hidden>
+            {t.axis}
+          </span>
+          <span className="sr-only">{c.axis(t.axis)}</span>
+          <span className="mono-meta text-muted">{t.sources}</span>
+        </p>
         <H className="mt-6 font-serif text-title">
           <ViewTransition name={`research-${t.slug}`} share="morph" default="none">
             <span className="inline-block">{t.title}</span>
           </ViewTransition>
         </H>
         <p className="mt-2 text-muted">{t.short}</p>
-        <p className="mt-6 max-w-[46ch] leading-relaxed text-ink/85">{t.lede}</p>
-        <p className="mono-meta mt-5 text-muted">{t.sources}</p>
+        <p className="mt-6 max-w-[46ch] leading-relaxed text-ink/85">
+          <SpeciesText text={t.lede} />
+        </p>
         <Link href={`/recherche/${t.slug}`} className="group mt-8 inline-flex items-center gap-2 self-start font-serif text-xl hover:text-accent-deep">
-          Lire l&apos;axe <span className="sr-only">: {t.title}</span>
+          {c.read}
+          <span className="sr-only">
+            {c.colon} {t.title}
+          </span>
           <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
         </Link>
       </div>
-      {t.figure && <RailFigureView figure={t.figure} />}
+      {t.figure && <RailFigureView figure={t.figure} caption={c.figure} />}
     </li>
   );
 }
 
-function RailFigureView({ figure }: { figure: RailFigure }) {
+function RailFigureView({ figure, caption }: { figure: RailFigure; caption: string }) {
   return (
     <figure className="plate min-w-0">
       <div className="overflow-hidden bg-white p-4">
-      <Image
-        src={figure.src}
-        width={figure.width}
-        height={figure.height}
-        alt={figure.alt}
-        sizes="(min-width: 1024px) 30vw, 100vw"
-        className="rail-figure plate-img h-auto max-h-[48vh] w-full object-contain"
-      />
+        <Image
+          src={figure.src}
+          width={figure.width}
+          height={figure.height}
+          alt={figure.alt}
+          sizes="(min-width: 1024px) 30vw, 100vw"
+          className="rail-figure plate-img h-auto max-h-[48vh] w-full object-contain"
+        />
       </div>
-      <figcaption className="mono-meta mt-2 text-muted">Figure de la thèse — {figure.notebook.split("/").pop()}</figcaption>
+      <figcaption className="mono-meta mt-2 text-muted">
+        {caption} — {figure.notebook.split("/").pop()}
+      </figcaption>
     </figure>
   );
 }

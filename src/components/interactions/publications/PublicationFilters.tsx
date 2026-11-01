@@ -1,8 +1,40 @@
 "use client";
 
-import { a11y } from "@/i18n";
 import type { Publication } from "@/types/content";
 import { TYPE_LABEL } from "@/components/interactions/publications/PublicationEntries";
+import { copy } from "@/i18n/config";
+import { useA11y, useLang } from "@/i18n/client";
+
+const COPY = copy({
+  fr: {
+    search: "Recherche",
+    year: "Année",
+    allYears: "Toutes",
+    type: "Type",
+    allTypes: "Tous",
+    theme: "Thème",
+    allThemes: "Tous les thèmes",
+    order: "Tri",
+    newest: "Plus récentes",
+    oldest: "Plus anciennes",
+    results: (n: number) => `${n} résultat${n > 1 ? "s" : ""}`,
+    clear: "Effacer les filtres",
+  },
+  en: {
+    search: "Search",
+    year: "Year",
+    allYears: "All",
+    type: "Type",
+    allTypes: "All",
+    theme: "Theme",
+    allThemes: "All themes",
+    order: "Order",
+    newest: "Newest first",
+    oldest: "Oldest first",
+    results: (n: number) => `${n} result${n > 1 ? "s" : ""}`,
+    clear: "Clear filters",
+  },
+});
 
 export type Filters = { year: number | "all"; type: Publication["publicationType"] | "all"; theme: string; query: string; order: "desc" | "asc" };
 export type FilterOptions = { years: number[]; types: Publication["publicationType"][]; themes: string[] };
@@ -23,10 +55,13 @@ type FiltersProps = {
 };
 
 export function PublicationFilters({ options, filters, update, count }: FiltersProps) {
+  const lang = useLang();
+  const a11y = useA11y();
+  const t = COPY[lang];
   return (
     <form className="mb-10 flex flex-col gap-4 border-y border-ink py-4 sm:flex-row sm:flex-wrap sm:items-end" onSubmit={(e) => e.preventDefault()} aria-label={a11y.filtrerLesPublications}>
       <label className="grid min-w-0 flex-1 gap-1.5 sm:min-w-[14rem]">
-        <span className="label text-muted">Recherche</span>
+        <span className="label text-muted">{t.search}</span>
         <input
           type="search"
           value={filters.query}
@@ -35,22 +70,22 @@ export function PublicationFilters({ options, filters, update, count }: FiltersP
           className="min-h-11 rounded-[3px] border border-ink/60 bg-paper px-3 text-sm"
         />
       </label>
-      <FilterSelect label="Année" allLabel="Toutes" value={filters.year} options={options.years.map((y) => ({ value: y, label: y }))} onChange={(v) => update({ year: v === "all" ? "all" : Number(v) })} />
-      <FilterSelect label="Type" allLabel="Tous" value={filters.type} options={options.types.map((t) => ({ value: t, label: TYPE_LABEL[t] }))} onChange={(v) => update({ type: v as Filters["type"] })} />
-      <FilterSelect label="Thème" allLabel="Tous les thèmes" value={filters.theme} options={options.themes.map((t) => ({ value: t, label: t }))} onChange={(v) => update({ theme: v })} />
+      <FilterSelect label={t.year} allLabel={t.allYears} value={filters.year} options={options.years.map((y) => ({ value: y, label: y }))} onChange={(v) => update({ year: v === "all" ? "all" : Number(v) })} />
+      <FilterSelect label={t.type} allLabel={t.allTypes} value={filters.type} options={options.types.map((type) => ({ value: type, label: TYPE_LABEL[lang][type] }))} onChange={(v) => update({ type: v as Filters["type"] })} />
+      <FilterSelect label={t.theme} allLabel={t.allThemes} value={filters.theme} options={options.themes.map((theme) => ({ value: theme, label: theme }))} onChange={(v) => update({ theme: v })} />
       <label className="grid gap-1.5">
-        <span className="label text-muted">Tri</span>
+        <span className="label text-muted">{t.order}</span>
         <select className={SELECT_CLS} value={filters.order} onChange={(e) => update({ order: e.target.value as Filters["order"] })}>
-          <option value="desc">Plus récentes</option>
-          <option value="asc">Plus anciennes</option>
+          <option value="desc">{t.newest}</option>
+          <option value="asc">{t.oldest}</option>
         </select>
       </label>
       <p className="mono-meta text-muted sm:ml-auto sm:self-center" role="status" aria-live="polite">
-        {count} résultat{count > 1 ? "s" : ""}
+        {t.results(count)}
       </p>
       {isFiltering(filters) && (
         <button type="button" className="min-h-11 self-start rounded-[3px] px-3 text-sm underline underline-offset-4 sm:self-auto" onClick={() => update(NO_FILTER)}>
-          Effacer les filtres
+          {t.clear}
         </button>
       )}
     </form>

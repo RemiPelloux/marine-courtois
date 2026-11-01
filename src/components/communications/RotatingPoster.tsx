@@ -2,6 +2,13 @@
 
 import { useState } from "react";
 import { RotateCw } from "lucide-react";
+import { copy } from "@/i18n/config";
+import { useLang } from "@/i18n/client";
+
+const COPY = copy({
+  fr: { caption: "Schéma du principe : un support imprimé à disques rotatifs. Photos du poster à venir.", turn: "Faire tourner" },
+  en: { caption: "Diagram of the principle: a printed board with rotating discs. Photos of the poster to come.", turn: "Turn the discs" },
+});
 
 /**
  * Schematic of the idea behind the JFSMA 2024 poster: printed panels with
@@ -9,6 +16,7 @@ import { RotateCw } from "lucide-react";
  */
 export function RotatingPoster() {
   const [turns, setTurns] = useState(0);
+  const t = COPY[useLang()];
   return (
     <figure>
       <div className="relative mx-auto max-w-sm">
@@ -24,13 +32,13 @@ export function RotatingPoster() {
         </svg>
       </div>
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <figcaption className="text-xs text-mist">Schéma du principe : un support imprimé à disques rotatifs. Photos du poster à venir.</figcaption>
+        <figcaption className="text-xs text-mist">{t.caption}</figcaption>
         <button
           type="button"
           onClick={() => setTurns((t) => t + 1)}
           className="inline-flex min-h-10 items-center gap-2 rounded-[3px] border border-paper/40 px-3 text-sm text-paper hover:bg-paper hover:text-antibes"
         >
-          <RotateCw className="size-4" aria-hidden /> Faire tourner
+          <RotateCw className="size-4" aria-hidden /> {t.turn}
         </button>
       </div>
     </figure>

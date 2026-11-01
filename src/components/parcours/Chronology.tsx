@@ -1,62 +1,62 @@
-import Link from "next/link";
-import { EXPERIENCE_KIND_LABEL } from "@/data/experiences";
-import { orderedExperiences } from "@/components/parcours/board";
-import { formatDateFr } from "@/lib/utils/format";
+import Link from "@/i18n/Link";
+import { copy } from "@/i18n/config";
+import { getLang } from "@/i18n/server";
+import { EXPERIENCE_KIND_LABEL, experiencesIn } from "@/data/experiences";
+import { SpeciesText } from "@/components/ui/Species";
+import { formatDate } from "@/lib/utils/format";
 import type { Experience } from "@/types/portfolio";
 
-/** The same pieces as the leaf, as a plain chronological list: readable without the puzzle. */
-export function Chronology({ list }: { list: Experience[] }) {
-  const ordered = orderedExperiences(list);
-  const dated = ordered.filter((e) => e.date);
-  const skills = ordered.filter((e) => !e.date);
+const COPY = copy({ fr: { newTab: "(nouvel onglet)" }, en: { newTab: "(opens in a new tab)" } });
+
+/** Dated career events, oldest first. */
+export function datedExperiences(list: Experience[]) {
+  return list.filter((e) => e.date).sort((a, b) => a.date!.localeCompare(b.date!));
+}
+
+/** Dated career events (talks, articles, defence…) by year, each with its source. */
+export async function Chronology() {
+  const lang = await getLang();
+  const dated = datedExperiences(experiencesIn(lang));
   const years = [...new Set(dated.map((e) => e.date!.slice(0, 4)))];
   return (
-    <div className="grid gap-12 lg:grid-cols-12">
-      <ol className="space-y-10 lg:col-span-8">
-        {years.map((y) => (
-          <li key={y} className="grid gap-4 border-t border-ink pt-4 sm:grid-cols-[6rem_1fr]">
-            <p className="font-serif text-4xl leading-none tabular-nums">{y}</p>
-            <ul className="space-y-4">
-              {dated.filter((e) => e.date!.startsWith(y)).map((e) => (
-                <li key={e.id}>
-                  <EntryTitle e={e} />
-                  <p className="text-sm text-muted">
-                    {EXPERIENCE_KIND_LABEL[e.kind]} · {formatDateFr(e.date!)}
-                    {e.place ? ` · ${e.place}` : ""}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </li>
-        ))}
-      </ol>
-      <div className="lg:col-span-4">
-        <h3 className="border-t border-ink pt-4 font-serif text-2xl">Compétences construites</h3>
-        <ul className="mt-4 space-y-4">
-          {skills.map((e) => (
-            <li key={e.id}>
-              <EntryTitle e={e} />
-              <p className="text-sm text-muted">{e.detail}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
+    <ol className="max-w-4xl space-y-10">
+      {years.map((y) => (
+        <li key={y} className="grid gap-4 border-t border-ink pt-4 sm:grid-cols-[6rem_1fr]">
+          <p className="font-serif text-4xl leading-none tabular-nums">{y}</p>
+          <ul className="space-y-4">
+            {dated.filter((e) => e.date!.startsWith(y)).map((e) => (
+              <li key={e.id}>
+                <EntryTitle e={e} newTab={COPY[lang].newTab} />
+                <p className="text-sm text-muted">
+                  {EXPERIENCE_KIND_LABEL[e.kind][lang]} · {formatDate(e.date!, lang)}
+                  {e.place ? ` · ${e.place}` : ""}
+                </p>
+                <p className="mt-1 max-w-2xl text-[0.95rem] leading-relaxed text-ink/80">
+                  <SpeciesText text={e.detail} />
+                </p>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ol>
   );
 }
 
-function EntryTitle({ e }: { e: Experience }) {
-  if (!e.href) return <p className="font-serif text-xl leading-snug">{e.title}</p>;
+function EntryTitle({ e, newTab }: { e: Experience; newTab: string }) {
+  const cls = "font-serif text-xl leading-snug";
+  const title = <SpeciesText text={e.title} />;
+  if (!e.href) return <p className={cls}>{title}</p>;
   if (e.href.startsWith("http")) {
     return (
-      <a href={e.href} target="_blank" rel="noopener noreferrer" className="font-serif text-xl leading-snug hover:text-accent-deep">
-        {e.title} <span className="sr-only">(nouvel onglet)</span>
+      <a href={e.href} target="_blank" rel="noopener noreferrer" className={`${cls} hover:text-accent-deep`}>
+        {title} <span className="sr-only">{newTab}</span>
       </a>
     );
   }
   return (
-    <Link href={e.href} className="font-serif text-xl leading-snug hover:text-accent-deep">
-      {e.title}
+    <Link href={e.href} className={`${cls} hover:text-accent-deep`}>
+      {title}
     </Link>
   );
 }

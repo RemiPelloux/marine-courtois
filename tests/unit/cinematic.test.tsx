@@ -12,11 +12,14 @@ vi.mock("next/image", () => ({
 
 describe("research rail data", () => {
   const items = researchRailItems();
-  it("has one panel per research theme, in order", () => {
+  it("has one panel per detail page, in order, each labelled by its axis", () => {
     expect(items.map((i) => i.slug)).toEqual(RESEARCH_THEMES.map((t) => t.slug));
+    expect(new Set(items.map((i) => i.axis))).toEqual(new Set(["A", "B"]));
   });
-  it("names the publications behind each theme", () => {
-    expect(items[0].sources).toContain("Thèse 2025");
+  it("names the thesis chapter and articles behind each figure", () => {
+    expect(items[0].sources).toMatch(/^Thèse, chapitre 2 · /);
+    expect(items.find((i) => i.slug === "fertilite-residuelle")?.sources).toBe("Thèse, chapitre 3 · Bulletin of Mathematical Biology 2025");
+    expect(researchRailItems("en")[0].sources).toMatch(/^Thesis, chapter 2 · /);
   });
   it("leaves a theme without a thesis figure figureless rather than borrowing one", () => {
     const invasions = items.find((i) => i.slug === "ecologie-des-invasions");
@@ -47,7 +50,7 @@ describe("publicationPreviews", () => {
 describe("cinematic components without motion", () => {
   it("renders every rail panel with a link to its theme page", () => {
     render(<ResearchRail items={researchRailItems()} />);
-    expect(screen.getAllByRole("link", { name: /Lire l'axe/ })).toHaveLength(RESEARCH_THEMES.length);
+    expect(screen.getAllByRole("link", { name: /Lire le détail/ })).toHaveLength(RESEARCH_THEMES.length);
     expect(screen.getByRole("link", { name: /Fertilité résiduelle/ })).toHaveAttribute("href", "/recherche/fertilite-residuelle");
   });
   it("keeps a scrubbed statement readable as one sentence", () => {

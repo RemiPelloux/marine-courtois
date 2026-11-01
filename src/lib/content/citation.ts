@@ -1,4 +1,7 @@
 import type { Publication } from "@/types/content";
+import type { Lang } from "@/i18n/config";
+
+const THESIS_LABEL: Record<Lang, string> = { fr: "Thèse de doctorat", en: "PhD thesis" };
 
 /**
  * Bibliographic exports for the publication pages: BibTeX and a readable
@@ -55,10 +58,11 @@ function apaName(full: string) {
   return `${family}, ${initials}`;
 }
 
-export function formatReference(p: Publication): string {
+/** Readable reference; only the word for "thesis" depends on the language. */
+export function formatReference(p: Publication, lang: Lang = "fr"): string {
   const names = p.authors.map(apaName);
   const authors = names.length > 1 ? `${names.slice(0, -1).join(", ")}, & ${names.at(-1)}` : names[0];
-  const where = p.publicationType === "these" ? "Thèse de doctorat, Université Côte d'Azur" : [p.journal, p.volume, p.pages].filter(Boolean).join(", ");
+  const where = p.publicationType === "these" ? `${THESIS_LABEL[lang]}, Université Côte d'Azur` : [p.journal, p.volume, p.pages].filter(Boolean).join(", ");
   const doi = p.doi ? ` https://doi.org/${p.doi}` : "";
   return `${authors} (${p.year}). ${p.title}. ${where}.${doi}`;
 }

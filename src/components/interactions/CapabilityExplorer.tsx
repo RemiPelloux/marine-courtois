@@ -1,26 +1,55 @@
 "use client";
 
-import { a11y } from "@/i18n";
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
+import { copy } from "@/i18n/config";
+import { useA11y, useLang } from "@/i18n/client";
+import { SpeciesText } from "@/components/ui/Species";
 import type { Capability, Publication, ResearchTheme, Tool } from "@/types/content";
 import { cn } from "@/lib/utils/cn";
 
-const STAGE_LABEL: Record<Capability["stage"], string> = {
-  formaliser: "Formaliser",
-  simuler: "Simuler",
-  interpreter: "Interpréter",
-  partager: "Partager",
-};
+const COPY = copy({
+  fr: {
+    stage: { formaliser: "Formaliser", simuler: "Simuler", interpreter: "Interpréter", partager: "Partager" } as Record<Capability["stage"], string>,
+    stagePrefix: "Étape : ",
+    evidence: "Preuve",
+    publications: "Publications liées",
+    thesis: "Thèse de doctorat (2025)",
+    research: "Recherche associée",
+    projects: "Projets où elle est mobilisée",
+    tools: "Outils vérifiés dans le code",
+    newTab: "(nouvel onglet)",
+  },
+  en: {
+    stage: { formaliser: "Formalise", simuler: "Simulate", interpreter: "Interpret", partager: "Share" },
+    stagePrefix: "Stage: ",
+    evidence: "Evidence",
+    publications: "Related publications",
+    thesis: "Doctoral thesis (2025)",
+    research: "Related research",
+    projects: "Projects where it is put to work",
+    tools: "Tools verified in the code",
+    newTab: "(new tab)",
+  },
+});
+
+type Text = (typeof COPY)["fr"];
+
+/** A public project, already in the page language. */
+export type CapabilityProject = { id: string; slug: string; title: string };
 
 type CapabilitySources = {
   publications: Publication[];
   research: ResearchTheme[];
   tools: Tool[];
+  projects: CapabilityProject[];
   visuals: Record<Capability["visual"], ReactNode>;
 };
+
+const pickAll = <T,>(ids: string[], items: T[], key: (item: T) => string) =>
+  ids.map((id) => items.find((it) => key(it) === id)).filter((x): x is T => x !== undefined);
 
 export function CapabilityExplorer({ capabilities, ...sources }: CapabilitySources & { capabilities: Capability[] }) {
   const [active, setActive] = useState(capabilities[0].id);
@@ -40,6 +69,8 @@ export function CapabilityExplorer({ capabilities, ...sources }: CapabilitySourc
 }
 
 function CapabilityList({ capabilities, active, onSelect }: { capabilities: Capability[]; active: string; onSelect: (id: string) => void }) {
+  const a11y = useA11y();
+  const t = COPY[useLang()];
   return (
     <ul className="divide-y divide-rule border-y border-ink" aria-label={a11y.competencesScientifiques}>
       {capabilities.map((c) => {
@@ -55,7 +86,7 @@ function CapabilityList({ capabilities, active, onSelect }: { capabilities: Capa
             >
               <span className="flex-1">
                 <span className={cn("block font-serif text-[1.45rem] leading-tight", on && "italic")}>{c.title}</span>
-                <span className="mt-1 block text-xs text-muted">{STAGE_LABEL[c.stage]}</span>
+                <span className="mt-1 block text-xs text-muted">{t.stage[c.stage]}</span>
               </span>
               <span className={cn("size-2 self-center rounded-full transition-colors", on ? "bg-accent" : "bg-transparent")} aria-hidden />
             </button>
@@ -66,11 +97,15 @@ function CapabilityList({ capabilities, active, onSelect }: { capabilities: Capa
   );
 }
 
-function CapabilityPanel({ capability: cap, publications, research, tools, visuals }: CapabilitySources & { capability: Capability }) {
+function CapabilityPanel({ capability: cap, publications, research, tools, projects, visuals }: CapabilitySources & { capability: Capability }) {
   const reduce = useReducedMotion();
-  const pubs = cap.publicationIds.map((id) => publications.find((p) => p.id === id)).filter(Boolean) as Publication[];
-  const themes = cap.researchSlugs.map((s) => research.find((r) => r.slug === s)).filter(Boolean) as ResearchTheme[];
-  const capTools = cap.toolIds.map((id) => tools.find((t) => t.id === id)).filter(Boolean) as Tool[];
+  const t = COPY[useLang()];
+  const linked = {
+    publications: pickAll(cap.publicationIds, publications, (p) => p.id),
+    themes: pickAll(cap.researchSlugs, research, (r) => r.slug),
+    projects: pickAll(cap.projectIds, projects, (p) => p.id),
+  };
+  const capTools = pickAll(cap.toolIds, tools, (tool) => tool.id);
   return (
     <motion.div
       initial={reduce ? false : { opacity: 0, x: 12 }}
@@ -81,47 +116,67 @@ function CapabilityPanel({ capability: cap, publications, research, tools, visua
       id="capability-detail"
       aria-live="polite"
     >
-      <CapabilityOverview capability={cap} publications={pubs} themes={themes} />
+      <CapabilityOverview capability={cap} linked={linked} t={t} />
       <div className="space-y-6">
         <div className="rounded-[3px] border border-rule bg-stone/40 p-4 text-ink">{visuals[cap.visual]}</div>
-        <CapabilityTools tools={capTools} />
-        <CapabilityLinks links={cap.links} />
+        <CapabilityTools tools={capTools} t={t} />
+        <CapabilityLinks links={cap.links} t={t} />
       </div>
     </motion.div>
   );
 }
 
-type OverviewProps = { capability: Capability; publications: Publication[]; themes: ResearchTheme[] };
+type Linked = { publications: Publication[]; themes: ResearchTheme[]; projects: CapabilityProject[] };
 
-function CapabilityOverview({ capability: cap, publications, themes }: OverviewProps) {
+function CapabilityOverview({ capability: cap, linked, t }: { capability: Capability; linked: Linked; t: Text }) {
   return (
     <div className="space-y-6">
       <div>
         <p className="label mb-3 text-accent-deep">
-          Étape : {STAGE_LABEL[cap.stage].toLowerCase()}
+          {t.stagePrefix}
+          {t.stage[cap.stage].toLowerCase()}
         </p>
         <h3 className="font-serif text-title">{cap.title}</h3>
         <p className="mt-4 leading-relaxed">{cap.description}</p>
       </div>
       <div className="border-l-2 border-accent pl-4">
-        <p className="label mb-1 text-muted">Preuve</p>
+        <p className="label mb-1 text-muted">{t.evidence}</p>
         <p className="text-sm">{cap.evidenceLabel}</p>
       </div>
-      <LinkedPublications publications={publications} />
-      <LinkedThemes themes={themes} />
+      <LinkedProjects projects={linked.projects} t={t} />
+      <LinkedPublications publications={linked.publications} t={t} />
+      <LinkedThemes themes={linked.themes} t={t} />
     </div>
   );
 }
 
-function LinkedPublications({ publications }: { publications: Publication[] }) {
+function LinkedProjects({ projects, t }: { projects: CapabilityProject[]; t: Text }) {
+  if (projects.length === 0) return null;
   return (
     <div>
-      <p className="label mb-2 text-muted">Publication liée</p>
+      <p className="label mb-2 text-muted">{t.projects}</p>
+      <ul className="space-y-1.5">
+        {projects.map((p) => (
+          <li key={p.id}>
+            <Link href={`/projets/${p.slug}`} className="link-underline inline-flex items-center gap-1.5 py-0.5 text-[0.95rem]">
+              <SpeciesText text={p.title} />
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function LinkedPublications({ publications, t }: { publications: Publication[]; t: Text }) {
+  return (
+    <div>
+      <p className="label mb-2 text-muted">{t.publications}</p>
       <ul className="space-y-2">
         {publications.map((p) => (
           <li key={p.id}>
             <Link href={`/publications/${p.slug}`} className="link-underline font-serif text-lg leading-snug">
-              {p.publicationType === "these" ? "Thèse de doctorat (2025)" : `${p.title} (${p.year})`}
+              {p.publicationType === "these" ? t.thesis : `${p.title} (${p.year})`}
             </Link>
           </li>
         ))}
@@ -130,15 +185,15 @@ function LinkedPublications({ publications }: { publications: Publication[] }) {
   );
 }
 
-function LinkedThemes({ themes }: { themes: ResearchTheme[] }) {
+function LinkedThemes({ themes, t }: { themes: ResearchTheme[]; t: Text }) {
   return (
     <div>
-      <p className="label mb-2 text-muted">Recherche associée</p>
+      <p className="label mb-2 text-muted">{t.research}</p>
       <ul className="flex flex-wrap gap-2">
-        {themes.map((t) => (
-          <li key={t.slug}>
-            <Link href={`/recherche/${t.slug}`} className="inline-block bg-ink/[0.06] px-2.5 py-1 on-dark:bg-paper/10 text-xs hover:border-ink">
-              {t.title}
+        {themes.map((theme) => (
+          <li key={theme.slug}>
+            <Link href={`/recherche/${theme.slug}`} className="inline-block bg-ink/[0.06] px-2.5 py-1 on-dark:bg-paper/10 text-xs hover:border-ink">
+              {theme.title}
             </Link>
           </li>
         ))}
@@ -147,17 +202,17 @@ function LinkedThemes({ themes }: { themes: ResearchTheme[] }) {
   );
 }
 
-function CapabilityTools({ tools }: { tools: Tool[] }) {
+function CapabilityTools({ tools, t }: { tools: Tool[]; t: Text }) {
   return (
     <div>
-      <p className="label mb-2 text-muted">Outils vérifiés dans le code</p>
+      <p className="label mb-2 text-muted">{t.tools}</p>
       <dl className="divide-y divide-rule border-y border-rule text-sm">
-        {tools.map((t) => (
-          <div key={t.id} className="grid grid-cols-[7.5rem_1fr] gap-3 py-2">
-            <dt className="tabular-nums text-[0.8rem]">{t.name}</dt>
+        {tools.map((tool) => (
+          <div key={tool.id} className="grid grid-cols-[7.5rem_1fr] gap-3 py-2">
+            <dt className="tabular-nums text-[0.8rem]">{tool.name}</dt>
             <dd className="text-muted">
-              {t.role}
-              <span className="mono-meta mt-0.5 block text-xs">{t.evidence[0]}</span>
+              {tool.role}
+              <span className="mono-meta mt-0.5 block text-xs">{tool.evidence[0]}</span>
             </dd>
           </div>
         ))}
@@ -166,7 +221,7 @@ function CapabilityTools({ tools }: { tools: Tool[] }) {
   );
 }
 
-function CapabilityLinks({ links }: { links: Capability["links"] }) {
+function CapabilityLinks({ links, t }: { links: Capability["links"]; t: Text }) {
   return (
     <ul className="flex flex-wrap gap-x-5 gap-y-2">
       {links.map((l) => (
@@ -174,7 +229,7 @@ function CapabilityLinks({ links }: { links: Capability["links"] }) {
           <a href={l.url} target="_blank" rel="noopener noreferrer" className="link-underline inline-flex items-center gap-1 py-1 text-sm">
             {l.label}
             <ArrowUpRight className="size-3.5" aria-hidden />
-            <span className="sr-only">(nouvel onglet)</span>
+            <span className="sr-only">{t.newTab}</span>
           </a>
         </li>
       ))}
