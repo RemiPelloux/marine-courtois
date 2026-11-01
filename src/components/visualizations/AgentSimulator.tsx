@@ -12,9 +12,9 @@ import { cn } from "@/lib/utils/cn";
 
 const DAYS = 100;
 const STATE_COLORS = {
-  fertile: "#171b18",
-  mixed: "#8a8f88",
-  sterile: "#f04a2d",
+  fertile: "#0f1d2e",
+  mixed: "#7d8fa3",
+  sterile: "var(--viz-accent)",
   unmated: "transparent",
 };
 
@@ -98,7 +98,7 @@ export function AgentSimulator({ compact = false, dark = false }: { compact?: bo
             className={cn("rounded-full border", compact ? "size-[9px]" : "size-[7px]")}
             style={{
               background: s === "fertile" && dark ? "#f5f2eb" : STATE_COLORS[s],
-              borderColor: s === "unmated" ? (dark ? "#a9b0a8" : "#747973") : s === "fertile" && dark ? "#f5f2eb" : STATE_COLORS[s],
+              borderColor: s === "unmated" ? (dark ? "#a8bfd6" : "#6b7785") : s === "fertile" && dark ? "#f5f2eb" : STATE_COLORS[s],
             }}
           />
         ))}
@@ -106,15 +106,15 @@ export function AgentSimulator({ compact = false, dark = false }: { compact?: bo
       <p className="sr-only" role="status">
         Jour {last?.t ?? 0} : {females ? `${females.fertile} femelles avec uniquement du sperme fertile, ${females.mixed} avec les deux, ${females.sterile} avec uniquement du sperme stérile, ${females.unmated} non accouplées` : ""}.
       </p>
-      <ul className={cn("mt-3 flex flex-wrap gap-x-4 gap-y-1 text-[0.72rem]", dark ? "text-paper/80" : "text-ink/75")}>
+      <ul className={cn("mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs", dark ? "text-paper/80" : "text-ink/75")}>
         <li className="flex items-center gap-1.5">
           <span className={cn("size-2 rounded-full", dark ? "bg-paper" : "bg-ink")} /> fertile
         </li>
         <li className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-[#8a8f88]" /> fertile + stérile
+          <span className="size-2 rounded-full bg-[#7d8fa3]" /> fertile + stérile
         </li>
         <li className="flex items-center gap-1.5">
-          <span className="size-2 rounded-full bg-vermilion" /> stérile
+          <span className="size-2 rounded-full bg-accent" /> stérile
         </li>
         <li className="flex items-center gap-1.5">
           <span className="size-2 rounded-full border border-muted-soft" /> non accouplée
@@ -205,17 +205,17 @@ export function AgentSimulator({ compact = false, dark = false }: { compact?: bo
         <div className="mb-3">
           <Legend
             items={[
-              { label: "Larves", color: "#f04a2d" },
-              { label: "Femelles", color: "#171b18" },
-              { label: "Mâles sauvages", color: "#747973", dash: "5 4" },
+              { label: "Larves", color: "#2468b3" },
+              { label: "Femelles", color: "#0f1d2e" },
+              { label: "Mâles sauvages", color: "#6b7785", dash: "5 4" },
             ]}
           />
         </div>
         <LineChart
           series={[
-            { id: "l", label: "Larves", points: series("larvae"), color: "#f04a2d", width: 2.4 },
-            { id: "f", label: "Femelles", points: series("females"), color: "#171b18", width: 1.8 },
-            { id: "w", label: "Mâles sauvages", points: series("wildMales"), color: "#747973", dash: "5 4", width: 1.6 },
+            { id: "l", label: "Larves", points: series("larvae"), color: "#2468b3", width: 2.4 },
+            { id: "f", label: "Femelles", points: series("females"), color: "#0f1d2e", width: 1.8 },
+            { id: "w", label: "Mâles sauvages", points: series("wildMales"), color: "#6b7785", dash: "5 4", width: 1.6 },
           ]}
           xDomain={[0, DAYS]}
           yDomain={[0, Math.max(800, ...history.map((h) => Math.max(h.larvae, h.females, h.wildMales))) * 1.05]}

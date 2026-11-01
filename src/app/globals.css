@@ -6,18 +6,20 @@
    Design tokens — see docs/DESIGN_SYSTEM.md
    ------------------------------------------------------------------ */
 @theme {
-  --color-paper: #f5f2eb;
-  --color-stone: #e8e5dd;
-  --color-ink: #171b18;
-  --color-vermilion: #f04a2d;
-  --color-vermilion-deep: #c5361d; /* AA text on paper */
-  --color-vermilion-light: #ff6a4d; /* AA text on botanical */
-  --color-botanical: #19241f;
-  --color-botanical-2: #223029;
-  --color-muted: #686d67; /* #747973 darkened slightly for AA body text */
-  --color-muted-soft: #747973;
-  --color-rule: #caccc4;
-  --color-mist: #a9b0a8; /* secondary text on botanical */
+  --color-paper: #f5f2eb; /* sable */
+  --color-stone: #e4eaef; /* brume marine */
+  --color-ink: #0f1d2e; /* encre bleu nuit */
+  --color-accent: #2468b3;
+  --color-accent-deep: #1d5a9e; /* AA text on paper and stone */
+  --color-accent-light: #6fb3f2; /* AA text on antibes and antibes-2 */
+  --color-antibes: #0b2d4f; /* bleu Antibes — chapitres sombres */
+  --color-antibes-2: #123a63; /* surface relevée / survol */
+  --color-antibes-3: #1d4e80; /* bleu azur profond — filets, accents */
+  --color-azur: #8fc1ea; /* bleu ciel — séries secondaires sur fond sombre */
+  --color-muted: #55626f; /* ardoise — AA on paper and stone */
+  --color-muted-soft: #6b7785; /* décoratif uniquement */
+  --color-rule: #c5ced6;
+  --color-mist: #a8bfd6; /* texte secondaire sur bleu */
 
   --font-serif: var(--font-instrument), "Times New Roman", serif;
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
@@ -42,6 +44,13 @@
 }
 
 @layer base {
+  /* chart accent: deep on light grounds, light inside bleu Antibes sections */
+  :root {
+    --viz-accent: var(--color-accent);
+  }
+  .on-dark {
+    --viz-accent: var(--color-accent-light);
+  }
   html {
     color-scheme: light;
     -webkit-text-size-adjust: 100%;
@@ -56,11 +65,11 @@
     text-rendering: optimizeLegibility;
   }
   ::selection {
-    background: var(--color-vermilion);
+    background: var(--color-accent);
     color: var(--color-paper);
   }
   :focus-visible {
-    outline: 2px solid var(--color-vermilion);
+    outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -112,7 +121,7 @@
   .link-underline:focus-visible {
     background-size: 100% 1px;
   }
-  /* range input — vermilion track + ink thumb */
+  /* range input — accent track + ink thumb */
   .range {
     -webkit-appearance: none;
     appearance: none;
@@ -124,11 +133,11 @@
   }
   .range::-webkit-slider-runnable-track {
     height: 2px;
-    background: linear-gradient(to right, var(--color-vermilion) var(--pct), var(--color-rule) var(--pct));
+    background: linear-gradient(to right, var(--color-accent) var(--pct), var(--color-rule) var(--pct));
   }
   .range::-moz-range-track {
     height: 2px;
-    background: linear-gradient(to right, var(--color-vermilion) var(--pct), var(--color-rule) var(--pct));
+    background: linear-gradient(to right, var(--color-accent) var(--pct), var(--color-rule) var(--pct));
   }
   .range::-webkit-slider-thumb {
     -webkit-appearance: none;
@@ -137,7 +146,7 @@
     margin-top: -8px;
     border-radius: 999px;
     background: var(--color-paper);
-    border: 2px solid var(--color-vermilion);
+    border: 2px solid var(--color-accent);
     transition: transform 0.2s var(--ease-editorial);
   }
   .range::-moz-range-thumb {
@@ -145,22 +154,25 @@
     height: 14px;
     border-radius: 999px;
     background: var(--color-paper);
-    border: 2px solid var(--color-vermilion);
+    border: 2px solid var(--color-accent);
   }
   .range:active::-webkit-slider-thumb {
     transform: scale(1.2);
   }
   .on-dark .range::-webkit-slider-thumb {
-    background: var(--color-botanical);
+    background: var(--color-antibes);
+    border-color: var(--color-accent-light);
   }
   .on-dark .range::-webkit-slider-runnable-track {
-    background: linear-gradient(to right, var(--color-vermilion) var(--pct), rgba(245, 242, 235, 0.25) var(--pct));
+    background: linear-gradient(to right, var(--color-accent-light) var(--pct), rgba(245, 242, 235, 0.25) var(--pct));
   }
   .katex {
     font-size: 1.05em;
   }
   /* Research rail: a vertical stack by default; pinned and sideways on wide screens with motion. */
   .rail {
+    --rail-panel: 56vw;
+    --rail-ratio: 0.5;
     max-width: var(--container-site);
     margin-inline: auto;
     padding-inline: clamp(1rem, 3.2vw, 2.5rem);
@@ -189,7 +201,8 @@
       max-width: none;
       padding-inline: 0;
       /* viewport height + the share of the track that has to slide past */
-      height: calc(100dvh - 5rem + (var(--rail-n) * 62vw + 10vw - 100vw));
+      /* pinned height = viewport + horizontal travel × ratio (lower ratio = lighter scroll) */
+      height: calc(100dvh - 5rem + (var(--rail-n) * var(--rail-panel) + 10vw - 100vw) * var(--rail-ratio));
     }
     [data-js] .rail-viewport {
       position: sticky;
@@ -208,7 +221,7 @@
       will-change: transform;
     }
     [data-js] .rail-panel {
-      width: 62vw;
+      width: var(--rail-panel);
       flex-shrink: 0;
       padding: 0 3vw;
       border-bottom: 0;
@@ -238,6 +251,35 @@
   }
   to {
     stroke-dashoffset: 0;
+  }
+}
+
+/* Figure plates: notebook figures shown in ink, original colours on hover/focus */
+.plate-img {
+  filter: grayscale(1) contrast(1.08);
+  transition: filter 0.6s var(--ease-editorial);
+}
+.plate:hover .plate-img,
+.plate:focus-visible .plate-img,
+.rail-panel:hover .plate-img,
+.rail-panel:focus-within .plate-img {
+  filter: none;
+}
+
+/* Reading progress under the header — CSS scroll-driven, no JavaScript */
+.page-progress {
+  transform: scaleX(0);
+  transform-origin: left;
+}
+@supports (animation-timeline: scroll()) {
+  .page-progress {
+    animation: page-progress linear both;
+    animation-timeline: scroll(root block);
+  }
+}
+@keyframes page-progress {
+  to {
+    transform: scaleX(1);
   }
 }
 
@@ -320,5 +362,176 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Career timeline (CareerTimeline.tsx) — plays once when in view.
+   Hidden start states only with JS and motion allowed: without JS or with
+   reduced motion the timeline is shown complete.
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-js] .ctl .ctl-axis {
+    transform: scaleX(0);
+  }
+  [data-js] .ctl .ctl-tick,
+  [data-js] .ctl .ctl-label,
+  [data-js] .ctl .ctl-head,
+  [data-js] .ctl .ctl-row {
+    opacity: 0;
+  }
+  [data-js] .ctl .ctl-stem {
+    transform: scaleY(0);
+  }
+  [data-js] .ctl .ctl-dot {
+    transform: scale(0);
+  }
+
+  .ctl[data-play] .ctl-axis {
+    animation: ctl-axis 1.1s var(--ease-editorial) forwards;
+  }
+  .ctl[data-play] .ctl-tick {
+    animation: ctl-fade 0.6s ease-out var(--t) forwards;
+  }
+  .ctl[data-play] .ctl-head {
+    animation: ctl-head var(--sweep) linear var(--lead) forwards;
+  }
+  .ctl[data-play] .ctl-stem {
+    animation: ctl-grow 0.45s var(--ease-editorial) var(--t) forwards;
+  }
+  .ctl[data-play] .ctl-dot {
+    animation: ctl-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) var(--t) forwards;
+  }
+  .ctl[data-play] .ctl-label {
+    animation: ctl-rise 0.7s var(--ease-editorial) calc(var(--t) + 0.12s) forwards;
+  }
+  .ctl[data-play] .ctl-row {
+    animation: ctl-rise 0.6s var(--ease-editorial) var(--t) forwards;
+  }
+  .ctl[data-play] .ctl-row .ctl-dot {
+    animation-delay: var(--t);
+  }
+  /* the defence keeps a slow pulse once it has appeared */
+  .ctl[data-play] .ctl-defense .ctl-dot::after {
+    content: "";
+    position: absolute;
+    inset: -7px;
+    border-radius: 999px;
+    border: 1.5px solid var(--color-accent-light);
+    opacity: 0;
+    animation: ctl-pulse 2.6s ease-out calc(var(--t) + 0.7s) infinite;
+  }
+}
+.ctl-item,
+.ctl-label {
+  transition: opacity 0.35s var(--ease-editorial), color 0.35s var(--ease-editorial);
+}
+.ctl-list:has(a:hover, a:focus-visible) .ctl-item:not(:has(a:hover, a:focus-visible)) {
+  opacity: 0.32;
+}
+.ctl-label:hover,
+.ctl-label:focus-visible {
+  color: var(--color-accent-light);
+}
+@keyframes ctl-axis {
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes ctl-fade {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ctl-grow {
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes ctl-pop {
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes ctl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes ctl-head {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+  94% {
+    left: 100%;
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+@keyframes ctl-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Sea ribbon (SeaRibbon.tsx) — two slow swells in bleu Antibes
+   ------------------------------------------------------------------ */
+.sea-swell {
+  animation: sea-drift 26s linear infinite;
+}
+.sea-swell--slow {
+  animation-duration: 41s;
+  animation-direction: reverse;
+}
+@keyframes sea-drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Toolkit stack (Toolkit.tsx) — builds from the foundation up, once.
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-js] .tk-stack .tk-slab {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  [data-js] .tk-stack .tk-tile > div {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  .tk-stack[data-play] .tk-slab {
+    animation: tk-slab 0.7s var(--ease-editorial) calc(var(--i) * 0.13s) forwards;
+  }
+  .tk-stack[data-play] .tk-tile > div {
+    animation: tk-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) calc(0.35s + var(--o) * 0.035s) forwards;
+  }
+}
+@keyframes tk-slab {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes tk-pop {
+  to {
+    opacity: 1;
+    transform: none;
   }
 }

@@ -1,6 +1,7 @@
 import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { Toolkit } from "@/components/interactions/Toolkit";
-import { CareerFilmEmbed } from "@/components/timeline/CareerFilmEmbed";
+import { CareerTimeline } from "@/components/timeline/CareerTimeline";
+import { MILESTONES } from "@/data/milestones";
 import { ButtonLink } from "@/components/ui/Links";
 import { ResearchRail } from "@/components/interactions/ResearchRail";
 import { researchRailItems } from "@/data/research-rail";
@@ -26,7 +27,7 @@ export function ToolkitSection() {
   );
 }
 
-/** The Remotion film of verified milestones, with a route to the full list. */
+/** Motion-design timeline of verified milestones, with a route to the full list. */
 export function ParcoursSection() {
   return (
     <section aria-labelledby="parcours" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
@@ -36,7 +37,7 @@ export function ParcoursSection() {
         intro="Communications, posters, articles et doctorat, placés sur un même axe du temps. Chaque jalon est vérifiable sur HAL, par son DOI ou sur theses.fr."
         className="mb-12"
       />
-      <CareerFilmEmbed />
+      <CareerTimeline milestones={MILESTONES} />
       <div className="mt-10">
         <ButtonLink href="/a-propos#jalons" variant="secondary">
           Tous les jalons, avec leurs sources

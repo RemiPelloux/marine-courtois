@@ -32,15 +32,15 @@ export default function LabPage() {
         intro="Chaque module indique clairement sa nature : modèle publié transcrit depuis le code public, démonstrateur simplifié ou schéma pédagogique. Aucun ne remplace les analyses publiées."
         aside={
           <ol className="label space-y-2 text-mist">
-            <li><a href="#module-1" className="hover:text-paper">01 — Dynamique des populations</a></li>
-            <li><a href="#module-2" className="hover:text-paper">02 — Lâchers d&apos;insectes stériles</a></li>
-            <li><a href="#module-3" className="hover:text-paper">03 — Modélisation individu-centrée</a></li>
-            <li><a href="#code" className="hover:text-paper">04 — Code & reproductibilité</a></li>
+            <li><a href="#module-1" className="inline-block py-1 hover:text-paper">01 — Dynamique des populations</a></li>
+            <li><a href="#module-2" className="inline-block py-1 hover:text-paper">02 — Lâchers d&apos;insectes stériles</a></li>
+            <li><a href="#module-3" className="inline-block py-1 hover:text-paper">03 — Modélisation individu-centrée</a></li>
+            <li><a href="#code" className="inline-block py-1 hover:text-paper">04 — Code & reproductibilité</a></li>
           </ol>
         }
       />
 
-      <section id="module-1" aria-labelledby="m1" className="on-dark scroll-mt-20 bg-botanical text-paper">
+      <section id="module-1" aria-labelledby="m1" className="on-dark scroll-mt-20 bg-antibes text-paper">
         <div id="model-explorer" className="site-gutter mx-auto max-w-site scroll-mt-24 pb-24">
           <SectionHeading
             chapter="Module 01"

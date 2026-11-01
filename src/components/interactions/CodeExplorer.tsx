@@ -19,7 +19,7 @@ function highlight(code: string): ReactNode[] {
   while ((m = re.exec(code))) {
     if (m.index > last) out.push(code.slice(last, m.index));
     const [tok] = m;
-    const cls = m[1] ? "text-mist italic" : m[2] ? "text-[#e9b872]" : m[3] ? "text-vermilion-light" : "text-[#9fc7b0]";
+    const cls = m[1] ? "text-mist italic" : m[2] ? "text-[#e9b872]" : m[3] ? "text-accent-light" : "text-paper font-medium";
     out.push(
       <span key={k++} className={cls}>
         {tok}
@@ -61,14 +61,14 @@ export function CodeExplorer({
   const lines = file.excerpt?.code.split("\n") ?? [];
 
   return (
-    <div className="on-dark overflow-hidden rounded-[4px] border border-ink bg-botanical text-paper">
+    <div className="on-dark overflow-hidden rounded-[4px] border border-ink bg-antibes text-paper">
       {/* top bar */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-paper/15 px-4 py-2.5">
         <span className="label text-mist">Explorateur de code</span>
-        <span className="mono-meta truncate text-[0.7rem] text-paper/70">
+        <span className="mono-meta truncate text-xs text-paper/70">
           {file.repository} / {file.path}
         </span>
-        <a href={fileUrls[file.id]} target="_blank" rel="noopener noreferrer" className="mono-meta ml-auto inline-flex items-center gap-1 text-[0.72rem] text-paper underline underline-offset-4 hover:text-vermilion-light">
+        <a href={fileUrls[file.id]} target="_blank" rel="noopener noreferrer" className="mono-meta ml-auto inline-flex items-center gap-1 py-1 text-xs text-paper underline underline-offset-4 hover:text-accent-light">
           Ouvrir sur GitLab <ArrowUpRight className="size-3" aria-hidden />
           <span className="sr-only">(nouvel onglet)</span>
         </a>
@@ -79,7 +79,7 @@ export function CodeExplorer({
         <nav aria-label={a11y.fichiersDesDepots} className="max-h-[34rem] overflow-y-auto border-b border-paper/15 p-3 lg:border-r lg:border-b-0">
           {tree.map(([folder, fs]) => (
             <div key={folder} className="mb-3">
-              <p className="flex items-center gap-1.5 px-2 py-1 font-mono text-[0.68rem] text-mist">
+              <p className="flex items-center gap-1.5 px-2 py-1 font-mono text-xs text-mist">
                 <FolderClosed className="size-3.5 shrink-0" aria-hidden />
                 <span className="truncate">{folder}</span>
               </p>
@@ -96,14 +96,14 @@ export function CodeExplorer({
                           onClick={() => setActive(f.id)}
                           aria-current={on ? "true" : undefined}
                           className={cn(
-                            "flex w-full items-center gap-2 rounded-[2px] py-1.5 pr-2 pl-6 text-left font-mono text-[0.72rem] transition-colors",
+                            "flex w-full items-center gap-2 rounded-[2px] py-1.5 pr-2 pl-6 text-left font-mono text-xs transition-colors",
                             on ? "bg-paper/10 text-paper" : "text-paper/75 hover:bg-paper/5 hover:text-paper",
                           )}
                         >
-                          <Icon className={cn("size-3.5 shrink-0", on ? "text-vermilion-light" : "text-mist")} aria-hidden />
+                          <Icon className={cn("size-3.5 shrink-0", on ? "text-accent-light" : "text-mist")} aria-hidden />
                           <span className="min-w-0">
                             <span className="block truncate">{f.path.split("/").at(-1)}</span>
-                            <span className="block truncate font-sans text-[0.66rem] text-mist">{f.excerpt?.label}</span>
+                            <span className="block truncate font-sans text-xs text-mist">{f.excerpt?.label}</span>
                           </span>
                         </button>
                       ) : (
@@ -111,7 +111,7 @@ export function CodeExplorer({
                           href={fileUrls[f.id]}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 py-1.5 pr-2 pl-6 font-mono text-[0.72rem] text-paper/50 hover:text-paper"
+                          className="flex items-center gap-2 py-1.5 pr-2 pl-6 font-mono text-xs text-paper/70 hover:text-paper"
                         >
                           <Icon className="size-3.5 shrink-0" aria-hidden />
                           <span className="truncate">{f.path.split("/").at(-1)}</span>
@@ -130,14 +130,14 @@ export function CodeExplorer({
         <div className="min-w-0 border-b border-paper/15 lg:border-b-0">
           <div className="flex items-baseline justify-between gap-3 border-b border-paper/10 px-4 py-2">
             <p className="font-serif text-lg">{file.excerpt?.label}</p>
-            <p className="mono-meta text-[0.66rem] text-mist">extrait verbatim</p>
+            <p className="mono-meta text-xs text-mist">extrait verbatim</p>
           </div>
           <div className="max-h-[30rem] overflow-auto">
             <pre className="code-block p-4" tabIndex={0} aria-label={`Extrait de ${file.path}`}>
               <code>
                 {lines.map((l, i) => (
                   <span key={i} className="grid grid-cols-[2.2rem_1fr]">
-                    <span className="text-right pr-4 text-paper/30 select-none" aria-hidden>
+                    <span className="text-right pr-4 text-paper/60 select-none" aria-hidden>
                       {i + 1}
                     </span>
                     <span className="whitespace-pre text-paper/90">{highlight(l)}</span>
@@ -146,7 +146,7 @@ export function CodeExplorer({
               </code>
             </pre>
           </div>
-          {file.excerpt?.note && <p className="mono-meta border-t border-paper/10 px-4 py-2 text-[0.7rem] text-mist">{file.excerpt.note}</p>}
+          {file.excerpt?.note && <p className="mono-meta border-t border-paper/10 px-4 py-2 text-xs text-mist">{file.excerpt.note}</p>}
         </div>
 
         {/* metadata + figure */}
@@ -173,7 +173,7 @@ export function CodeExplorer({
                 <dt className="label text-mist">Bibliothèques importées</dt>
                 <dd className="mt-1.5 flex flex-wrap gap-1.5">
                   {file.imports.map((i) => (
-                    <span key={i} className="rounded-[2px] border border-paper/20 px-1.5 py-0.5 font-mono text-[0.68rem]">
+                    <span key={i} className="rounded-[2px] border border-paper/20 px-1.5 py-0.5 font-mono text-xs">
                       {i}
                     </span>
                   ))}
@@ -197,9 +197,9 @@ export function CodeExplorer({
 
       <div className="grid gap-px border-t border-paper/15 bg-paper/15 sm:grid-cols-2">
         {repositories.map((r) => (
-          <a key={r.name} href={r.url} target="_blank" rel="noopener noreferrer" className="group bg-botanical p-4 transition-colors hover:bg-botanical-2">
+          <a key={r.name} href={r.url} target="_blank" rel="noopener noreferrer" className="group bg-antibes p-4 transition-colors hover:bg-antibes-2">
             <p className="flex items-center gap-2 font-mono text-sm">
-              gitlab.com/marinecourtois/<span className="text-vermilion-light">{r.name}</span>
+              gitlab.com/marinecourtois/<span className="text-accent-light">{r.name}</span>
               <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
             </p>
             <p className="mt-1 text-xs text-paper/70">{r.description}</p>

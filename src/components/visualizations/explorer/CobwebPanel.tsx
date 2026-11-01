@@ -107,7 +107,7 @@ export function CobwebPanel({ content }: { content: ExplorerContent }) {
           <path d={lg(gPts) ?? ""} stroke={C.ink} strokeWidth={2} fill="none" />
           <path d={web(points) ?? ""} stroke={C.ver} strokeWidth={1.8} fill="none" strokeLinejoin="round" />
           <circle cx={x(0)} cy={y(0)} r={5} fill={C.ink} />
-          <circle cx={x(Fstar)} cy={y(Fstar)} r={6} fill="#19241f" stroke={C.ver} strokeWidth={2} />
+          <circle cx={x(Fstar)} cy={y(Fstar)} r={6} fill="#0b2d4f" stroke={C.ver} strokeWidth={2} />
           <text x={x(Fstar) + 10} y={y(Fstar) + 18} className="tabular-nums text-[12px]" fill="#f5f2eb">
             F* = S/(λ−1) = {nf1.format(Fstar)} (instable)
           </text>
@@ -118,7 +118,7 @@ export function CobwebPanel({ content }: { content: ExplorerContent }) {
         <>
           <p>
             Seuil <span className="tabular-nums text-paper">F* = {nf1.format(Fstar)}</span>. Partant de{" "}
-            <span className="tabular-nums text-vermilion-light">F₀ = {nf1.format(F0)}</span>, la population {fate}
+            <span className="tabular-nums text-accent-light">F₀ = {nf1.format(F0)}</span>, la population {fate}
             {series.length > 1 && (
               <>
                 {" "}

@@ -21,9 +21,9 @@ export function Hero() {
           <div className="relative flex gap-6 lg:gap-8">
 
             <div className="relative min-w-0 flex-1">
-              <p className="label text-[0.66rem] sm:text-[0.7rem]">
+              <p className="label text-xs sm:text-xs">
                 <span className="font-semibold">Marine A. Courtois</span>
-                <span className="mx-2 text-vermilion-deep">—</span>
+                <span className="mx-2 text-accent-deep">—</span>
                 Biologie mathématique
               </p>
               <HeroTitle />
@@ -38,8 +38,8 @@ export function Hero() {
                 </ButtonLink>
               </div>
               <p className="mono-meta mt-8 text-muted">
-                Mathématiques appliquées <span className="text-vermilion-deep">/</span> Dynamique des populations{" "}
-                <span className="text-vermilion-deep">/</span> Écologie
+                Mathématiques appliquées <span className="text-accent-deep">/</span> Dynamique des populations{" "}
+                <span className="text-accent-deep">/</span> Écologie
               </p>
             </div>
           </div>
@@ -66,7 +66,7 @@ export function Hero() {
               }
             >
               <Link href={item.href} className="group flex h-full flex-col gap-2 px-1 py-6 sm:px-6 lg:py-7">
-                <span className="font-serif text-3xl text-vermilion-deep italic">{item.n}</span>
+                <span className="font-serif text-3xl text-accent-deep italic">{item.n}</span>
                 <span className="flex items-center justify-between gap-4">
                   <span className="font-serif text-[1.7rem] leading-tight">{item.title}</span>
                   <ArrowRight className="size-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />

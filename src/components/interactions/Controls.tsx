@@ -37,7 +37,7 @@ export function Slider({
       <div className="flex items-baseline justify-between gap-3">
         <label htmlFor={id} className={cn("text-sm", dark ? "text-paper" : "text-ink")}>
           {label}
-          {symbol && <span className="ml-2 tabular-nums text-xs text-vermilion-deep on-dark:text-vermilion-light">{symbol}</span>}
+          {symbol && <span className="ml-2 tabular-nums text-xs text-accent-deep on-dark:text-accent-light">{symbol}</span>}
         </label>
         <output
           htmlFor={id}
@@ -96,7 +96,7 @@ export function SegmentedControl<T extends string>({
               "min-h-9 rounded-[2px] px-3 text-[0.8rem] transition-colors",
               active
                 ? dark
-                  ? "bg-paper text-botanical"
+                  ? "bg-paper text-antibes"
                   : "bg-ink text-paper"
                 : dark
                   ? "text-paper/80 hover:text-paper"
@@ -134,9 +134,9 @@ export function IconButton({
       aria-pressed={pressed}
       className={cn(
         "inline-flex min-h-10 items-center gap-2 rounded-[3px] px-3.5 text-[0.82rem] transition-[background-color,color,transform] active:scale-[0.97]",
-        variant === "solid" && "bg-ink text-paper hover:bg-vermilion-deep",
+        variant === "solid" && "bg-ink text-paper hover:bg-accent-deep",
         variant === "outline" && "border border-ink/70 text-ink hover:bg-ink hover:text-paper",
-        variant === "outline-dark" && "border border-paper/40 text-paper hover:bg-paper hover:text-botanical",
+        variant === "outline-dark" && "border border-paper/40 text-paper hover:bg-paper hover:text-antibes",
         className,
       )}
     >

@@ -64,7 +64,7 @@ export default async function PublicationPage({ params }: PageProps<"/publicatio
         title={p.publicationType === "these" ? <span className="text-[0.72em] leading-[1.05]">{p.title}</span> : p.editorialTitle}
         intro={p.publicationType !== "these" ? <p className="font-serif text-2xl italic" lang="en">{p.title}</p> : undefined}
         aside={
-          <Link href="/publications" className="link-underline inline-flex items-center gap-2 text-sm">
+          <Link href="/publications" className="link-underline inline-flex items-center gap-2 py-1.5 text-sm">
             <ArrowLeft className="size-4" aria-hidden /> Index des publications
           </Link>
         }
@@ -76,7 +76,7 @@ export default async function PublicationPage({ params }: PageProps<"/publicatio
               <h2 className="label mb-3 text-muted">En bref</h2>
               <p className="text-xl leading-relaxed">{p.summaryFr}</p>
             </section>
-            <section className="border-l-2 border-vermilion pl-5">
+            <section className="border-l-2 border-accent pl-5">
               <h2 className="label mb-2 text-muted">Question</h2>
               <p className="font-serif text-2xl leading-snug">{p.questionFr}</p>
             </section>
@@ -106,7 +106,7 @@ export default async function PublicationPage({ params }: PageProps<"/publicatio
                 <dd className="mt-1">
                   {p.authors.map((a, i) => (
                     <span key={a}>
-                      <span className={a.includes("Courtois") ? "font-medium underline decoration-vermilion decoration-2 underline-offset-4" : undefined}>{a}</span>
+                      <span className={a.includes("Courtois") ? "font-medium underline decoration-antibes decoration-2 underline-offset-4" : undefined}>{a}</span>
                       {i < p.authors.length - 1 ? ", " : ""}
                     </span>
                   ))}
@@ -141,7 +141,7 @@ export default async function PublicationPage({ params }: PageProps<"/publicatio
                   <a href={l.url} target="_blank" rel="noopener noreferrer" className="group flex items-start justify-between gap-3 rounded-[3px] border border-rule p-3 hover:border-ink">
                     <span>
                       <span className="block text-sm">{l.label}</span>
-                      <span className="block tabular-nums text-[0.7rem] break-all text-muted">{l.value}</span>
+                      <span className="block tabular-nums text-xs break-all text-muted">{l.value}</span>
                     </span>
                     <ArrowUpRight className="size-4 shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
                     <span className="sr-only">(nouvel onglet)</span>

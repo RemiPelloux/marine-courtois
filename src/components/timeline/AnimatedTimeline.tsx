@@ -35,7 +35,7 @@ export function AnimatedTimeline({ milestones }: { milestones: Milestone[] }) {
       <span className="tl-spine absolute top-0 bottom-0 left-[4px] w-px origin-top bg-ink/40 md:left-[calc(10rem+4px)]" aria-hidden />
       {byYearDesc(milestones).map(({ year, items }) => (
         <div key={year} className="tl-group grid gap-x-8 pb-6 md:grid-cols-[8rem_1fr]">
-          <h3 className="tl-year pl-8 font-serif text-[2.6rem] leading-none text-vermilion-deep italic tabular-nums md:sticky md:top-28 md:self-start md:pl-0">{year}</h3>
+          <h3 className="tl-year pl-8 font-serif text-[2.6rem] leading-none text-accent-deep italic tabular-nums md:sticky md:top-28 md:self-start md:pl-0">{year}</h3>
           <ol className="mt-4 md:mt-0">
             {items.map((t) => (
               <TimelineItem key={t.id} t={t} />
@@ -52,14 +52,14 @@ function TimelineItem({ t }: { t: Milestone }) {
   return (
     <li className="relative pb-8 pl-8">
       <span
-        className={`tl-dot absolute top-1.5 left-0 size-[9px] rounded-full ${strong ? "bg-vermilion" : t.kind === "poster" ? "border-[1.5px] border-ink bg-stone" : "bg-ink"}`}
+        className={`tl-dot absolute top-1.5 left-0 size-[9px] rounded-full ${strong ? "bg-accent" : t.kind === "poster" ? "border-[1.5px] border-ink bg-stone" : "bg-ink"}`}
         aria-hidden
       />
       <div className="tl-body">
         <p className="mono-meta text-muted">
-          {formatDateFr(t.date)} · <span className="text-vermilion-deep">{MILESTONE_KIND_LABEL[t.kind]}</span>
+          {formatDateFr(t.date)} · <span className="text-accent-deep">{MILESTONE_KIND_LABEL[t.kind]}</span>
         </p>
-        <a href={t.url} target="_blank" rel="noopener noreferrer" className="mt-1 block max-w-[62ch] font-serif text-xl leading-snug transition-colors hover:text-vermilion-deep">
+        <a href={t.url} target="_blank" rel="noopener noreferrer" className="mt-1 block max-w-[62ch] font-serif text-xl leading-snug transition-colors hover:text-accent-deep">
           {t.title}
         </a>
       </div>

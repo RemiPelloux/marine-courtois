@@ -77,7 +77,7 @@ export function ResidualFertilityPanel({ content }: { content: ExplorerContent }
           dark
           series={[
             { id: "nosit", label: "Sans lâchers", points: data.noSit, color: C.mist, dash: "2 4", width: 1.5 },
-            { id: "norf", label: "Stérilité parfaite", points: data.noRF, color: C.ink, dash: "6 4", width: 1.6 },
+            { id: "norf", label: "Stérilité parfaite", points: data.noRF, color: C.ink, dash: "6 4", width: 1.8 },
             { id: "rf", label: "Fertilité résiduelle", points: data.rf, color: C.ver, width: 2.6 },
           ]}
           xDomain={[0, 300]}
@@ -95,13 +95,13 @@ export function ResidualFertilityPanel({ content }: { content: ExplorerContent }
             {hasRF && (
               <>
                 {" "}
-                et <span className="tabular-nums text-vermilion-light">{nf1.format(data.endRF)}</span> avec fertilité résiduelle
+                et <span className="tabular-nums text-accent-light">{nf1.format(data.endRF)}</span> avec fertilité résiduelle
               </>
             )}
             , contre <span className="tabular-nums">{nf.format(RF_INITIAL[1])}</span> sans lâchers.
           </p>
           <p className="mt-2 text-paper/70">
-            Augmentez δ : même avec des lâchers intenses, la courbe rouge peut se stabiliser au-dessus de zéro — une réduction plutôt
+            Augmentez δ : même avec des lâchers intenses, la courbe bleue en trait plein peut se stabiliser au-dessus de zéro — une réduction plutôt
             qu&apos;une suppression.
           </p>
         </>

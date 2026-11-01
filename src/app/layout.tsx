@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { ViewTransition } from "react";
 import { Instrument_Serif, Montserrat, IBM_Plex_Mono } from "next/font/google";
 import "katex/dist/katex.min.css";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { PageTransition } from "@/components/layout/PageTransition";
 import { RESEARCHER } from "@/data/researcher";
 
 const instrument = Instrument_Serif({
@@ -67,9 +67,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <SiteHeader />
         <main id="contenu" className="flex-1">
-          <ViewTransition default="page">
-            <div>{children}</div>
-          </ViewTransition>
+          <PageTransition>{children}</PageTransition>
         </main>
         <SiteFooter />
       </body>

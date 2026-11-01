@@ -78,7 +78,7 @@ export function SITSequence() {
               aria-current={i === step ? "step" : undefined}
               className={cn(
                 "flex w-full items-baseline gap-4 border-l-2 py-2.5 pl-4 text-left transition-colors",
-                i === step ? "border-vermilion text-ink" : "border-rule text-ink/60 hover:text-ink",
+                i === step ? "border-accent text-ink" : "border-rule text-ink/75 hover:text-ink",
               )}
             >
               <span className="tabular-nums text-xs">{i + 1}</span>
@@ -97,7 +97,7 @@ export function SITSequence() {
             transition={{ duration: 0.25 }}
           >
             <p className="mb-5 max-w-2xl text-[1.02rem] leading-relaxed" aria-live="polite">
-              <span className="tabular-nums text-xs text-vermilion-deep">Étape {step + 1}/5 · </span>
+              <span className="tabular-nums text-xs text-accent-deep">Étape {step + 1}/5 · </span>
               {STEPS[step].text}
             </p>
             {step < 4 ? (
@@ -107,17 +107,17 @@ export function SITSequence() {
                     .filter((p) => p.kind === "F")
                     .map((f, i) => {
                       const partner = pts[(i * 7 + 18) % pts.length];
-                      return <path key={i} d={`M${f.x},${f.y}L${partner.x},${partner.y}`} stroke="#171b18" strokeOpacity={0.25} strokeDasharray="2 3" />;
+                      return <path key={i} d={`M${f.x},${f.y}L${partner.x},${partner.y}`} stroke="#0f1d2e" strokeOpacity={0.25} strokeDasharray="2 3" />;
                     })}
                 {pts.map((p, i) => (
                   <g key={i} transform={`translate(${p.x},${p.y})`}>
-                    {p.kind === "M" && <circle r={4.5} fill="#171b18" />}
-                    {p.kind === "S" && <circle r={4.5} fill="#f04a2d" />}
+                    {p.kind === "M" && <circle r={4.5} fill="#0f1d2e" />}
+                    {p.kind === "S" && <circle r={4.5} fill="#2468b3" />}
                     {p.kind === "F" && (
                       <circle
                         r={5.5}
-                        fill={p.mated === "fertile" ? "#171b18" : p.mated === "sterile" ? "#f5f2eb" : "#f5f2eb"}
-                        stroke={p.mated === "sterile" ? "#f04a2d" : "#171b18"}
+                        fill={p.mated === "fertile" ? "#0f1d2e" : p.mated === "sterile" ? "#f5f2eb" : "#f5f2eb"}
+                        stroke={p.mated === "sterile" ? "#2468b3" : "#0f1d2e"}
                         strokeWidth={1.6}
                       />
                     )}
@@ -129,10 +129,10 @@ export function SITSequence() {
                 <LineChart
                   height={300}
                   series={[
-                    { id: "n", label: "Sans lâchers", points: traj.none, color: "#747973", dash: "2 4", width: 1.5 },
-                    { id: "l", label: "Lâchers faibles", points: traj.low, color: "#171b18", dash: "6 4", width: 1.8 },
-                    { id: "h", label: "Lâchers forts", points: traj.high, color: "#171b18", width: 2 },
-                    { id: "r", label: "Lâchers forts + 1 % de mâles fertiles", points: traj.rf, color: "#f04a2d", width: 2.4 },
+                    { id: "n", label: "Sans lâchers", points: traj.none, color: "#6b7785", dash: "2 4", width: 1.5 },
+                    { id: "l", label: "Lâchers faibles", points: traj.low, color: "#0f1d2e", dash: "6 4", width: 1.8 },
+                    { id: "h", label: "Lâchers forts", points: traj.high, color: "#0f1d2e", width: 2 },
+                    { id: "r", label: "Lâchers forts + 1 % de mâles fertiles", points: traj.rf, color: "#2468b3", width: 2.4 },
                   ]}
                   xDomain={[0, 300]}
                   yDomain={[0, 1050]}
@@ -144,7 +144,7 @@ export function SITSequence() {
                   <li>— — sans lâchers</li>
                   <li>- - - lâchers faibles (σ = 150/j)</li>
                   <li>—— lâchers forts (σ = 2 000/j)</li>
-                  <li className="text-vermilion-deep">—— lâchers forts + 1 % de mâles fertiles</li>
+                  <li className="text-accent-deep">—— lâchers forts + 1 % de mâles fertiles</li>
                 </ul>
               </div>
             )}
@@ -153,9 +153,9 @@ export function SITSequence() {
         <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
           <ul className="flex flex-wrap gap-4 text-xs text-ink/75" aria-label={a11y.legendeDuSchema}>
             <li className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-ink" /> mâle sauvage</li>
-            <li className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-vermilion" /> mâle stérile</li>
+            <li className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-accent" /> mâle stérile</li>
             <li className="flex items-center gap-1.5"><span className="size-3 rounded-full border-[1.5px] border-ink bg-paper" /> femelle</li>
-            <li className="flex items-center gap-1.5"><span className="size-3 rounded-full border-[1.5px] border-vermilion bg-paper" /> accouplée à un mâle stérile</li>
+            <li className="flex items-center gap-1.5"><span className="size-3 rounded-full border-[1.5px] border-accent bg-paper" /> accouplée à un mâle stérile</li>
           </ul>
           <div className="flex gap-2">
             <IconButton onClick={() => setStep((s) => Math.max(0, s - 1))} label="Étape précédente">

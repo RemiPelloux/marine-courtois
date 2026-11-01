@@ -23,7 +23,6 @@ const personJsonLd = {
   name: RESEARCHER.name,
   jobTitle: "Docteure en biologie mathématique",
   alumniOf: { "@type": "CollegeOrUniversity", name: "Université Côte d'Azur" },
-  email: `mailto:${RESEARCHER.email}`,
   sameAs: RESEARCHER.profiles.map((p) => p.url),
   knowsAbout: RESEARCHER.interests,
 };
@@ -39,8 +38,8 @@ export default function Home() {
         <MethodsChapter />
         <ToolkitSection />
         <PublicationsChapter />
-        <ThesisChapter />
-        <CodeChapter />
+        <ThesisChapter compact />
+        <CodeChapter compact />
         <ParcoursSection />
         <ContactChapter />
       </SectionFlow>

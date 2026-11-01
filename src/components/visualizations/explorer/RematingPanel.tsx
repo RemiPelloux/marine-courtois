@@ -89,7 +89,7 @@ export function RematingPanel({ content }: { content: ExplorerContent }) {
           dark
           series={[
             { id: "none", label: "Sans lâchers", points: data.none, color: C.mist, dash: "2 4", width: 1.5 },
-            { id: "first", label: "First", points: data.first, color: C.ink, width: 2.2 },
+            { id: "first", label: "First", points: data.first, color: C.ink, width: 2.4 },
             { id: "last", label: "Last", points: data.last, color: C.ver, width: 2.6 },
           ]}
           xDomain={[0, data.tEnd]}
@@ -104,7 +104,7 @@ export function RematingPanel({ content }: { content: ExplorerContent }) {
         <>
           <p>
             En fin de simulation : <span className="tabular-nums text-paper">{nf.format(data.endFirst)}</span> larves (« First ») et{" "}
-            <span className="tabular-nums text-vermilion-light">{nf.format(data.endLast)}</span> (« Last »).
+            <span className="tabular-nums text-accent-light">{nf.format(data.endLast)}</span> (« Last »).
           </p>
           <p className="mt-2 text-paper/70">
             Comparez les deux horizons : selon l&apos;intensité des lâchers, la règle qui fait baisser la population le plus vite au

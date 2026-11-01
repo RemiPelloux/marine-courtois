@@ -13,17 +13,17 @@ export interface ExplorerContent {
   figure: string;
 }
 
-export const C = { ink: "#f5f2eb", ver: "#f04a2d", mist: "#a9b0a8", amber: "#e9b872" };
+export const C = { ink: "#f5f2eb", ver: "#6fb3f2", mist: "#a8bfd6", azur: "#8fc1ea", amber: "#e9b872" };
 
 /* ------------------------------------------------------------------ */
 
 function Stage({ title, sub, children, className }: { title: string; sub: string; children: ReactNode; className?: string }) {
   return (
     <section className={className} aria-label={`${title} ${sub}`}>
-      <h4 className="mb-6 flex items-baseline gap-3 font-serif text-[2rem] leading-none">
+      <h3 className="mb-6 flex items-baseline gap-3 font-serif text-[2rem] leading-none">
         {title}
         <span className="font-sans text-sm text-paper/60">{sub}</span>
-      </h4>
+      </h3>
       {children}
     </section>
   );
@@ -81,15 +81,15 @@ export function PanelLayout({
             <p className="text-sm leading-relaxed text-paper/75">{content.citation.text}</p>
             <ul className="grid gap-px bg-paper/10 sm:grid-cols-2 xl:grid-cols-4">
               {links.map((l) => (
-                <li key={l.label} className="bg-botanical">
+                <li key={l.label} className="bg-antibes">
                   <a
                     href={l.href}
                     {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="group flex h-full flex-col gap-1 p-4 transition-colors hover:bg-botanical-2"
+                    className="group flex h-full flex-col gap-1 p-4 transition-colors hover:bg-antibes-2"
                   >
                     <span className="flex items-center justify-between font-serif text-xl">
                       {l.label}
-                      <span aria-hidden className="text-vermilion-light transition-transform group-hover:translate-x-0.5">
+                      <span aria-hidden className="text-accent-light transition-transform group-hover:translate-x-0.5">
                         {l.external ? "↗" : "→"}
                       </span>
                     </span>
@@ -99,7 +99,7 @@ export function PanelLayout({
                 </li>
               ))}
             </ul>
-            <p className="text-xs leading-relaxed text-paper/60">{verification}</p>
+            <p className="max-w-[78ch] text-xs leading-relaxed text-paper/70">{verification}</p>
           </div>
         </div>
       </Stage>

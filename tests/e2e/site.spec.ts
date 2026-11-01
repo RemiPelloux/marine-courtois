@@ -116,3 +116,10 @@ test("sitemap and robots are served", async ({ request }) => {
   expect(await sm.text()).toContain("/publications/");
   expect((await request.get("/robots.txt")).status()).toBe(200);
 });
+
+test("the email stays hidden until a visitor asks for it", async ({ page }) => {
+  await page.goto("/contact");
+  expect(await page.content()).not.toContain("@inrae.fr");
+  await page.getByRole("button", { name: "Afficher l'adresse électronique" }).first().click();
+  await expect(page.locator('a[href^="mailto:"]').first()).toHaveText(/@inrae\.fr$/, { timeout: 4000 });
+});

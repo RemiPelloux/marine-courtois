@@ -75,9 +75,9 @@ export function BifurcationVisual({ className }: { className?: string }) {
       <path d={`M${x(0)},${y(0)}H${x(230)}`} stroke="currentColor" strokeWidth={2.4} />
       <path d={l(stable) ?? ""} fill="none" stroke="currentColor" strokeWidth={2} style={drawStyle(700)} className="motion-reduce:[animation:none]" />
       <path d={l(unstable) ?? ""} fill="none" stroke="currentColor" strokeWidth={1.6} strokeDasharray="6 5" strokeOpacity={0.8} />
-      <path d={`M${x(Sc)},${M.top}V${H - M.bottom}`} stroke="#f04a2d" strokeDasharray="2 3" />
-      <circle cx={x(pts[iMax][0])} cy={y(pts[iMax][1])} r={5} fill="#f04a2d" />
-      <text x={x(Sc) - 6} y={M.top + 12} textAnchor="end" className="tabular-nums text-[11px]" fill="#f04a2d">
+      <path d={`M${x(Sc)},${M.top}V${H - M.bottom}`} style={{ stroke: "var(--viz-accent)" }} strokeDasharray="2 3" />
+      <circle cx={x(pts[iMax][0])} cy={y(pts[iMax][1])} r={5} style={{ fill: "var(--viz-accent)" }} />
+      <text x={x(Sc) - 6} y={M.top + 12} textAnchor="end" className="tabular-nums text-[11px]" style={{ fill: "var(--viz-accent)" }}>
         S_c
       </text>
       <g className="tabular-nums text-[10px]" fill="currentColor" fillOpacity={0.75}>
@@ -109,8 +109,8 @@ export function ScenarioComparisonVisual({ className }: { className?: string }) 
     .y((d) => y(d[1]));
   const styles = [
     { dash: undefined, color: "currentColor", label: "δ = 0" },
-    { dash: "5 4", color: "#f04a2d", label: "δ = 0,5 %" },
-    { dash: undefined, color: "#f04a2d", label: "δ = 1 %" },
+    { dash: "5 4", color: "var(--viz-accent)", label: "δ = 0,5 %" },
+    { dash: undefined, color: "var(--viz-accent)", label: "δ = 1 %" },
   ];
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className={className} role="img" aria-label={a11y.scenarioComparisonChart}>
@@ -120,17 +120,16 @@ export function ScenarioComparisonVisual({ className }: { className?: string }) 
           key={i}
           d={l(c) ?? ""}
           fill="none"
-          stroke={styles[i].color}
+          style={{ stroke: styles[i].color, ...(styles[i].dash ? {} : drawStyle(900, i * 0.3)) }}
           strokeWidth={i === 0 ? 1.8 : 2}
           strokeDasharray={styles[i].dash}
-          style={styles[i].dash ? undefined : drawStyle(900, i * 0.3)}
           className="motion-reduce:[animation:none]"
         />
       ))}
       <g className="tabular-nums text-[10px]">
         {styles.map((s, i) => (
           <g key={s.label} transform={`translate(${W - M.right - 92},${M.top + 10 + i * 16})`}>
-            <path d="M0,0H18" stroke={s.color} strokeWidth={2} strokeDasharray={s.dash} />
+            <path d="M0,0H18" style={{ stroke: s.color }} strokeWidth={2} strokeDasharray={s.dash} />
             <text x={24} dy="0.35em" fill="currentColor">
               {s.label}
             </text>

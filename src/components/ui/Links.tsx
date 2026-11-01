@@ -6,10 +6,10 @@ import type { ComponentProps, ReactNode } from "react";
 type Variant = "primary" | "secondary" | "ghost-dark" | "primary-dark";
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-vermilion text-ink hover:bg-ink hover:text-paper",
+  primary: "bg-accent text-paper hover:bg-ink",
   secondary: "border border-ink/80 text-ink hover:bg-ink hover:text-paper",
-  "ghost-dark": "border border-paper/50 text-paper hover:bg-paper hover:text-botanical",
-  "primary-dark": "bg-vermilion text-ink hover:bg-paper",
+  "ghost-dark": "border border-paper/50 text-paper hover:bg-paper hover:text-antibes",
+  "primary-dark": "bg-accent-light text-ink hover:bg-paper",
 };
 
 const isExternal = (href: string) => /^(https?:|mailto:)/.test(href);
@@ -69,7 +69,7 @@ export function TextLink({
   ...rest
 }: { href: string; children: ReactNode; className?: string } & Omit<ComponentProps<"a">, "href">) {
   const external = /^https?:/.test(href);
-  const cls = cn("link-underline inline-flex items-baseline gap-1", className);
+  const cls = cn("link-underline inline-flex items-baseline gap-1 py-1", className);
   if (external) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={cls} {...rest}>

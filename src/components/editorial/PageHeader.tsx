@@ -23,7 +23,7 @@ export function PageHeader({
   morphName?: string;
 }) {
   return (
-    <header className={cn("border-b", dark ? "on-dark border-paper/15 bg-botanical text-paper" : "border-ink")}>
+    <header className={cn("border-b", dark ? "on-dark border-paper/15 bg-antibes text-paper" : "border-ink")}>
       <div className="site-gutter mx-auto grid max-w-site gap-10 pt-14 pb-16 md:pt-20 md:pb-20 lg:grid-cols-12">
         <div className="lg:col-span-8">
           <Kicker accent={chapter}>{kicker}</Kicker>

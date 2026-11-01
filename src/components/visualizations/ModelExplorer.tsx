@@ -89,7 +89,7 @@ export function ModelExplorer({
               {active && (
                 <motion.span
                   layoutId="explorer-tab"
-                  className="absolute inset-x-0 -bottom-px h-[2px] bg-vermilion"
+                  className="absolute inset-x-0 -bottom-px h-[2px] bg-azur"
                   transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 36 }}
                 />
               )}

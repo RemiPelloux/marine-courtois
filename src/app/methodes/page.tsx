@@ -55,7 +55,7 @@ export default function MethodsPage() {
           intro="Cette liste est établie à partir des imports effectivement présents dans les dépôts publics. Elle ne prétend pas être exhaustive."
           size="title"
         />
-        <div className="mt-12 overflow-x-auto">
+        <div className="mt-12 overflow-x-auto" role="region" aria-labelledby="outils" tabIndex={0}>
           <table className="w-full min-w-[40rem] border-y border-ink text-left text-sm">
             <caption className="sr-only">Outils logiciels et fichiers où ils sont utilisés</caption>
             <thead>
@@ -71,8 +71,8 @@ export default function MethodsPage() {
                 <tr key={t.id}>
                   <th scope="row" className="py-3 pr-4 font-serif text-lg font-normal">{t.name}</th>
                   <td className="py-3 pr-4 text-ink/85">{t.role}</td>
-                  <td className="py-3 pr-4 tabular-nums text-[0.72rem] text-muted">{t.evidence.join(" · ")}</td>
-                  <td className="py-3 tabular-nums text-[0.72rem] text-muted">{t.versionNote ?? "—"}</td>
+                  <td className="py-3 pr-4 tabular-nums text-xs text-muted">{t.evidence.join(" · ")}</td>
+                  <td className="py-3 tabular-nums text-xs text-muted">{t.versionNote ?? "—"}</td>
                 </tr>
               ))}
             </tbody>

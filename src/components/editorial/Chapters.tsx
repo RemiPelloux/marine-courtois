@@ -10,6 +10,8 @@ import { AgentSimulator } from "@/components/visualizations/AgentSimulator";
 import { BifurcationVisual, ScenarioComparisonVisual } from "@/components/visualizations/MethodVisuals";
 import { ModelExplorerSection } from "@/components/scientific/ModelExplorerSection";
 import { ThesisSection, CodeSection } from "@/components/scientific/Sections";
+import { ThesisCompact, FigureWall } from "@/components/editorial/HomeTeasers";
+import { ProtectedEmail } from "@/components/interactions/ProtectedEmail";
 import { PublicationIndex } from "@/components/interactions/PublicationIndex";
 import { HoverPreview } from "@/components/interactions/HoverPreview";
 import { publicationPreviews } from "@/data/research-rail";
@@ -27,8 +29,8 @@ export function SequenceRail({ active = 2, dark = false }: { active?: number; da
     <ol className="grid grid-cols-3 gap-y-6 border-t border-current/20 pt-5 sm:grid-cols-6" aria-label={a11y.researchSequence}>
       {RESEARCH_SEQUENCE.map((s, i) => (
         <li key={s.fr} className="relative pr-3">
-          <span className={`absolute -top-[23px] left-0 size-[7px] rounded-full ${i === active ? "bg-vermilion" : dark ? "bg-paper/40" : "bg-ink/40"}`} aria-hidden />
-                    <span className={`block font-serif text-xl ${i === active ? "italic text-vermilion-deep on-dark:text-vermilion-light" : ""}`}>{s.fr}</span>
+          <span className={`absolute -top-[23px] left-0 size-[7px] rounded-full ${i === active ? "bg-accent" : dark ? "bg-paper/40" : "bg-ink/40"}`} aria-hidden />
+                    <span className={`block font-serif text-xl ${i === active ? "italic text-accent-deep on-dark:text-accent-light" : ""}`}>{s.fr}</span>
         </li>
       ))}
     </ol>
@@ -98,7 +100,7 @@ export function MethodsChapter({ withExplorer = true }: { withExplorer?: boolean
     "Expérience numérique sur le modèle de fertilité résiduelle : densité de femelles après 300 jours selon σ, pour trois valeurs de δ.",
   ];
   return (
-    <section id="methodes" aria-labelledby="methodes-titre" className="on-dark scroll-mt-20 bg-botanical text-paper">
+    <section id="methodes" aria-labelledby="methodes-titre" className="on-dark scroll-mt-20 bg-antibes text-paper">
       <div className="site-gutter mx-auto max-w-site py-24 md:py-32">
         <SectionHeading
           chapter="Chapitre 02"
@@ -114,13 +116,13 @@ export function MethodsChapter({ withExplorer = true }: { withExplorer?: boolean
           {METHOD_PANELS.map((p, i) => (
             <Reveal key={p.title} delay={i * 0.08} as="article" className="flex flex-col py-8 lg:px-8">
               <h3 className="font-serif text-[2.1rem] leading-none">
-                <span className="mr-2 tabular-nums text-sm align-middle text-vermilion-light">{p.index}.</span>
+                <span className="mr-2 tabular-nums text-sm align-middle text-accent-light">{p.index}.</span>
                 {p.title}
               </h3>
               <p className="mt-4 text-[0.95rem] leading-relaxed text-paper/80">{p.description}</p>
               <figure className="mt-8 flex-1">
                 <div className="min-h-48">{visuals[i]}</div>
-                <figcaption className="mono-meta mt-3 text-[0.68rem] leading-relaxed text-mist">{captions[i]}</figcaption>
+                <figcaption className="mono-meta mt-3 text-xs leading-relaxed text-mist">{captions[i]}</figcaption>
               </figure>
               <ul className="mt-6 flex flex-wrap gap-2 border-t border-paper/15 pt-5">
                 {p.capabilities.map((c) => (
@@ -153,7 +155,7 @@ export function MethodsChapter({ withExplorer = true }: { withExplorer?: boolean
                 { t: "Explorer", s: "les paramètres", d: "Modifiez l'intensité des lâchers ou la biologie : les trajectoires sont recalculées en direct." },
                 { t: "Comprendre", s: "les résultats", d: "Une lecture de la courbe, puis la publication, le DOI, le code et la méthodologie." },
               ].map((step) => (
-                <li key={step.t} className="bg-botanical p-6">
+                <li key={step.t} className="bg-antibes p-6">
                   <p className="font-serif text-3xl">
                     {step.t} <span className="font-sans text-sm text-paper/60">{step.s}</span>
                   </p>
@@ -201,7 +203,7 @@ export function PublicationsChapter() {
             <li key={c.id} className="flex flex-col gap-1 py-3 sm:flex-row sm:items-baseline sm:gap-6">
               <span className="mono-meta w-32 shrink-0 text-muted">{formatDateFr(c.date)}</span>
               <a href={c.url} target="_blank" rel="noopener noreferrer" className="group flex-1">
-                <span className="font-serif text-lg leading-snug group-hover:text-vermilion-deep">{c.title}</span>
+                <span className="font-serif text-lg leading-snug group-hover:text-accent-deep">{c.title}</span>
                 <span className="block text-xs text-muted">
                   {c.event} — {c.place}
                 </span>
@@ -221,10 +223,11 @@ export function PublicationsChapter() {
 
 /* ---------------- Thesis transition ---------------- */
 
-export function ThesisChapter({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" }) {
+export function ThesisChapter({ headingLevel = "h2", compact = false }: { headingLevel?: "h1" | "h2"; compact?: boolean }) {
+  if (compact) return <ThesisCompact />;
   const H = headingLevel;
   return (
-    <section id="these" aria-labelledby="these-titre" className="on-dark scroll-mt-20 bg-botanical text-paper">
+    <section id="these" aria-labelledby="these-titre" className="on-dark scroll-mt-20 bg-antibes text-paper">
       <div className="site-gutter mx-auto max-w-site py-24 md:py-36">
         <Kicker accent="Chapitre 04">Doctorat</Kicker>
         <H id="these-titre" className="mt-8 max-w-5xl font-serif text-headline">
@@ -244,12 +247,12 @@ export function ThesisChapter({ headingLevel = "h2" }: { headingLevel?: "h1" | "
           </div>
         </div>
         <div className="mt-20">
-          <ThesisSection />
+          <ThesisSection headingLevel={headingLevel === "h1" ? "h2" : "h3"} />
         </div>
         <ul className="mt-14 grid gap-px bg-paper/15 sm:grid-cols-2 lg:grid-cols-5">
           {THESIS.resources.map((r) => (
-            <li key={r.url} className="bg-botanical">
-              <a href={r.url} target="_blank" rel="noopener noreferrer" className="group flex h-full flex-col gap-2 p-5 hover:bg-botanical-2">
+            <li key={r.url} className="bg-antibes">
+              <a href={r.url} target="_blank" rel="noopener noreferrer" className="group flex h-full flex-col gap-2 p-5 hover:bg-antibes-2">
                 <span className="mono-meta text-mist">{r.kind}</span>
                 <span className="flex items-start justify-between gap-3 font-serif text-lg leading-snug">
                   {r.label}
@@ -266,7 +269,7 @@ export function ThesisChapter({ headingLevel = "h2" }: { headingLevel?: "h1" | "
 
 /* ---------------- Code & reproducibility ---------------- */
 
-export function CodeChapter() {
+export function CodeChapter({ compact = false }: { compact?: boolean }) {
   return (
     <section id="code" aria-labelledby="code-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
       <SectionHeading
@@ -279,9 +282,7 @@ export function CodeChapter() {
         }
         intro="Les scripts et notebooks associés à ma thèse permettent de retrouver les analyses numériques et les visualisations utilisées dans le manuscrit. Ils constituent une partie essentielle de la documentation et de la reproductibilité du travail."
       />
-      <div className="mt-14">
-        <CodeSection />
-      </div>
+      <div className="mt-14">{compact ? <FigureWall /> : <CodeSection />}</div>
     </section>
   );
 }
@@ -303,17 +304,14 @@ export function ContactChapter({ headingLevel = "h2" }: { headingLevel?: "h1" | 
               Pour discuter d&apos;une question scientifique, d&apos;une collaboration, d&apos;un projet ou simplement échanger autour des
               mathématiques du vivant, vous pouvez me contacter.
             </p>
-            <a href={`mailto:${RESEARCHER.email}`} className="group block border-y border-ink py-5">
-              <span className="label text-muted">Courriel professionnel</span>
-              <span className="mt-2 flex items-center justify-between gap-4 font-serif text-[1.6rem] break-all sm:text-3xl">
-                {RESEARCHER.email}
-                <ArrowUpRight className="size-6 shrink-0 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" aria-hidden />
-              </span>
-            </a>
+            <div className="border-y border-ink py-5">
+              <p className="label text-muted">Courriel professionnel</p>
+              <ProtectedEmail className="mt-2" />
+            </div>
             <ul className="divide-y divide-rule">
               {RESEARCHER.profiles.map((p) => (
                 <li key={p.label}>
-                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="flex items-baseline justify-between gap-4 py-3 hover:text-vermilion-deep">
+                  <a href={p.url} target="_blank" rel="noopener noreferrer" className="flex items-baseline justify-between gap-4 py-3 hover:text-accent-deep">
                     <span className="font-serif text-xl">{p.label}</span>
                     <span className="tabular-nums text-xs text-muted">{p.handle} ↗</span>
                   </a>
@@ -321,7 +319,7 @@ export function ContactChapter({ headingLevel = "h2" }: { headingLevel?: "h1" | 
               ))}
             </ul>
             <p className="text-sm text-muted">
-              <Link href="/a-propos" className="link-underline">
+              <Link href="/a-propos" className="link-underline inline-block py-1">
                 En savoir plus sur mon parcours →
               </Link>
             </p>

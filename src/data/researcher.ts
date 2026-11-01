@@ -17,7 +17,11 @@ export const RESEARCHER = {
     environment: "Institut Sophia Agrobiotech — INRAE, Université Côte d'Azur",
     collaborations: "Collaborations avec des chercheuses et chercheurs d'Inria et du CNRS",
   },
-  email: "marine.courtois@inrae.fr",
+  /**
+   * Professional address, obfuscated against harvesters (see lib/utils/email.ts).
+   * Regenerate with encodeEmail("…") if it changes.
+   */
+  emailCodes: [111, 123, 51, 120, 124, 111, 115, 116, 93, 110, 116, 114, 105, 111, 104, 114, 126, 51, 120, 115, 116, 111, 124, 112],
   profiles: [
     { label: "ORCID", handle: "0009-0002-3623-1460", url: "https://orcid.org/0009-0002-3623-1460" },
     { label: "GitLab", handle: "marinecourtois", url: "https://gitlab.com/marinecourtois" },

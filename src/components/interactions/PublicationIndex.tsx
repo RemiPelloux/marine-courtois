@@ -15,7 +15,7 @@ function Authors({ authors }: { authors: string[] }) {
     <>
       {authors.map((a, i) => (
         <span key={a}>
-          <span className={a.includes("Courtois") ? "font-medium text-ink underline decoration-vermilion decoration-2 underline-offset-4" : undefined}>{a}</span>
+          <span className={a.includes("Courtois") ? "font-medium text-ink underline decoration-antibes decoration-2 underline-offset-4" : undefined}>{a}</span>
           {i < authors.length - 1 ? ", " : ""}
         </span>
       ))}
@@ -34,7 +34,7 @@ function Links({ p }: { p: Publication }) {
     <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
       {links.map((l) => (
         <li key={l.url}>
-          <a href={l.url} target="_blank" rel="noopener noreferrer" className="link-underline inline-flex items-center gap-1 tabular-nums text-[0.78rem]">
+          <a href={l.url} target="_blank" rel="noopener noreferrer" className="link-underline inline-flex min-h-6 items-center gap-1 py-1 tabular-nums text-[0.8rem]">
             {l.label}
             <ArrowUpRight className="size-3.5" aria-hidden />
             <span className="sr-only">(nouvel onglet)</span>
@@ -45,7 +45,16 @@ function Links({ p }: { p: Publication }) {
   );
 }
 
-export function PublicationIndex({ publications, showFilters = true }: { publications: Publication[]; showFilters?: boolean }) {
+export function PublicationIndex({
+  publications,
+  showFilters = true,
+  headingLevel = "h3",
+}: {
+  publications: Publication[];
+  showFilters?: boolean;
+  headingLevel?: "h2" | "h3";
+}) {
+  const H = headingLevel;
   const reduce = useReducedMotion();
   const years = useMemo(() => Array.from(new Set(publications.map((p) => p.year))).sort((a, b) => b - a), [publications]);
   const themes = useMemo(() => Array.from(new Set(publications.flatMap((p) => p.themes))).sort((a, b) => a.localeCompare(b, "fr")), [publications]);
@@ -125,17 +134,17 @@ export function PublicationIndex({ publications, showFilters = true }: { publica
         <article className="mb-14 grid gap-8 border-b border-ink pb-14 lg:grid-cols-12" aria-labelledby={`pub-${featured.id}`}>
           <div className="lg:col-span-5">
             <p className="label mb-5 flex items-center gap-3">
-              <span className="text-vermilion-deep">À la une</span>
+              <span className="text-accent-deep">À la une</span>
               <span className="h-px w-6 bg-ink/40" />
               {featured.year} · {featured.journal}
             </p>
-            <h3 id={`pub-${featured.id}`} className="font-serif text-title">
+            <H id={`pub-${featured.id}`} className="font-serif text-title">
               <ViewTransition name={`pub-${featured.slug}`} share="morph" default="none">
-                <Link href={`/publications/${featured.slug}`} className="hover:text-vermilion-deep">
+                <Link href={`/publications/${featured.slug}`} className="hover:text-accent-deep">
                   {featured.editorialTitle}
                 </Link>
               </ViewTransition>
-            </h3>
+            </H>
             <p className="mt-4 font-serif text-xl text-ink/70 italic" lang="en">
               {featured.title}
             </p>
@@ -169,18 +178,18 @@ export function PublicationIndex({ publications, showFilters = true }: { publica
             <li key={p.id}>
               <article aria-labelledby={`pub-${p.id}`} className="grid gap-4 py-7 md:grid-cols-12 md:gap-6">
                 <div className="flex items-baseline gap-4 md:col-span-2 md:block">
-                  <p className="font-serif text-4xl text-vermilion-deep italic">{p.year}</p>
+                  <p className="font-serif text-4xl text-accent-deep italic">{p.year}</p>
                   <p className="label mt-1 text-muted">{TYPE_LABEL[p.publicationType]}</p>
                 </div>
                 <div className="md:col-span-8">
                   <p className="mono-meta mb-2 text-muted">{p.journal}</p>
-                  <h3 id={`pub-${p.id}`} className="font-serif text-[1.65rem] leading-tight md:text-[1.9rem]">
+                  <H id={`pub-${p.id}`} className="font-serif text-[1.65rem] leading-tight md:text-[1.9rem]">
                     <ViewTransition name={`pub-${p.slug}`} share="morph" default="none">
-                      <Link href={`/publications/${p.slug}`} className="hover:text-vermilion-deep">
+                      <Link href={`/publications/${p.slug}`} className="hover:text-accent-deep">
                         {p.publicationType === "these" ? p.title : p.editorialTitle ?? p.title}
                       </Link>
                     </ViewTransition>
-                  </h3>
+                  </H>
                   {p.publicationType !== "these" && (
                     <p className="mt-2 text-[0.95rem] text-ink/70 italic" lang="en">
                       {p.title}

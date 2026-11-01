@@ -8,7 +8,7 @@ import { RESEARCHER } from "@/data/researcher";
 import { MILESTONES } from "@/data/milestones";
 import { THESIS } from "@/data/thesis";
 import { AnimatedTimeline } from "@/components/timeline/AnimatedTimeline";
-import { CareerFilmEmbed } from "@/components/timeline/CareerFilmEmbed";
+import { CareerTimeline } from "@/components/timeline/CareerTimeline";
 import { pageMetadata } from "@/lib/content/metadata";
 
 export const metadata = pageMetadata({
@@ -82,7 +82,7 @@ export default function AboutPage() {
         <div className="site-gutter mx-auto max-w-site py-20">
           <SectionHeading kicker="Jalons vérifiés" title={<span id="jalons">Parcours scientifique.</span>} size="title" intro="Publications, communications et soutenance, telles que référencées dans ORCID, HAL et theses.fr." />
           <figure className="mt-12">
-            <CareerFilmEmbed />
+            <CareerTimeline milestones={MILESTONES} />
             <figcaption className="mono-meta mt-3 text-muted">
               Film généré avec Remotion à partir des mêmes données que la liste ci-dessous. Lecture, pause et défilement au clavier.
             </figcaption>

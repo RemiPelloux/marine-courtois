@@ -63,15 +63,15 @@ export function ImpulsiveReleases() {
       <div className="lg:col-span-8">
         <Legend
           items={[
-            { label: "Simulation (impulsions)", color: "#171b18" },
-            { label: "Solution périodique analytique", color: "#f04a2d", dash: "6 4" },
+            { label: "Simulation (impulsions)", color: "#0f1d2e" },
+            { label: "Solution périodique analytique", color: "#2468b3", dash: "6 4" },
           ]}
         />
         <LineChart
           height={300}
           series={[
-            { id: "sim", label: "Simulation", points: data.pts, color: "#171b18", width: 2 },
-            { id: "per", label: "Solution périodique", points: data.periodic, color: "#f04a2d", dash: "6 4", width: 2 },
+            { id: "sim", label: "Simulation", points: data.pts, color: "#0f1d2e", width: 2 },
+            { id: "per", label: "Solution périodique", points: data.periodic, color: "#2468b3", dash: "6 4", width: 2 },
           ]}
           xDomain={[0, 100]}
           yDomain={[0, Math.max(700, data.max * 1.1)]}

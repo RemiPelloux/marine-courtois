@@ -26,7 +26,8 @@ describe("research rail data", () => {
 
 describe("railShift", () => {
   it("slides the track so its last panel ends inside the viewport", () => {
-    expect(railShift(6)).toBeCloseTo((282 / 382) * 100, 5);
+    // track = 6 × 56vw + 2 × 5vw = 346vw, of which 246vw slide out
+    expect(railShift(6)).toBeCloseTo((246 / 346) * 100, 5);
   });
   it("does not move a track narrower than the viewport", () => {
     expect(railShift(1)).toBe(0);

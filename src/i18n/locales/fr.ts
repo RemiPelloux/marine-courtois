@@ -28,6 +28,8 @@ export const a11y = {
   modeles: "Modèles",
   filmDuParcours: "Film du parcours : chaque jalon vérifié de 2022 à 2026, placé sur un axe du temps",
   mettreEnEvidenceLesOutils: "Mettre en évidence les outils",
+  revealEmail: "Afficher l'adresse électronique",
+  copyEmail: "Copier l'adresse électronique",
 } as const;
 
 export type A11yKey = keyof typeof a11y;

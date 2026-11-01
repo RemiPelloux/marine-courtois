@@ -17,7 +17,7 @@ export function HeroTitle() {
       {LINES.map((l, i) => (
         <span key={l.text} className="block overflow-hidden pb-[0.06em]" aria-hidden>
           <motion.span
-            className={l.italic ? "block text-vermilion italic" : "block"}
+            className={l.italic ? "block text-accent italic" : "block"}
             initial={reduce ? false : { y: "105%" }}
             animate={{ y: 0 }}
             transition={{ duration: 1.05, delay: 0.12 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}

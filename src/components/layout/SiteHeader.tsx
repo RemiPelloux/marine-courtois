@@ -9,6 +9,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { NAV_ITEMS, RESEARCHER } from "@/data/researcher";
 import { Monogram } from "@/components/ui/Monogram";
 import { cn } from "@/lib/utils/cn";
+import { ProtectedEmail } from "@/components/interactions/ProtectedEmail";
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -30,6 +31,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-ink/80 bg-paper [view-transition-name:site-header]">
+      <span aria-hidden className="page-progress pointer-events-none absolute inset-x-0 -bottom-px h-[2px] bg-antibes" />
       <div className="site-gutter mx-auto flex h-[4.5rem] max-w-site items-center gap-6 md:h-20">
         <Link
           href="/"
@@ -41,7 +43,7 @@ export function SiteHeader() {
           <span className="hidden h-9 w-px bg-rule sm:block" aria-hidden />
           <span className="hidden flex-col sm:flex">
             <span className="font-serif text-[1.45rem] leading-none">{RESEARCHER.displayName}</span>
-            <span className="label mt-1.5 text-[0.6rem] text-ink/80">Biologie mathématique</span>
+            <span className="label mt-1.5 text-xs text-ink/80">Biologie mathématique</span>
           </span>
         </Link>
 
@@ -55,7 +57,7 @@ export function SiteHeader() {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "font-serif text-[1.18rem] transition-colors hover:text-vermilion-deep",
+                      "font-serif text-[1.18rem] transition-colors hover:text-accent-deep",
                       active ? "text-ink" : "text-ink/85",
                     )}
                   >
@@ -64,7 +66,7 @@ export function SiteHeader() {
                   {active && (
                     <motion.span
                       layoutId="nav-indicator"
-                      className="absolute -bottom-2 left-0 h-[2px] w-full bg-vermilion"
+                      className="absolute -bottom-2 left-0 h-[2px] w-full bg-antibes"
                       transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 34 }}
                     />
                   )}
@@ -78,7 +80,7 @@ export function SiteHeader() {
 
         <Link
           href="/contact"
-          className="group ml-auto hidden items-center gap-2 rounded-[3px] bg-ink px-4 py-2.5 font-serif text-[1.05rem] text-paper transition-colors hover:bg-vermilion-deep active:scale-[0.98] sm:inline-flex lg:ml-0"
+          className="group ml-auto hidden items-center gap-2 rounded-[3px] bg-ink px-4 py-2.5 font-serif text-[1.05rem] text-paper transition-colors hover:bg-accent-deep active:scale-[0.98] sm:inline-flex lg:ml-0"
         >
           Contact
           <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden />
@@ -116,8 +118,8 @@ export function SiteHeader() {
                       aria-current={isActive(item.href) ? "page" : undefined}
                       className="flex items-baseline gap-5 py-4"
                     >
-                      <span className="tabular-nums text-xs text-vermilion-deep">{String(i + 1).padStart(2, "0")}</span>
-                      <span className={cn("font-serif text-4xl", isActive(item.href) && "italic text-vermilion-deep")}>
+                      <span className="tabular-nums text-xs text-accent-deep">{String(i + 1).padStart(2, "0")}</span>
+                      <span className={cn("font-serif text-4xl", isActive(item.href) && "italic text-accent-deep")}>
                         {item.label}
                       </span>
                     </Link>
@@ -125,12 +127,12 @@ export function SiteHeader() {
                 ))}
                 <li>
                   <Link href="/contact" onClick={() => setOpen(false)} className="flex items-baseline gap-5 py-4">
-                    <span className="tabular-nums text-xs text-vermilion-deep">07</span>
+                    <span className="tabular-nums text-xs text-accent-deep">07</span>
                     <span className="font-serif text-4xl">Contact</span>
                   </Link>
                 </li>
               </ul>
-              <p className="mono-meta mt-8 text-muted">{RESEARCHER.email}</p>
+              <ProtectedEmail size="compact" className="mt-8" />
             </nav>
           </motion.div>
         )}

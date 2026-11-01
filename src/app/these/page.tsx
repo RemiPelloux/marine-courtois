@@ -36,10 +36,8 @@ export default function ThesisPage() {
           <dl className="divide-y divide-rule border-y border-ink lg:col-span-5 lg:col-start-8">
             {NARRATIVE.map((n) => (
               <div key={n.k} className="py-4">
-                <div>
-                  <dt className="font-serif text-xl">{n.k}</dt>
-                  <dd className="mt-1 text-sm leading-relaxed text-muted">{n.v}</dd>
-                </div>
+                <dt className="font-serif text-xl">{n.k}</dt>
+                <dd className="mt-1 text-sm leading-relaxed text-muted">{n.v}</dd>
               </div>
             ))}
           </dl>
@@ -54,7 +52,7 @@ export default function ThesisPage() {
             {related.map((p) => (
               <li key={p.id} className="bg-stone p-6">
                 <p className="mono-meta text-muted">{p.journal} · {p.year}</p>
-                <Link href={`/publications/${p.slug}`} className="mt-2 block font-serif text-2xl leading-snug hover:text-vermilion-deep">
+                <Link href={`/publications/${p.slug}`} className="mt-2 block font-serif text-2xl leading-snug hover:text-accent-deep">
                   {p.editorialTitle}
                 </Link>
                 <p className="mt-2 text-sm text-ink/70 italic" lang="en">{p.title}</p>

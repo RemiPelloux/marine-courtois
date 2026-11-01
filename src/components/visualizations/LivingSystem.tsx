@@ -130,7 +130,7 @@ export function LivingSystem() {
         ctx.moveTo(px + r, py);
         ctx.arc(px, py, r, 0, Math.PI * 2);
       }
-      ctx.fillStyle = kind === 0 ? "rgba(23,27,24,0.78)" : "rgba(240,74,45,0.82)";
+      ctx.fillStyle = kind === 0 ? "rgba(15,29,46,0.78)" : "rgba(36,104,179,0.82)";
       ctx.fill();
     }
     if (cursorRef.current) {
@@ -196,12 +196,12 @@ export function LivingSystem() {
 
       {/* Legend */}
       <div className="pointer-events-none mb-3 sm:absolute sm:top-0 sm:right-1 sm:z-10 sm:mb-0 sm:rounded-[3px] sm:border sm:border-rule sm:bg-paper/90 sm:px-4 sm:py-3">
-        <ul className="label flex flex-wrap gap-x-5 gap-y-2 text-[0.6rem] sm:block sm:space-y-2 sm:text-[0.66rem]">
+        <ul className="label flex flex-wrap gap-x-5 gap-y-2 text-xs sm:block sm:space-y-2 sm:text-xs">
           <li className="flex items-center gap-3">
             <span className="size-2.5 rounded-full bg-ink" aria-hidden /> Femelles sauvages
           </li>
           <li className="flex items-center gap-3">
-            <span className="size-2.5 rounded-full bg-vermilion" aria-hidden /> Mâles stériles
+            <span className="size-2.5 rounded-full bg-accent" aria-hidden /> Mâles stériles
           </li>
           {mode === "comparer" && (
             <li className="flex items-center gap-3">
@@ -213,12 +213,12 @@ export function LivingSystem() {
 
       <div className="relative w-full" style={{ aspectRatio: `${W} / ${H}` }}>
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden />
-        <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full overflow-visible" role="img" aria-label={summary}>
+        <svg viewBox={`0 0 ${W} ${H}`} className="absolute inset-0 h-full w-full overflow-visible" role="group" aria-label={summary}>
 
           {/* fan of model trajectories for other release intensities */}
           <g
             fill="none"
-            stroke="#171b18"
+            stroke="#0f1d2e"
             strokeOpacity={0.16}
             strokeWidth={0.8}
             onMouseEnter={() => setTooltip("fan")}
@@ -230,12 +230,12 @@ export function LivingSystem() {
           </g>
 
           {/* model curves */}
-          <path d={path(main.wild) ?? ""} fill="none" stroke="#171b18" strokeWidth={1.4} strokeOpacity={settled ? 0.9 : 0.35} className="transition-[stroke-opacity] duration-700" />
-          <path d={path(main.sterile) ?? ""} fill="none" stroke="#f04a2d" strokeWidth={1.4} strokeOpacity={settled ? 0.95 : 0.35} className="transition-[stroke-opacity] duration-700" />
+          <path d={path(main.wild) ?? ""} fill="none" stroke="#0f1d2e" strokeWidth={1.4} strokeOpacity={settled ? 0.9 : 0.35} className="transition-[stroke-opacity] duration-700" />
+          <path d={path(main.sterile) ?? ""} fill="none" stroke="#2468b3" strokeWidth={1.4} strokeOpacity={settled ? 0.95 : 0.35} className="transition-[stroke-opacity] duration-700" />
           {mode === "comparer" && (
             <>
-              <path d={path(withRF.wild) ?? ""} fill="none" stroke="#171b18" strokeWidth={1.6} strokeDasharray="6 5" />
-              <path d={`M${x(0)},${y(1)}H${x(T_END)}`} stroke="#171b18" strokeOpacity={0.45} strokeDasharray="2 4" />
+              <path d={path(withRF.wild) ?? ""} fill="none" stroke="#0f1d2e" strokeWidth={1.6} strokeDasharray="6 5" />
+              <path d={`M${x(0)},${y(1)}H${x(T_END)}`} stroke="#0f1d2e" strokeOpacity={0.45} strokeDasharray="2 4" />
               <text x={x(T_END) - 4} y={y(1) - 8} textAnchor="end" className="fill-ink/70 tabular-nums text-[13px]">
                 sans lâchers
               </text>
@@ -243,11 +243,11 @@ export function LivingSystem() {
           )}
 
           {/* axes */}
-          <g className="tabular-nums text-[14px] max-sm:text-[26px]" fill="#171b18">
-            <path d={`M${M.left},${M.top - 10}V${H - M.bottom}H${W - M.right + 8}`} stroke="#171b18" strokeWidth={1} fill="none" />
+          <g className="tabular-nums text-[14px] max-sm:text-[26px]" fill="#0f1d2e">
+            <path d={`M${M.left},${M.top - 10}V${H - M.bottom}H${W - M.right + 8}`} stroke="#0f1d2e" strokeWidth={1} fill="none" />
             {[0, 0.2, 0.4, 0.6, 0.8, 1].map((v) => (
               <g key={v} transform={`translate(${M.left},${y(v)})`}>
-                <path d="M-6,0H0" stroke="#171b18" />
+                <path d="M-6,0H0" stroke="#0f1d2e" />
                 <text x={-12} dy="0.35em" textAnchor="end">
                   {v.toFixed(1)}
                 </text>
@@ -255,7 +255,7 @@ export function LivingSystem() {
             ))}
             {[0, 50, 100, 150, 200, 250, 300].map((t) => (
               <g key={t} transform={`translate(${x(t)},${H - M.bottom})`}>
-                <path d="M0,0V6" stroke="#171b18" />
+                <path d="M0,0V6" stroke="#0f1d2e" />
                 <text y={22} textAnchor="middle">
                   {t}
                 </text>
@@ -271,8 +271,8 @@ export function LivingSystem() {
 
           {/* time cursor */}
           <g ref={cursorRef} transform={`translate(${x(reduce ? T_END : 0)},0)`} aria-hidden>
-            <path d={`M0,${M.top}V${H - M.bottom}`} stroke="#f04a2d" strokeOpacity={0.55} strokeDasharray="2 3" />
-            <rect x={-3} y={H - M.bottom - 3} width={6} height={6} fill="#f04a2d" />
+            <path d={`M0,${M.top}V${H - M.bottom}`} stroke="#2468b3" strokeOpacity={0.55} strokeDasharray="2 3" />
+            <rect x={-3} y={H - M.bottom - 3} width={6} height={6} fill="#2468b3" />
           </g>
 
           {/* annotations */}
@@ -299,7 +299,7 @@ export function LivingSystem() {
         </svg>
 
         {tooltip && (
-          <div role="status" className="absolute bottom-[14%] left-[9%] z-20 max-w-xs rounded-[3px] border border-ink bg-paper p-3 text-xs leading-relaxed shadow-[4px_4px_0_0_rgba(23,27,24,0.12)]">
+          <div role="status" className="absolute bottom-[14%] left-[9%] z-20 max-w-xs rounded-[3px] border border-ink bg-paper p-3 text-xs leading-relaxed shadow-[4px_4px_0_0_rgba(15,29,46,0.12)]">
             {tooltip === "wild" &&
               "Densité de femelles sauvages F, rapportée à sa valeur initiale. Elle diminue car une part croissante des accouplements implique des mâles stériles."}
             {tooltip === "sterile" &&
@@ -340,7 +340,7 @@ export function LivingSystem() {
         <p className="label text-center text-ink/80">
           Visualisation pédagogique — données illustratives
         </p>
-        <p className="mono-meta text-center text-[0.68rem] text-muted">
+        <p className="mono-meta mx-auto max-w-[72ch] text-center text-xs text-muted">
           Courbes : modèle de fertilité résiduelle (Courtois et al., 2025), paramètres du notebook public · σ<sub>max</sub> ={" "}
           {SIGMA_MAX} ind./jour · le nuage de points est un rendu illustratif, pas des observations.
         </p>
@@ -380,9 +380,9 @@ function Annotation({
       onClick={onFocus}
       className={cn("group cursor-help outline-none")}
     >
-      <path d={`M${px},${py}L${tx},${ty}`} stroke="#171b18" strokeWidth={0.9} className="max-sm:hidden" />
-      <circle cx={px} cy={py} r={5.5} fill="#f5f2eb" stroke="#171b18" strokeWidth={1.2} className="transition-[r] group-hover:[r:7] group-focus-visible:[r:7]" />
-      <circle cx={px} cy={py} r={12} fill="none" stroke="#f04a2d" strokeWidth={1.5} className="opacity-0 group-focus-visible:opacity-100" />
+      <path d={`M${px},${py}L${tx},${ty}`} stroke="#0f1d2e" strokeWidth={0.9} className="max-sm:hidden" />
+      <circle cx={px} cy={py} r={5.5} fill="#f5f2eb" stroke="#0f1d2e" strokeWidth={1.2} className="transition-[r] group-hover:[r:7] group-focus-visible:[r:7]" />
+      <circle cx={px} cy={py} r={12} fill="none" stroke="#2468b3" strokeWidth={1.5} className="opacity-0 group-focus-visible:opacity-100" />
       <text x={tx + (align === "start" ? 6 : -6)} y={ty + 4} textAnchor={align} className="hidden fill-ink font-serif text-[19px] italic sm:block">
         {label.map((l, i) => (
           <tspan key={i} x={tx + (align === "start" ? 6 : -6)} dy={i === 0 ? 0 : 21}>

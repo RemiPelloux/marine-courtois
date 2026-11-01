@@ -26,7 +26,7 @@ export default function ResearchPage() {
         }
         intro="Les mathématiques et la simulation offrent un cadre pour explorer des mécanismes difficiles à isoler expérimentalement. Mes recherches mobilisent ces approches pour étudier les dynamiques de populations, les comportements reproducteurs et les interactions écologiques."
         aside={
-          <p className="border-l-2 border-vermilion pl-4 font-serif text-xl leading-snug">
+          <p className="border-l-2 border-accent pl-4 font-serif text-xl leading-snug">
             Six axes, un fil conducteur : comprendre comment des mécanismes biologiques et des contraintes pratiques façonnent la dynamique
             des populations.
           </p>
@@ -35,7 +35,7 @@ export default function ResearchPage() {
       <div className="site-gutter mx-auto max-w-site py-16">
         <SequenceRail active={0} />
       </div>
-      <ResearchRail items={researchRailItems()} />
+      <ResearchRail items={researchRailItems()} headingLevel="h2" />
       <section aria-label={a11y.sourcesDesAxes} className="site-gutter mx-auto max-w-site pb-24">
         <SourceNote className="mt-10" ids={["pubRF", "pubPolyandry", "pubInvasion", "gitThesis", "thesesFr"]} />
       </section>

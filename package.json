@@ -21,7 +21,6 @@
     "readme:tour": "node scripts/readme/record-tour.mjs && bash scripts/readme/encode-tour.sh"
   },
   "dependencies": {
-    "@remotion/player": "4.0.539",
     "animejs": "4.5.0",
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
@@ -31,10 +30,11 @@
     "next": "16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "remotion": "4.0.539",
+    "simple-icons": "^16.36.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.64.1",
     "@tailwindcss/turbopack": "^4",
     "@testing-library/jest-dom": "^7.0.1",

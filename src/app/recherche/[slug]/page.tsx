@@ -45,7 +45,7 @@ export default async function ResearchStory({ params }: PageProps<"/recherche/[s
         title={t.title}
         intro={t.lede}
         aside={
-          <Link href="/recherche" className="link-underline inline-flex items-center gap-2 text-sm">
+          <Link href="/recherche" className="link-underline inline-flex items-center gap-2 py-1.5 text-sm">
             <ArrowLeft className="size-4" aria-hidden /> Tous les axes de recherche
           </Link>
         }
@@ -54,7 +54,7 @@ export default async function ResearchStory({ params }: PageProps<"/recherche/[s
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="space-y-12 lg:col-span-6">
             <section aria-labelledby="q">
-              <p id="q" className="label mb-3 text-vermilion-deep">Question de recherche</p>
+              <p id="q" className="label mb-3 text-accent-deep">Question de recherche</p>
               <p className="font-serif text-[2rem] leading-tight">{t.question}</p>
             </section>
             <section aria-labelledby="m">
@@ -82,8 +82,8 @@ export default async function ResearchStory({ params }: PageProps<"/recherche/[s
             {fig && (
               <figure className="border border-rule bg-white/40 p-3">
                 <Image src={fig.src} alt={fig.alt} width={fig.width} height={fig.height} className="h-auto w-full" sizes="(min-width: 1024px) 36vw, 100vw" />
-                <figcaption className="mono-meta mt-3 text-[0.7rem] text-muted">
-                  {fig.caption} Figure de <a className="underline" href={fileUrl(fig.repository, fig.notebook)} target="_blank" rel="noopener noreferrer">{fig.notebook.split("/").at(-1)}</a>.
+                <figcaption className="mono-meta mt-3 text-xs text-muted">
+                  {fig.caption} Figure de <a className="py-1.5 underline" href={fileUrl(fig.repository, fig.notebook)} target="_blank" rel="noopener noreferrer">{fig.notebook.split("/").at(-1)}</a>.
                 </figcaption>
               </figure>
             )}
@@ -94,7 +94,7 @@ export default async function ResearchStory({ params }: PageProps<"/recherche/[s
                   <li key={p.id}>
                     <Link href={`/publications/${p.slug}`} className="group block py-4">
                       <span className="mono-meta text-muted">{p.journal} · {p.year}</span>
-                      <span className="mt-1 block font-serif text-xl leading-snug group-hover:text-vermilion-deep">{p.publicationType === "these" ? "Thèse de doctorat" : p.title}</span>
+                      <span className="mt-1 block font-serif text-xl leading-snug group-hover:text-accent-deep">{p.publicationType === "these" ? "Thèse de doctorat" : p.title}</span>
                     </Link>
                   </li>
                 ))}
@@ -106,7 +106,7 @@ export default async function ResearchStory({ params }: PageProps<"/recherche/[s
                 <ul className="space-y-2">
                   {files.map((f) => (
                     <li key={f.id}>
-                      <a href={fileUrl(f.repository, f.path)} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-2 tabular-nums text-[0.8rem] hover:text-vermilion-deep">
+                      <a href={fileUrl(f.repository, f.path)} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-2 tabular-nums text-[0.8rem] hover:text-accent-deep">
                         <ArrowUpRight className="mt-0.5 size-3.5 shrink-0" aria-hidden />
                         <span>
                           {f.repository}/{f.path.split("/").at(-1)}
@@ -127,11 +127,11 @@ export default async function ResearchStory({ params }: PageProps<"/recherche/[s
         <nav aria-label={a11y.axesVoisins} className="mt-16 grid gap-px border-y border-ink sm:grid-cols-2">
           <Link href={`/recherche/${prev.slug}`} className="group py-6 sm:pr-6">
             <span className="label text-muted">← Axe précédent</span>
-            <span className="mt-2 block font-serif text-2xl group-hover:text-vermilion-deep">{prev.title}</span>
+            <span className="mt-2 block font-serif text-2xl group-hover:text-accent-deep">{prev.title}</span>
           </Link>
           <Link href={`/recherche/${next.slug}`} className="group border-t border-rule py-6 sm:border-t-0 sm:border-l sm:pl-6 sm:text-right">
             <span className="label text-muted">Axe suivant →</span>
-            <span className="mt-2 flex items-center gap-2 font-serif text-2xl group-hover:text-vermilion-deep sm:justify-end">
+            <span className="mt-2 flex items-center gap-2 font-serif text-2xl group-hover:text-accent-deep sm:justify-end">
               {next.title} <ArrowRight className="size-5" aria-hidden />
             </span>
           </Link>

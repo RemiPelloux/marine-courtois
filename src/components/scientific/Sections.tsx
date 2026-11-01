@@ -51,10 +51,10 @@ export function CapabilitySection() {
     repository: (
       <div>
         <p className="label mb-2 text-muted">gitlab.com/marinecourtois/thesisData</p>
-        <ul className="tabular-nums text-[0.75rem] leading-7">
+        <ul className="tabular-nums text-xs leading-7">
           {THESIS_TREE.map((f) => (
             <li key={f}>
-              <a href={folderUrl("thesisData", f)} target="_blank" rel="noopener noreferrer" className="hover:text-vermilion-deep">
+              <a href={folderUrl("thesisData", f)} target="_blank" rel="noopener noreferrer" className="hover:text-accent-deep">
                 ├─ {f}/
               </a>
             </li>
@@ -67,12 +67,13 @@ export function CapabilitySection() {
   return <CapabilityExplorer capabilities={CAPABILITIES} publications={PUBLICATIONS} research={RESEARCH_THEMES} tools={TOOLS} visuals={visuals} />;
 }
 
-export function ThesisSection() {
+export function ThesisSection({ headingLevel = "h3" }: { headingLevel?: "h2" | "h3" }) {
   const folderUrls: Record<number, string> = Object.fromEntries(
     THESIS_CHAPTERS.filter((c) => c.folder !== "—").map((c) => [c.number, folderUrl("thesisData", c.folder)]),
   );
   return (
     <ThesisExplorer
+      headingLevel={headingLevel}
       chapters={THESIS_CHAPTERS}
       publications={PUBLICATIONS}
       codeFiles={CODE_FILES}

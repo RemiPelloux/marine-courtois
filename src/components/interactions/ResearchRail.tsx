@@ -3,14 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { animate, onScroll } from "animejs";
+import { onScroll } from "animejs";
 import { useRef, ViewTransition, type CSSProperties } from "react";
 import { a11y } from "@/i18n";
 import type { RailFigure, RailItem } from "@/data/research-rail";
 import { useAnimeScope } from "@/hooks/useAnimeScope";
 
-/** Must match .rail-panel width and .rail-track padding in globals.css (vw). */
-const PANEL_VW = 62;
+/** Must match --rail-panel and .rail-track padding in globals.css (vw). */
+const PANEL_VW = 56;
 const PAD_VW = 5;
 const DESKTOP = "(min-width: 1024px)";
 
@@ -22,26 +22,46 @@ export function railShift(count: number): number {
 
 const pad2 = (n: number) => String(n).padStart(2, "0");
 
-/** Vertical scroll drives the track sideways while the viewport stays pinned. */
+/**
+ * Vertical scroll drives the track sideways while the viewport stays pinned.
+ * One observer, synced 1:1 with the scroll (no smoothing lag), writing
+ * compositor-only transforms. The scroll distance is set in CSS (--rail-ratio).
+ */
 function pinRail(root: HTMLElement) {
   if (!window.matchMedia(DESKTOP).matches) return;
   const count = Number(root.dataset.count);
+  const shift = railShift(count);
+  const track = root.querySelector<HTMLElement>(".rail-track");
+  const bar = root.querySelector<HTMLElement>(".rail-progress");
   const counter = root.querySelector<HTMLElement>(".rail-counter");
-  const span = () => onScroll({ target: root, enter: { container: "5rem", target: "top" }, leave: "bottom bottom", sync: 0.2 });
-  animate(root.querySelector(".rail-track")!, { x: ["0%", `-${railShift(count)}%`], ease: "linear", autoplay: span() });
-  animate(root.querySelector(".rail-progress")!, { scaleX: [0, 1], ease: "linear", autoplay: span() });
-  animate(root.querySelectorAll(".rail-figure"), { x: ["7%", "-7%"], ease: "linear", autoplay: span() });
+  const figures = [...root.querySelectorAll<HTMLElement>(".rail-figure")];
+  if (!track) return;
+  let last = -1;
+  const render = (p: number) => {
+    if (Math.abs(p - last) < 0.0005) return;
+    last = p;
+    track.style.transform = `translate3d(${(-shift * p).toFixed(3)}%,0,0)`;
+    if (bar) bar.style.transform = `scaleX(${p.toFixed(4)})`;
+    const x = (5 - 10 * p).toFixed(2);
+    figures.forEach((f) => (f.style.transform = `translate3d(${x}%,0,0)`));
+    if (counter) counter.textContent = pad2(Math.min(count, Math.floor(p * count) + 1));
+  };
+  render(0);
   onScroll({
     target: root,
     enter: { container: "5rem", target: "top" },
     leave: "bottom bottom",
-    onUpdate: (self) => {
-      if (counter) counter.textContent = pad2(Math.min(count, Math.floor(self.progress * count) + 1));
-    },
+    sync: true,
+    onUpdate: (self) => render(self.progress),
+    onEnter: (self) => render(self.progress),
+    onLeave: (self) => render(self.progress),
   });
+  return () => {
+    [track, bar, ...figures].forEach((el) => el?.style.removeProperty("transform"));
+  };
 }
 
-export function ResearchRail({ items }: { items: RailItem[] }) {
+export function ResearchRail({ items, headingLevel = "h3" }: { items: RailItem[]; headingLevel?: "h2" | "h3" }) {
   const root = useRef<HTMLElement>(null);
   useAnimeScope(root, pinRail);
   return (
@@ -49,7 +69,7 @@ export function ResearchRail({ items }: { items: RailItem[] }) {
       <div className="rail-viewport">
         <ol className="rail-track">
           {items.map((t) => (
-            <RailPanel key={t.slug} t={t} />
+            <RailPanel key={t.slug} t={t} H={headingLevel} />
           ))}
         </ol>
         <div className="rail-meter site-gutter" aria-hidden>
@@ -57,7 +77,7 @@ export function ResearchRail({ items }: { items: RailItem[] }) {
             <span className="rail-counter">01</span> / {pad2(items.length)}
           </span>
           <span className="relative h-px flex-1 bg-ink/20">
-            <span className="rail-progress absolute inset-0 origin-left bg-vermilion" />
+            <span className="rail-progress absolute inset-0 origin-left bg-antibes" />
           </span>
         </div>
       </div>
@@ -65,22 +85,22 @@ export function ResearchRail({ items }: { items: RailItem[] }) {
   );
 }
 
-function RailPanel({ t }: { t: RailItem }) {
+function RailPanel({ t, H }: { t: RailItem; H: "h2" | "h3" }) {
   return (
     <li className="rail-panel">
       <div className="flex min-w-0 flex-col">
-        <span className="font-serif text-[3.4rem] leading-none text-vermilion-deep italic tabular-nums" aria-hidden>
+        <span className="font-serif text-[3.4rem] leading-none text-accent-deep italic tabular-nums" aria-hidden>
           {t.index}
         </span>
-        <h3 className="mt-6 font-serif text-title">
+        <H className="mt-6 font-serif text-title">
           <ViewTransition name={`research-${t.slug}`} share="morph" default="none">
             <span className="inline-block">{t.title}</span>
           </ViewTransition>
-        </h3>
+        </H>
         <p className="mt-2 text-muted">{t.short}</p>
         <p className="mt-6 max-w-[46ch] leading-relaxed text-ink/85">{t.lede}</p>
         <p className="mono-meta mt-5 text-muted">{t.sources}</p>
-        <Link href={`/recherche/${t.slug}`} className="group mt-8 inline-flex items-center gap-2 self-start font-serif text-xl hover:text-vermilion-deep">
+        <Link href={`/recherche/${t.slug}`} className="group mt-8 inline-flex items-center gap-2 self-start font-serif text-xl hover:text-accent-deep">
           Lire l&apos;axe <span className="sr-only">: {t.title}</span>
           <ArrowRight className="size-5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
         </Link>
@@ -92,15 +112,17 @@ function RailPanel({ t }: { t: RailItem }) {
 
 function RailFigureView({ figure }: { figure: RailFigure }) {
   return (
-    <figure className="min-w-0 overflow-hidden">
+    <figure className="plate min-w-0">
+      <div className="overflow-hidden bg-white p-4">
       <Image
         src={figure.src}
         width={figure.width}
         height={figure.height}
         alt={figure.alt}
         sizes="(min-width: 1024px) 30vw, 100vw"
-        className="rail-figure h-auto max-h-[52vh] w-full object-contain mix-blend-multiply"
+        className="rail-figure plate-img h-auto max-h-[48vh] w-full object-contain"
       />
+      </div>
       <figcaption className="mono-meta mt-2 text-muted">Figure de la thèse — {figure.notebook.split("/").pop()}</figcaption>
     </figure>
   );

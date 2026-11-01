@@ -5,16 +5,22 @@ import { useRef } from "react";
 import { useAnimeScope } from "@/hooks/useAnimeScope";
 
 /** Unread words sit at this opacity until the scroll reaches them. */
-const UNREAD = 0.16;
+const UNREAD = 0.28;
 
-/** Words light up one after another, tied to the scroll position, then stay lit once read. */
+/**
+ * Words light up one after another, tied 1:1 to the scroll position.
+ * Text already on screen when the page opens is left fully readable: a reader
+ * should never have to scroll to read the first screen. The reveal completes
+ * while the paragraph is still in the lower half of the viewport.
+ */
 function scrub(el: HTMLElement) {
+  if (el.getBoundingClientRect().top < window.innerHeight * 0.8) return;
   animate(el.querySelectorAll(".scrub-word"), {
     opacity: [UNREAD, 1],
     duration: 200,
-    delay: stagger(45),
+    delay: stagger(30),
     ease: "linear",
-    autoplay: onScroll({ target: el, enter: "88% top", leave: "40% bottom", sync: 0.5 }),
+    autoplay: onScroll({ target: el, enter: "90% top", leave: "65% bottom", sync: true }),
   });
 }
 

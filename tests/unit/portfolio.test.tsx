@@ -4,7 +4,7 @@ import { MILESTONES, dateToYear } from "@/data/milestones";
 import { DECLARED_TOOLS, groupToolkit } from "@/data/toolkit";
 import { TOOLS } from "@/data/skills";
 import { declaredToolSchema } from "@/types/content";
-import { INTRO, MOVE, STEP, axisX, filmCursor, filmDuration, reachedCount, OUTRO } from "@/components/timeline/film/layout";
+import { axisPercent, placeMilestones, yearTicks } from "@/lib/timeline/lanes";
 import { Toolkit } from "@/components/interactions/Toolkit";
 
 describe("milestones", () => {
@@ -24,29 +24,31 @@ describe("milestones", () => {
   });
 });
 
-describe("career film timing", () => {
-  const n = 12;
-  it("has no milestone before the intro ends", () => {
-    expect(filmCursor(0, n)).toMatchObject({ index: -1, done: false });
-    expect(reachedCount(INTRO - 1, n)).toBe(0);
-  });
-  it("counts a milestone once the playhead arrives on it", () => {
-    expect(reachedCount(INTRO + MOVE - 1, n)).toBe(0);
-    expect(reachedCount(INTRO + MOVE, n)).toBe(1);
-    expect(reachedCount(INTRO + STEP + MOVE, n)).toBe(2);
-  });
-  it("ends with every milestone reached and the outro playing", () => {
-    const last = filmDuration(n) - 1;
-    expect(last).toBe(INTRO + n * STEP + OUTRO - 1);
-    expect(filmCursor(last, n)).toMatchObject({ index: n - 1, done: true });
-    expect(reachedCount(last, n)).toBe(n);
-  });
-  it("maps later dates further right, inside the padding", () => {
-    const [w, pad] = [1280, 72];
-    const xs = MILESTONES.map((m) => axisX(m.date, w, pad));
+describe("career timeline geometry", () => {
+  const placed = placeMilestones(MILESTONES);
+  it("maps later dates further right, inside the axis", () => {
+    const xs = placed.map((m) => m.x);
     expect(xs).toEqual([...xs].sort((a, b) => a - b));
-    expect(Math.min(...xs)).toBeGreaterThan(pad);
-    expect(Math.max(...xs)).toBeLessThan(w - pad);
+    expect(Math.min(...xs)).toBeGreaterThan(0);
+    expect(Math.max(...xs)).toBeLessThan(100);
+    expect(axisPercent("2024-07")).toBeLessThan(axisPercent("2024-08"));
+  });
+  it("never lets two labels overlap on the same lane", () => {
+    const width = 14;
+    const lanes = new Map<number, [number, number][]>();
+    for (const m of placed) {
+      const span: [number, number] = m.alignEnd ? [m.x - width, m.x] : [m.x, m.x + width];
+      const taken = lanes.get(m.lane) ?? [];
+      for (const [a, b] of taken) expect(span[0] >= b || span[1] <= a).toBe(true);
+      lanes.set(m.lane, [...taken, span]);
+    }
+  });
+  it("keeps every milestone, including the defence", () => {
+    expect(placed).toHaveLength(MILESTONES.length);
+    expect(placed.some((m) => m.kind === "doctorat")).toBe(true);
+  });
+  it("ticks every new year inside the span", () => {
+    expect(yearTicks()).toEqual([2023, 2024, 2025, 2026]);
   });
 });
 

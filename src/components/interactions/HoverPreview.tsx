@@ -76,7 +76,7 @@ export function HoverPreview({ previews, children }: { previews: Record<string, 
   return (
     <div ref={root}>
       {children}
-      <div ref={card} aria-hidden className="pointer-events-none fixed top-0 left-0 z-40 w-[22rem] bg-paper p-3 opacity-0 shadow-[0_18px_40px_-12px_rgba(23,27,24,0.35)]">
+      <div ref={card} aria-hidden className="pointer-events-none fixed top-0 left-0 z-40 w-[22rem] bg-paper p-3 opacity-0 shadow-[0_18px_40px_-12px_rgba(15,29,46,0.35)]">
         {fig && (
           <>
             <Image src={fig.src} alt="" width={fig.width} height={fig.height} sizes="22rem" loading="eager" className="h-auto w-full mix-blend-multiply" />

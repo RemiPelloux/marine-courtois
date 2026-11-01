@@ -182,7 +182,7 @@ const RAW_COMMUNICATIONS: z.input<typeof communicationSchema>[] = [
     id: "hal-04788971",
     title: "Sterility on the rocks",
     type: "communication",
-    event: "International Congress in Ecology and Evolution — Société Française d'Écologie et d'Évolution",
+    event: "SFE² 2024 — International Congress in Ecology and Evolution, Société Française d'Écologie et d'Évolution",
     place: "Lyon, France",
     date: "2024-10",
     authors: [

@@ -26,13 +26,13 @@ const shortEvent = (event: string) => event.split(" — ")[0];
 
 /** Verified milestones (HAL, DOI, theses.fr), oldest first. */
 export const MILESTONES: Milestone[] = [
-  ...COMMUNICATIONS.map((c) => ({ id: c.id, date: c.date, kind: c.type, short: shortEvent(c.event), title: c.event, url: c.url })),
+  ...COMMUNICATIONS.map((c) => ({ id: c.id, date: c.date, kind: c.type, short: shortEvent(c.event), title: c.event.replace(" — ", ", "), url: c.url })),
   ...ARTICLES.map((a) => ({
     id: a.id,
     date: a.date ?? String(a.year),
     kind: "article" as const,
     short: a.journal ?? "Article",
-    title: `${a.journal} — ${a.title}`,
+    title: `${a.journal}, ${a.title}`,
     url: `https://doi.org/${a.doi}`,
   })),
   {
@@ -40,7 +40,7 @@ export const MILESTONES: Milestone[] = [
     date: THESIS.defenseDate,
     kind: "doctorat" as const,
     short: "Soutenance de thèse",
-    title: `Soutenance de thèse — ${THESIS.institution}`,
+    title: `Soutenance de thèse, ${THESIS.institution}`,
     url: "https://theses.fr/s352892",
   },
 ].sort((a, b) => a.date.localeCompare(b.date));

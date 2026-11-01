@@ -55,7 +55,7 @@ export function LineChart({
     .x((d) => x(d[0]))
     .y((d) => y(d[1]))
     .curve(curveLinear);
-  const ink = dark ? "#f5f2eb" : "#171b18";
+  const ink = dark ? "#f5f2eb" : "#0f1d2e";
   const titleId = useId();
 
   return (
@@ -88,8 +88,8 @@ export function LineChart({
       </g>
       {markers.map((m) => (
         <g key={m.label}>
-          <path d={`M${M.left},${y(m.y)}H${W - M.right}`} stroke="#f04a2d" strokeDasharray="3 4" strokeOpacity={0.7} />
-          <text x={W - M.right - 4} y={y(m.y) - 6} textAnchor="end" className="tabular-nums text-[11px]" fill="#f04a2d">
+          <path d={`M${M.left},${y(m.y)}H${W - M.right}`} style={{ stroke: "var(--viz-accent)" }} strokeDasharray="3 4" strokeOpacity={0.7} />
+          <text x={W - M.right - 4} y={y(m.y) - 6} textAnchor="end" className="tabular-nums text-[11px]" style={{ fill: "var(--viz-accent)" }}>
             {m.label}
           </text>
         </g>
