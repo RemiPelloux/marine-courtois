@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/editorial/Hero";
 import {
   PhilosophySection,
-  MethodsChapter,
   PublicationsChapter,
   ThesisChapter,
   CodeChapter,
   ContactChapter,
 } from "@/components/editorial/Chapters";
+import { MethodsChapter } from "@/components/editorial/MethodsChapter";
 import { ParcoursSection, ResearchRailSection, ToolkitSection } from "@/components/editorial/PortfolioSections";
 import { SectionFlow } from "@/components/editorial/SectionFlow";
 import { RESEARCHER } from "@/data/researcher";

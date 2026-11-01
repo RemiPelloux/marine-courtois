@@ -3,16 +3,7 @@ import { KineticTitle } from "@/components/editorial/KineticTitle";
 import { ViewTransition, type ReactNode } from "react";
 import { cn } from "@/lib/utils/cn";
 
-/** Interior page header: chapter label, large serif title, intro, optional aside. */
-export function PageHeader({
-  chapter,
-  kicker,
-  title,
-  intro,
-  aside,
-  dark = false,
-  morphName,
-}: {
+interface PageHeaderProps {
   chapter: string;
   kicker: string;
   title: ReactNode;
@@ -21,7 +12,10 @@ export function PageHeader({
   dark?: boolean;
   /** shared-element name: the title morphs from the list entry that linked here, instead of rising line by line */
   morphName?: string;
-}) {
+}
+
+/** Interior page header: chapter label, large serif title, intro, optional aside. */
+export function PageHeader({ chapter, kicker, title, intro, aside, dark = false, morphName }: PageHeaderProps) {
   return (
     <header className={cn("border-b", dark ? "on-dark border-paper/15 bg-antibes text-paper" : "border-ink")}>
       <div className="site-gutter mx-auto grid max-w-site gap-10 pt-14 pb-16 md:pt-20 md:pb-20 lg:grid-cols-12">

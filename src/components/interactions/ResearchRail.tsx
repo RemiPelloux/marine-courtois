@@ -29,23 +29,10 @@ const pad2 = (n: number) => String(n).padStart(2, "0");
  */
 function pinRail(root: HTMLElement) {
   if (!window.matchMedia(DESKTOP).matches) return;
-  const count = Number(root.dataset.count);
-  const shift = railShift(count);
-  const track = root.querySelector<HTMLElement>(".rail-track");
-  const bar = root.querySelector<HTMLElement>(".rail-progress");
-  const counter = root.querySelector<HTMLElement>(".rail-counter");
-  const figures = [...root.querySelectorAll<HTMLElement>(".rail-figure")];
+  const parts = railParts(root);
+  const { track, bar, figures } = parts;
   if (!track) return;
-  let last = -1;
-  const render = (p: number) => {
-    if (Math.abs(p - last) < 0.0005) return;
-    last = p;
-    track.style.transform = `translate3d(${(-shift * p).toFixed(3)}%,0,0)`;
-    if (bar) bar.style.transform = `scaleX(${p.toFixed(4)})`;
-    const x = (5 - 10 * p).toFixed(2);
-    figures.forEach((f) => (f.style.transform = `translate3d(${x}%,0,0)`));
-    if (counter) counter.textContent = pad2(Math.min(count, Math.floor(p * count) + 1));
-  };
+  const render = railRenderer({ ...parts, track }, Number(root.dataset.count));
   render(0);
   onScroll({
     target: root,
@@ -58,6 +45,32 @@ function pinRail(root: HTMLElement) {
   });
   return () => {
     [track, bar, ...figures].forEach((el) => el?.style.removeProperty("transform"));
+  };
+}
+
+type RailParts = { track: HTMLElement; bar: HTMLElement | null; counter: HTMLElement | null; figures: HTMLElement[] };
+
+function railParts(root: HTMLElement): Omit<RailParts, "track"> & { track: HTMLElement | null } {
+  return {
+    track: root.querySelector<HTMLElement>(".rail-track"),
+    bar: root.querySelector<HTMLElement>(".rail-progress"),
+    counter: root.querySelector<HTMLElement>(".rail-counter"),
+    figures: [...root.querySelectorAll<HTMLElement>(".rail-figure")],
+  };
+}
+
+/** Writes the transforms and counter for a scroll progress `p` in [0, 1]; skips sub-pixel repeats. */
+function railRenderer({ track, bar, counter, figures }: RailParts, count: number) {
+  const shift = railShift(count);
+  let last = -1;
+  return (p: number) => {
+    if (Math.abs(p - last) < 0.0005) return;
+    last = p;
+    track.style.transform = `translate3d(${(-shift * p).toFixed(3)}%,0,0)`;
+    if (bar) bar.style.transform = `scaleX(${p.toFixed(4)})`;
+    const x = (5 - 10 * p).toFixed(2);
+    figures.forEach((f) => (f.style.transform = `translate3d(${x}%,0,0)`));
+    if (counter) counter.textContent = pad2(Math.min(count, Math.floor(p * count) + 1));
   };
 }
 

@@ -14,38 +14,26 @@ const VARIANTS: Record<Variant, string> = {
 
 const isExternal = (href: string) => /^(https?:|mailto:)/.test(href);
 
-/** Editorial button-link. External links open in a new tab with an explicit arrow. */
-export function ButtonLink({
-  href,
-  children,
-  variant = "primary",
-  className,
-  icon = true,
-}: {
+interface ButtonLinkProps {
   href: string;
   children: ReactNode;
   variant?: Variant;
   className?: string;
   icon?: boolean;
-}) {
+}
+
+/** Editorial button-link. External links open in a new tab with an explicit arrow. */
+export function ButtonLink({ href, children, variant = "primary", className, icon = true }: ButtonLinkProps) {
   const external = isExternal(href) && !href.startsWith("mailto:");
   const cls = cn(
     "group inline-flex min-h-12 items-center justify-center gap-3 rounded-[3px] px-5 py-3 font-serif text-[1.15rem] leading-none transition-[background-color,color,transform] duration-300 active:scale-[0.98]",
     VARIANTS[variant],
     className,
   );
-  const Icon = external ? ArrowUpRight : ArrowRight;
   const content = (
-    <>
+    <ButtonLinkContent external={external} icon={icon}>
       {children}
-      {icon && (
-        <Icon
-          className="size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
-          aria-hidden
-        />
-      )}
-      {external && <span className="sr-only">(nouvel onglet)</span>}
-    </>
+    </ButtonLinkContent>
   );
   if (isExternal(href)) {
     return (
@@ -58,6 +46,23 @@ export function ButtonLink({
     <Link href={href} className={cls}>
       {content}
     </Link>
+  );
+}
+
+/** Label, trailing arrow (↗ when it opens a new tab) and the screen-reader new-tab hint. */
+function ButtonLinkContent({ external, icon, children }: { external: boolean; icon: boolean; children: ReactNode }) {
+  const Icon = external ? ArrowUpRight : ArrowRight;
+  return (
+    <>
+      {children}
+      {icon && (
+        <Icon
+          className="size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
+          aria-hidden
+        />
+      )}
+      {external && <span className="sr-only">(nouvel onglet)</span>}
+    </>
   );
 }
 

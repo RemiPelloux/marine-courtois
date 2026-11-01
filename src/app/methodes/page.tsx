@@ -1,5 +1,6 @@
 import { PageHeader } from "@/components/editorial/PageHeader";
-import { MethodsChapter, SequenceRail } from "@/components/editorial/Chapters";
+import { SequenceRail } from "@/components/editorial/Chapters";
+import { MethodsChapter } from "@/components/editorial/MethodsChapter";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { CapabilitySection } from "@/components/scientific/Sections";
 import { SourceNote } from "@/components/scientific/SourceNote";
