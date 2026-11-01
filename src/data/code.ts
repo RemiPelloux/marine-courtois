@@ -1,4 +1,4 @@
-import { codeFileSchema, figureSchema, type CodeFile, type Figure } from "@/types/content";
+import { codeFileSchema, type CodeFile } from "@/types/content";
 import type { z } from "zod";
 import {
   RF_MODEL_EXCERPT,
@@ -42,101 +42,7 @@ export function folderUrl(repo: keyof typeof REPOSITORIES, path: string) {
   return `${r.url}/-/tree/${r.branch}/${path.split("/").map(encodeURIComponent).join("/")}`;
 }
 
-const RAW_FIGURES: z.input<typeof figureSchema>[] = [
-  {
-    id: "fig-ch1-articles",
-    src: "/figures/ch1-sit-articles-per-year.webp",
-    width: 1000,
-    height: 544,
-    alt: "Histogramme du nombre d'articles par année, de 1960 à 2024, distinguant les articles de modélisation (bleu) des autres (gris). Les publications augmentent fortement après 2005.",
-    caption: "Nombre d'articles publiés par année sur la technique de l'insecte stérile, avec la part des travaux de modélisation.",
-    notebook: "Chapter 1 - Introduction/fig_number_article_SIT_published.ipynb",
-    repository: "thesisData",
-  },
-  {
-    id: "fig-ch2-cobweb",
-    src: "/figures/ch2-cobweb-knipling.webp",
-    width: 1000,
-    height: 799,
-    alt: "Diagramme en toile d'araignée du modèle discret F(t+1) = λF²/(F+S) : une trajectoire partant sous le seuil converge vers zéro, une autre partant au-dessus diverge.",
-    caption: "Diagramme en toile d'araignée d'un modèle discret de lâchers stériles, avec ses deux équilibres.",
-    notebook: "Chapter 2 - Modeling SIT/fig_chapter2_thesis.ipynb",
-    repository: "thesisData",
-  },
-  {
-    id: "fig-ch2-bifurcation",
-    src: "/figures/ch2-bifurcation-competition.webp",
-    width: 1000,
-    height: 754,
-    alt: "Diagramme de bifurcation : densité d'équilibre des femelles en fonction de la densité de mâles stérilisés, avec une branche stable, une branche instable et un point de bifurcation nœud-col en S_c.",
-    caption: "Diagramme de bifurcation d'un modèle avec compétition et lâchers stériles : au-delà de S_c, seul l'équilibre nul subsiste.",
-    notebook: "Chapter 2 - Modeling SIT/fig_chapter2_thesis.ipynb",
-    repository: "thesisData",
-  },
-  {
-    id: "fig-ch3-dynamics",
-    src: "/figures/ch3-rf-temporal-dynamics.webp",
-    width: 1200,
-    height: 700,
-    alt: "Courbes de densité de femelles sur 300 jours : sans lâchers (constante), et avec lâchers faibles ou forts, avec ou sans fertilité résiduelle de 1 %.",
-    caption: "Dynamique temporelle des femelles sauvages avec et sans fertilité résiduelle, pour deux intensités de lâchers.",
-    notebook: "Chapter 3 - Residual Fertility/Script_Manuscrit_SIT_RF.ipynb",
-    repository: "thesisData",
-  },
-  {
-    id: "fig-ch3-sensitivity",
-    src: "/figures/ch3-sensitivity-analysis.webp",
-    width: 900,
-    height: 537,
-    alt: "Diagramme en barres horizontales des indices de sensibilité totale des paramètres du modèle ; μF a l'indice le plus élevé.",
-    caption: "Indices de sensibilité des paramètres du modèle de fertilité résiduelle.",
-    notebook: "Chapter 3 - Residual Fertility/Sensitivity_Analysis_SIT.ipynb",
-    repository: "thesisData",
-  },
-  {
-    id: "fig-ch4-first-last",
-    src: "/figures/ch4-remating-first-last.webp",
-    width: 1400,
-    height: 520,
-    alt: "Deux panneaux de densité larvaire en fonction du temps pour trois intensités de lâchers, comparant les scénarios d'utilisation du sperme « First » (bleu) et « Last » (orange) en forte (A) et faible (B) infestation initiale.",
-    caption: "Modèle compartimental : densité larvaire selon la règle d'utilisation du sperme (premier ou dernier mâle).",
-    notebook: "Chapter 4 - Multiple Mating/Compartmental_model_output_vAvril.ipynb",
-    repository: "thesisData",
-  },
-  {
-    id: "fig-ch4-abm",
-    src: "/figures/ch4-abm-sperm-use.webp",
-    width: 1200,
-    height: 587,
-    alt: "À gauche, trajectoires stochastiques du nombre de larves sur 100 jours pour plusieurs règles d'utilisation du sperme ; à droite, réduction de l'aire sous la courbe par scénario.",
-    caption: "Modèle individu-centré : dynamiques larvaires répétées et réduction de l'aire sous la courbe selon le scénario d'utilisation du sperme.",
-    notebook: "Chapter 4 - Multiple Mating/ABM_model_output.ipynb",
-    repository: "thesisData",
-  },
-  {
-    id: "fig-ch5-impulsive",
-    src: "/figures/ch5-impulsive-releases.webp",
-    width: 1200,
-    height: 558,
-    alt: "Population de mâles stérilisés sous lâchers périodiques tous les 7 jours : la simulation converge vers la solution périodique analytique.",
-    caption: "Lâchers impulsionnels : la population de mâles stériles converge vers une solution périodique.",
-    notebook: "Chapter 5 - Agricultural Context/Notebook_part_impulsive_releases.ipynb",
-    repository: "thesisData",
-  },
-  {
-    id: "fig-ch5-budget",
-    src: "/figures/ch5-impulsive-2.webp",
-    width: 1000,
-    height: 677,
-    alt: "Nombre optimal de lâchers en fonction du budget total en mâles stériles : une fonction en escalier croissante de 1 à 7.",
-    caption: "Nombre optimal de lâchers en fonction du budget total en mâles stériles.",
-    notebook: "Chapter 5 - Agricultural Context/Notebook_part_impulsive_releases.ipynb",
-    repository: "thesisData",
-  },
-];
-
-export const FIGURES: Figure[] = RAW_FIGURES.map((f) => figureSchema.parse(f));
-export const getFigure = (id?: string) => FIGURES.find((f) => f.id === id);
+export { FIGURES, getFigure } from "./figures";
 
 const RAW_CODE_FILES: z.input<typeof codeFileSchema>[] = [
   {
