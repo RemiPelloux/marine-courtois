@@ -53,7 +53,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" className={`${instrument.variable} ${montserrat.variable} ${plexMono.variable} antialiased`}>
+    <html lang="fr" data-scroll-behavior="smooth" className={`${instrument.variable} ${montserrat.variable} ${plexMono.variable} antialiased`}>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#contenu"

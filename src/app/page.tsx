@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/editorial/Hero";
-import { PhilosophySection, MethodsChapter, PublicationsChapter, ThesisChapter, CodeChapter, ContactChapter } from "@/components/editorial/Chapters";
+import {
+  PhilosophySection,
+  MethodsChapter,
+  PublicationsChapter,
+  ThesisChapter,
+  CodeChapter,
+  ContactChapter,
+} from "@/components/editorial/Chapters";
+import { ParcoursSection, ToolkitSection } from "@/components/editorial/PortfolioSections";
+import { SectionFlow } from "@/components/editorial/SectionFlow";
 import { RESEARCHER } from "@/data/researcher";
 
 export const metadata: Metadata = {
@@ -23,13 +32,17 @@ export default function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }} />
-      <Hero />
-      <PhilosophySection />
-      <MethodsChapter />
-      <PublicationsChapter />
-      <ThesisChapter />
-      <CodeChapter />
-      <ContactChapter />
+      <SectionFlow>
+        <Hero />
+        <PhilosophySection />
+        <MethodsChapter />
+        <ToolkitSection />
+        <PublicationsChapter />
+        <ThesisChapter />
+        <CodeChapter />
+        <ParcoursSection />
+        <ContactChapter />
+      </SectionFlow>
     </>
   );
 }
