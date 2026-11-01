@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils/cn";
 const NAME: Record<Lang, string> = { fr: "Français", en: "English" };
 
 /**
- * FR | EN, drawn like the Contact button: one ink-ruled block, the current
- * language filled. Each half links to the same page in its language.
+ * FR | EN on the bleu Antibes header: one paper-ruled block, the current
+ * language raised. Each half links to the same page in its language.
  * Plain <a>: the two languages have different root layouts, so the switch is a
  * full page load; a next/link here would prefetch the other root in a loop.
  */
@@ -21,11 +21,11 @@ export function LangSwitch({ className }: { className?: string }) {
   const a11y = useA11y();
   return (
     <nav aria-label={a11y.langue} className={cn("shrink-0", className)}>
-      <ul className="flex h-11 items-stretch overflow-hidden rounded-[3px] border border-ink/70">
+      <ul className="border-paper/30 flex h-11 items-stretch overflow-hidden rounded-[3px] border">
         {LANGS.map((l, i) => {
           const current = l === lang;
           return (
-            <li key={l} className={cn("flex", i > 0 && "border-l border-ink/70")}>
+            <li key={l} className={cn("flex", i > 0 && "border-paper/30 border-l")}>
               <a
                 href={switchPath(pathname, l)}
                 hrefLang={l}
@@ -35,7 +35,7 @@ export function LangSwitch({ className }: { className?: string }) {
                 title={NAME[l]}
                 className={cn(
                   "inline-flex min-w-11 items-center justify-center px-2.5 font-serif text-[1.05rem] leading-none tracking-[0.04em] transition-colors duration-200",
-                  current ? "bg-ink text-paper" : "text-ink/75 hover:bg-stone hover:text-accent-deep",
+                  current ? "bg-antibes-3 text-paper" : "text-mist hover:bg-antibes-2 hover:text-paper",
                 )}
               >
                 {l.toUpperCase()}
