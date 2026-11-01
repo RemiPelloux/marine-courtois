@@ -26,7 +26,8 @@ async function glide(to, duration = 1400) {
         const step = (now) => {
           const p = Math.min(1, (now - start) / d);
           window.scrollTo(0, from + (target - from) * ease(p));
-          p < 1 ? requestAnimationFrame(step) : done();
+          if (p < 1) requestAnimationFrame(step);
+          else done();
         };
         requestAnimationFrame(step);
       }),
