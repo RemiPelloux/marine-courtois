@@ -57,7 +57,7 @@ function Caption({ hover, family, tools, axes }: CaptionProps) {
       <>
         <span className="font-semibold">{tool.name}</span> — {tool.role}
         <span className="block text-sm text-muted">
-          {tool.familyLabel} · {tool.inPublicCode ? "utilisé dans le code publié sur GitLab" : "hors code publié"}
+          {tool.familyLabel} · {tool.inPublicCode ? "utilisé dans le code publié (GitLab, Zenodo)" : "hors code publié"}
         </span>
       </>
     );

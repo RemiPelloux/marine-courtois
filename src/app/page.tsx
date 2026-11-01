@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/editorial/Hero";
 import { PublicationsChapter, ContactChapter } from "@/components/editorial/Chapters";
-import { MethodsChapter } from "@/components/editorial/MethodsChapter";
 import { ProfileSection } from "@/components/home/ProfileSection";
+import { FeaturedSection } from "@/components/home/Featured";
+import { FishSection } from "@/components/home/FishSection";
 import { ResearchAxesSection } from "@/components/home/ResearchAxes";
-import { CommunicationSection, TeachingSection } from "@/components/home/ActivitySections";
+import { ParcoursSection } from "@/components/home/ParcoursSection";
+import { TeachingSection } from "@/components/home/ActivitySections";
 import { SectionFlow } from "@/components/editorial/SectionFlow";
 import { RESEARCHER } from "@/data/researcher";
 import { groupToolkit } from "@/data/toolkit";
 
 export const metadata: Metadata = {
   title: { absolute: `${RESEARCHER.displayName} — ${RESEARCHER.tagline}` },
+  description:
+    "Marine A. Courtois, docteure en biologie mathématique : modélisation, simulation et analyse de données pour comprendre les systèmes biologiques — lutte biologique, comportements reproducteurs, invasions biologiques.",
   alternates: { canonical: "/" },
 };
 
@@ -18,10 +22,12 @@ const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: RESEARCHER.name,
-  jobTitle: "Docteure en biologie mathématique — modélisation et data science",
+  jobTitle: "Docteure en biologie mathématique",
   alumniOf: { "@type": "CollegeOrUniversity", name: "Université Côte d'Azur" },
+  identifier: { "@type": "PropertyValue", propertyID: "ORCID", value: "0009-0002-3623-1460" },
   sameAs: RESEARCHER.profiles.map((p) => p.url),
-  knowsAbout: [...RESEARCHER.interests, "Machine learning", ...groupToolkit().flatMap((f) => f.tools.map((t) => t.name))],
+  knowsAbout: [...RESEARCHER.interests, ...groupToolkit().flatMap((f) => f.tools.map((t) => t.name))],
+  url: RESEARCHER.siteUrl,
 };
 
 export default function Home() {
@@ -31,9 +37,10 @@ export default function Home() {
       <SectionFlow>
         <Hero />
         <ProfileSection />
+        <FeaturedSection />
+        <FishSection />
         <ResearchAxesSection />
-        <MethodsChapter />
-        <CommunicationSection />
+        <ParcoursSection />
         <TeachingSection />
         <PublicationsChapter />
         <ContactChapter />

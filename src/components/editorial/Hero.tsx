@@ -13,22 +13,22 @@ function HeroIntro() {
       <p className="text-sm">
         <span className="font-semibold">Marine A. Courtois</span>
         <span className="mx-2 text-accent-deep">—</span>
-        Modélisation, data science et écologie
+        Docteure en biologie mathématique
       </p>
       <HeroTitle />
       <p className="mt-7 max-w-[34rem] text-[1.06rem] leading-relaxed text-ink/85 md:text-lg">
-        Docteure en biologie mathématique, je passe des équations aux simulations, des statistiques au machine learning, du
-        script au tableau de bord. J&apos;adapte l&apos;outil à la question, et j&apos;apprends celui qui manque.
+        Je cherche à comprendre les systèmes biologiques par la modélisation, l&apos;expérimentation numérique et l&apos;analyse des
+        données : des insectes ravageurs aux poissons d&apos;eau douce, des équations différentielles au machine learning.
       </p>
       <div className="mt-8 flex flex-wrap gap-3">
-        <ButtonLink href="/contact">Parlons de votre projet</ButtonLink>
-        <ButtonLink href="#axes" variant="secondary" icon={false}>
-          Mes quatre axes
+        <ButtonLink href="/recherche">Explorer mes recherches</ButtonLink>
+        <ButtonLink href="/publications" variant="secondary" icon={false}>
+          Publications
         </ButtonLink>
       </div>
       <p className="mt-8 max-w-[34rem] text-sm leading-relaxed text-muted">
-        Python, R, SQL · modèles mécanistes et individu-centrés · statistiques et machine learning · visualisation et
-        restitution.
+        Questions : quand la lutte biologique échoue-t-elle ? Que révèle la consommation d&apos;un prédateur sur son caractère invasif ?
+        Comment un comportement individuel change-t-il une population ?
       </p>
     </div>
   );

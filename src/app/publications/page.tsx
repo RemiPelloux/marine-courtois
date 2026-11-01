@@ -3,10 +3,11 @@ import { HoverPreview } from "@/components/interactions/HoverPreview";
 import { publicationPreviews } from "@/data/research-rail";
 import { PageHeader } from "@/components/editorial/PageHeader";
 import { PublicationIndex } from "@/components/interactions/PublicationIndex";
-import { SectionHeading } from "@/components/editorial/SectionHeading";
+import { ButtonLink } from "@/components/ui/Links";
 import { SourceNote } from "@/components/scientific/SourceNote";
 import { PUBLICATIONS, COMMUNICATIONS } from "@/data/publications";
-import { CommunicationList } from "@/components/interactions/CommunicationList";
+import { ExportBibtex } from "@/components/publication/ExportBibtex";
+import { toBibtex } from "@/lib/content/citation";
 import { pageMetadata } from "@/lib/content/metadata";
 
 export const metadata = pageMetadata({
@@ -44,20 +45,24 @@ export default function PublicationsPage() {
         <HoverPreview previews={publicationPreviews(PUBLICATIONS)}>
           <PublicationIndex publications={PUBLICATIONS} headingLevel="h2" />
         </HoverPreview>
-        <SourceNote className="mt-8" ids={["orcid", "pubRF", "pubPolyandry", "pubInvasion", "thesesFr"]} label="Métadonnées vérifiées" />
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+          <SourceNote ids={["orcid", "pubRF", "pubPolyandry", "pubInvasion", "thesesFr"]} label="Métadonnées vérifiées" />
+          <ExportBibtex bibtex={PUBLICATIONS.map(toBibtex).join("\n\n")} />
+        </div>
       </section>
       <section aria-labelledby="comms" className="border-t border-ink bg-stone">
-        <div className="site-gutter mx-auto max-w-site py-20">
-          <SectionHeading
-            kicker="Communications & posters"
-            title={<span id="comms">Présenter, discuter, confronter.</span>}
-            intro="Communications orales et posters présentés lors de congrès, référencés dans l'archive ouverte HAL."
-            size="title"
-          />
-          <div className="mt-12">
-            <CommunicationList />
+        <div className="site-gutter mx-auto flex max-w-site flex-wrap items-end justify-between gap-6 py-16">
+          <div>
+            <h2 id="comms" className="font-serif text-title">
+              Communications et posters
+            </h2>
+            <p className="mt-3 max-w-2xl text-ink/80">
+              Présentés en congrès et référencés dans HAL, ils ont leur propre page, distincte des publications évaluées.
+            </p>
           </div>
-          <SourceNote className="mt-6" ids={["hal", "orcid"]} />
+          <ButtonLink href="/communications" variant="secondary">
+            {`Les ${COMMUNICATIONS.length} communications`}
+          </ButtonLink>
         </div>
       </section>
     </>

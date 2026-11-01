@@ -198,7 +198,7 @@ function ContactDetails() {
       </div>
       <ProfileLinks />
       <p className="text-sm text-muted">
-        <Link href="/a-propos" className="link-underline inline-block py-1">
+        <Link href="/parcours" className="link-underline inline-block py-1">
           En savoir plus sur mon parcours →
         </Link>
       </p>

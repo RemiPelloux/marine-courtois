@@ -3,16 +3,19 @@ import AxeBuilder from "@axe-core/playwright";
 
 const ROUTES = [
   "/",
+  "/parcours",
   "/recherche",
   "/recherche/fertilite-residuelle",
-  "/methodes",
   "/publications",
-  "/publications/polyandrie-technique-insecte-sterile",
-  "/communication",
+  "/publications/reponse-fonctionnelle-invasivite",
+  "/communications",
+  "/vulgarisation",
   "/enseignement",
+  "/projets",
+  "/projets/modele-individu-centre",
+  "/outils",
   "/these",
   "/laboratoire",
-  "/a-propos",
   "/contact",
 ];
 

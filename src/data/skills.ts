@@ -91,6 +91,13 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
     evidence: ["fig_chapter2_thesis.ipynb"],
   },
   {
+    id: "r",
+    name: "R",
+    family: "langages",
+    role: "Analyse comparative bayésienne (MCMCglmm, phylogénie) et figures de l'étude sur les réponses fonctionnelles",
+    evidence: ["Zenodo 10.5281/zenodo.18377688 — analysis/Main_Script.R", "Zenodo — analysis/Supplementary_Script_phylogeny.R"],
+  },
+  {
     id: "gitlab",
     name: "GitLab",
     family: "partage",
@@ -205,31 +212,3 @@ const RAW_CAPABILITIES: z.input<typeof capabilitySchema>[] = [
 ];
 
 export const CAPABILITIES: Capability[] = RAW_CAPABILITIES.map((c) => capabilitySchema.parse(c));
-
-/** The three methodological panels of chapter 02. */
-export const METHOD_PANELS = [
-  {
-    index: "01",
-    title: "Formaliser",
-    description:
-      "Traduire les mécanismes biologiques en variables, hypothèses et relations mathématiques pour rendre explicites les processus qui gouvernent un système.",
-    capabilities: ["Modélisation mathématique", "Systèmes dynamiques", "Dynamique des populations", "Analyse de modèles"],
-    visual: "phase" as const,
-  },
-  {
-    index: "02",
-    title: "Simuler",
-    description:
-      "Construire des expériences numériques pour explorer différents scénarios, représenter les interactions individuelles et observer l'évolution du système.",
-    capabilities: ["Python", "Simulation numérique", "Modèles individu-centrés", "Expériences computationnelles"],
-    visual: "agents" as const,
-  },
-  {
-    index: "03",
-    title: "Interpréter",
-    description:
-      "Comparer les résultats, étudier l'influence des paramètres, identifier les mécanismes importants et confronter les conclusions aux connaissances biologiques.",
-    capabilities: ["Analyse des résultats", "Analyse statistique", "Comparaison de scénarios", "Interprétation écologique"],
-    visual: "distribution" as const,
-  },
-] as const;

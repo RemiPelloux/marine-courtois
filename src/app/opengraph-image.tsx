@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { buildBoard } from "@/components/puzzle/board";
 import { CELL, FAMILY_FILL, PAD } from "@/components/puzzle/constants";
 
-export const alt = "Marine Courtois — Mathématiques, code et données : tout s'assemble.";
+export const alt = "Marine Courtois — Modéliser le vivant, simuler, analyser : tout s'assemble.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -19,11 +19,11 @@ export default function OpengraphImage() {
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%", width: 600 }}>
           <div style={{ fontSize: 24, fontFamily: "sans-serif" }}>Marine A. Courtois</div>
           <div style={{ display: "flex", flexDirection: "column", fontSize: 80, lineHeight: 0.98 }}>
-            <span>Mathématiques,</span>
-            <span>code et données :</span>
+            <span>Modéliser le vivant,</span>
+            <span>simuler, analyser :</span>
             <span style={{ color: "#2468b3", fontStyle: "italic" }}>tout s&apos;assemble.</span>
           </div>
-          <div style={{ fontSize: 22, fontFamily: "sans-serif", color: "#55626f" }}>Modélisation · Data science · Écologie</div>
+          <div style={{ fontSize: 22, fontFamily: "sans-serif", color: "#55626f" }}>Biologie mathématique · Simulation · Données</div>
         </div>
         <svg width={470} height={470} viewBox={`${-PAD} ${-PAD} ${view} ${view}`} style={{ marginLeft: 40 }}>
           {slots.map((s) => (

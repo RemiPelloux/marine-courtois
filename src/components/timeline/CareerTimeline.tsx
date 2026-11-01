@@ -96,12 +96,12 @@ function SweepItem({ m }: { m: PlacedMilestone }) {
         target="_blank"
         rel="noopener noreferrer"
         className={cn(
-          "ctl-label absolute block w-[13rem] py-1 outline-offset-4",
+          "ctl-label absolute block w-[11.25rem] py-1 outline-offset-4",
           m.alignEnd ? "right-0 text-right" : "left-0",
           up ? "bottom-[var(--h)] pb-2" : "top-[var(--h)] pt-2",
         )}
       >
-        <MilestoneCaption m={m} titleClassName="mt-0.5 block font-serif text-lg leading-tight" />
+        <MilestoneCaption m={m} titleClassName="mt-0.5 block font-serif text-[1.05rem] leading-tight" />
       </a>
     </li>
   );

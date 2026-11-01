@@ -1,12 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { PageHeader } from "@/components/editorial/PageHeader";
 import { SourceNote } from "@/components/scientific/SourceNote";
 import { PUBLICATIONS, getPublication, PUBLICATION_TYPE_LABEL } from "@/data/publications";
 import { getResearchTheme } from "@/data/research";
 import { RESEARCHER } from "@/data/researcher";
+import { PUBLICATION_DEPTH } from "@/data/publication-depth";
+import { DepthSections } from "@/components/publication/DepthSections";
+import { modulesFor } from "@/components/publication/PublicationModules";
+import { PublicationAside } from "@/components/publication/PublicationAside";
+import { CitationTools } from "@/components/publication/CitationTools";
+import { formatReference, toBibtex, bibtexKey } from "@/lib/content/citation";
 
 /** All known slugs are prerendered; unknown slugs render notFound(). */
 export const instant = false;
@@ -32,6 +38,7 @@ export default async function PublicationPage({ params }: PageProps<"/publicatio
   const p = getPublication(slug);
   if (!p) notFound();
   const themes = p.researchSlugs.map(getResearchTheme).filter((t) => t !== undefined);
+  const depth = PUBLICATION_DEPTH[p.id];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -70,7 +77,7 @@ export default async function PublicationPage({ params }: PageProps<"/publicatio
         }
       />
       <article className="site-gutter mx-auto max-w-site py-16 md:py-20">
-        <div className="grid gap-14 lg:grid-cols-12">
+        <div className="grid gap-14 pb-16 lg:grid-cols-12">
           <div className="space-y-10 lg:col-span-7">
             <section>
               <h2 className="label mb-3 text-muted">En bref</h2>
@@ -98,59 +105,16 @@ export default async function PublicationPage({ params }: PageProps<"/publicatio
                 </ul>
               </section>
             )}
+            <section aria-labelledby="citer">
+              <h2 id="citer" className="label mb-3 text-muted">
+                Citer
+              </h2>
+              <CitationTools reference={formatReference(p)} bibtex={toBibtex(p)} fileName={`${bibtexKey(p)}.bib`} />
+            </section>
           </div>
-          <aside className="space-y-8 lg:col-span-4 lg:col-start-9">
-            <dl className="divide-y divide-rule border-y border-ink text-sm">
-              <div className="py-3">
-                <dt className="label text-muted">Auteurs</dt>
-                <dd className="mt-1">
-                  {p.authors.map((a, i) => (
-                    <span key={a}>
-                      <span className={a.includes("Courtois") ? "font-medium underline decoration-antibes decoration-2 underline-offset-4" : undefined}>{a}</span>
-                      {i < p.authors.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </dd>
-                {p.authorNote && <dd className="mt-2 text-xs text-muted">{p.authorNote}</dd>}
-              </div>
-              {p.journal && (
-                <div className="py-3">
-                  <dt className="label text-muted">{p.publicationType === "these" ? "Cadre" : "Revue"}</dt>
-                  <dd className="mt-1 font-serif text-lg">
-                    {p.journal}
-                    {p.volume && <span className="tabular-nums text-xs text-muted"> {p.volume}{p.pages ? `, ${p.pages}` : ""}</span>}
-                  </dd>
-                </div>
-              )}
-              {p.date && (
-                <div className="py-3">
-                  <dt className="label text-muted">{p.publicationType === "these" ? "Soutenance" : "Publication"}</dt>
-                  <dd className="mt-1 tabular-nums">{p.date}</dd>
-                </div>
-              )}
-              {p.license && (
-                <div className="py-3">
-                  <dt className="label text-muted">Licence</dt>
-                  <dd className="mt-1 tabular-nums">{p.license}</dd>
-                </div>
-              )}
-            </dl>
-            <ul className="space-y-2">
-              {links.map((l) => (
-                <li key={l.url}>
-                  <a href={l.url} target="_blank" rel="noopener noreferrer" className="group flex items-start justify-between gap-3 rounded-[3px] border border-rule p-3 hover:border-ink">
-                    <span>
-                      <span className="block text-sm">{l.label}</span>
-                      <span className="block tabular-nums text-xs break-all text-muted">{l.value}</span>
-                    </span>
-                    <ArrowUpRight className="size-4 shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
-                    <span className="sr-only">(nouvel onglet)</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </aside>
+          <PublicationAside p={p} links={links} />
         </div>
+        {depth && <DepthSections depth={depth} modules={modulesFor(depth.module)} />}
         <SourceNote className="mt-16" ids={p.sources} />
       </article>
     </>

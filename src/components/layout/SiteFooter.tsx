@@ -23,9 +23,9 @@ function FooterSignature() {
     <div className="md:col-span-5">
       <Monogram inverted className="h-12 w-auto" />
       <p className="mt-6 font-serif text-4xl leading-tight md:text-5xl">
-        Mathématiques, code et données :
+        Modéliser le vivant,
         <br />
-        <em className="text-accent-light">tout s&apos;assemble.</em>
+        simuler, <em className="text-accent-light">analyser.</em>
       </p>
     </div>
   );

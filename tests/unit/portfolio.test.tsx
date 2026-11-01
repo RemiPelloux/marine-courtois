@@ -58,10 +58,13 @@ describe("toolkit", () => {
     expect(all).toHaveLength(TOOLS.length + DECLARED_TOOLS.length);
     expect(new Set(all.map((t) => t.id)).size).toBe(all.length);
   });
-  it("marks R, R Shiny, MySQL and Power BI as outside the published code", () => {
-    for (const name of ["R", "R Shiny", "MySQL", "Power BI"]) {
+  it("marks declared tools (R Shiny, MySQL, Power BI, machine learning) as outside the published code", () => {
+    for (const name of ["R Shiny", "MySQL", "Power BI", "scikit-learn", "PyTorch", "TensorFlow / Keras", "XGBoost / LightGBM"]) {
       expect(all.find((t) => t.name === name)?.inPublicCode).toBe(false);
     }
+  });
+  it("counts R as published code since the Zenodo R scripts, alongside Python", () => {
+    expect(all.find((t) => t.name === "R")?.inPublicCode).toBe(true);
     expect(all.find((t) => t.name === "Python")?.inPublicCode).toBe(true);
   });
   it("rejects a declared tool without a known family", () => {
@@ -78,7 +81,8 @@ describe("Toolkit", () => {
     expect(declared).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("status")).toHaveTextContent(`${DECLARED_TOOLS.length} outils`);
     expect(screen.getByTestId("tool-python")).toHaveAttribute("data-dim", "true");
-    expect(screen.getByTestId("tool-r")).toHaveAttribute("data-dim", "false");
+    expect(screen.getByTestId("tool-r")).toHaveAttribute("data-dim", "true");
+    expect(screen.getByTestId("tool-mysql")).toHaveAttribute("data-dim", "false");
   });
   it("returns to every tool at full strength", () => {
     render(<Toolkit families={groupToolkit()} />);

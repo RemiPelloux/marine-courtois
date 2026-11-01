@@ -13,15 +13,29 @@ function filterOptions(publications: Publication[]): FilterOptions {
   };
 }
 
-function matches(p: Publication, { year, type, theme }: Filters): boolean {
-  return (year === "all" || p.year === year) && (type === "all" || p.publicationType === type) && (theme === "all" || p.themes.includes(theme));
+const fold = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+/** Free-text search over titles, summary, approach, authors, venue and themes, accent-insensitive. */
+export function matchesQuery(p: Publication, query: string): boolean {
+  const q = fold(query.trim());
+  if (!q) return true;
+  const haystack = fold([p.title, p.editorialTitle, p.journal, p.doi, p.summaryFr, p.approachFr, ...p.authors, ...p.themes].filter(Boolean).join(" "));
+  return q.split(/\s+/).every((w) => haystack.includes(w));
 }
+
+function matches(p: Publication, { year, type, theme, query }: Filters): boolean {
+  return (year === "all" || p.year === year) && (type === "all" || p.publicationType === type) && (theme === "all" || p.themes.includes(theme)) && matchesQuery(p, query);
+}
+
+const dateKey = (p: Publication) => p.date ?? String(p.year);
 
 function usePublicationFilters(publications: Publication[]) {
   const options = useMemo(() => filterOptions(publications), [publications]);
   const [filters, setFilters] = useState<Filters>(NO_FILTER);
   const update = (patch: Partial<Filters>) => setFilters((f) => ({ ...f, ...patch }));
-  const filtered = publications.filter((p) => matches(p, filters));
+  const filtered = publications
+    .filter((p) => matches(p, filters))
+    .sort((a, b) => (filters.order === "desc" ? dateKey(b).localeCompare(dateKey(a)) : dateKey(a).localeCompare(dateKey(b))));
   return { options, filters, update, filtered };
 }
 

@@ -1,33 +1,8 @@
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
-import { CareerTimeline } from "@/components/timeline/CareerTimeline";
 import { ButtonLink } from "@/components/ui/Links";
-import { MILESTONES } from "@/data/milestones";
-import { COMMUNICATIONS } from "@/data/publications";
-import { COURSES, TEACHING_RESOURCES, type TeachingResource } from "@/data/teaching";
-
-const talks = COMMUNICATIONS.filter((c) => c.type === "communication").length;
-const posters = COMMUNICATIONS.length - talks;
-
-/** Talks and posters on the animated timeline, with a route to the full list. */
-export function CommunicationSection() {
-  return (
-    <section id="communication" aria-labelledby="communication-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
-      <SectionHeading
-        title={<span id="communication-titre">Communiquer la science.</span>}
-        intro={`${talks} communications orales et ${posters} posters en congrès, en français et en anglais : des mathématiques appliquées aux systèmes multi-agents et à l'écologie. Chaque jalon ouvre sa source.`}
-        className="mb-12"
-      />
-      <CareerTimeline milestones={MILESTONES} />
-      <div className="mt-10">
-        <ButtonLink href="/communication" variant="secondary">
-          Toutes les communications
-        </ButtonLink>
-      </div>
-    </section>
-  );
-}
+import { TEACHING_ACTIVITIES, TEACHING_RESOURCES, type TeachingResource } from "@/data/teaching";
 
 /** Teaching: courses once supplied, and the public material that already teaches. */
 export function TeachingSection({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" }) {
@@ -47,11 +22,16 @@ export function TeachingSection({ headingLevel = "h2" }: { headingLevel?: "h1" |
             </li>
           ))}
         </ul>
-        <p className="mt-8 max-w-2xl text-sm text-mist">
-          {COURSES.length === 0
-            ? "Le détail des enseignements (intitulés, niveaux, établissements, volumes horaires) sera publié ici."
-            : `${COURSES.length} enseignements, détaillés sur la page Enseignement.`}
-        </p>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <ButtonLink href="/vulgarisation" variant="ghost-dark">
+            Les modules de vulgarisation
+          </ButtonLink>
+          {TEACHING_ACTIVITIES.length > 0 && (
+            <ButtonLink href="/enseignement" variant="ghost-dark" icon={false}>
+              {`${TEACHING_ACTIVITIES.length} enseignements`}
+            </ButtonLink>
+          )}
+        </div>
       </div>
     </section>
   );

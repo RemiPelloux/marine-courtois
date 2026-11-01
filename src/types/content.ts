@@ -57,6 +57,10 @@ export const communicationSchema = z.object({
   halId: z.string(),
   url: z.url(),
   themes: z.array(z.string()),
+  /** context that HAL does not hold (format, staging), with its origin */
+  note: z.string().optional(),
+  /** id of an editorial feature (see data/features.ts) */
+  featureId: z.string().optional(),
 });
 export type Communication = z.infer<typeof communicationSchema>;
 

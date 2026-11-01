@@ -111,7 +111,7 @@ function ToolTooltip({ tool }: { tool: ToolkitEntry }) {
       className="pointer-events-none absolute bottom-[calc(100%+0.5rem)] left-1/2 z-20 w-56 -translate-x-1/2 bg-paper px-3 py-2 text-xs leading-snug text-ink opacity-0 shadow-[0_6px_24px_rgba(11,45,79,0.25)] transition-opacity duration-200 group-hover:opacity-100"
     >
       {tool.role}
-      <span className="mt-1 block text-muted">{tool.inPublicCode ? "Importé dans les dépôts publics" : "Hors code publié"}</span>
+      <span className="mt-1 block text-muted">{tool.inPublicCode ? "Utilisé dans le code publié" : "Hors code publié"}</span>
     </span>
   );
 }
@@ -146,7 +146,7 @@ function Legend() {
   return (
     <ul className="mono-meta mt-6 flex flex-wrap gap-x-8 gap-y-2 text-muted">
       <li className="flex items-center gap-2">
-        <span className="inline-block size-3.5 bg-antibes" aria-hidden /> Importé dans les dépôts publics (GitLab)
+        <span className="inline-block size-3.5 bg-antibes" aria-hidden /> Utilisé dans le code publié (GitLab, Zenodo)
       </li>
       <li className="flex items-center gap-2">
         <span className="inline-block size-3.5 border border-dashed border-antibes" aria-hidden /> Également utilisé, hors code publié

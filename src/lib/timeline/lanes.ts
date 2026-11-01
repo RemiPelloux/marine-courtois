@@ -9,8 +9,8 @@ export function axisPercent(iso: string, span: [number, number] = SPAN): number 
   return ((dateToYear(iso) - a) / (b - a)) * 100;
 }
 
-/** Label width as a share of the axis (≈ 13rem on a 1280px stage). */
-export const LABEL_WIDTH = 16;
+/** Label width as a share of the axis (≈ 11.25rem on a 1280px stage). */
+export const LABEL_WIDTH = 14;
 
 /** Lanes, alternating above (negative) and below (positive) the axis. */
 export const LANES = [-1, 1, -2, 2, -3, 3] as const;

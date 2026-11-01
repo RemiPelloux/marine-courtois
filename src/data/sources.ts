@@ -103,6 +103,20 @@ export const SOURCES = {
     kind: "archive",
     verifies: "Titres, événements, lieux et dates des communications scientifiques.",
   },
+  orcidEmployment: {
+    id: "orcidEmployment",
+    label: "ORCID — activités professionnelles",
+    url: "https://orcid.org/0009-0002-3623-1460",
+    kind: "registry",
+    verifies: "Doctorante, INRAE et Université Côte d'Azur, Sophia Antipolis, d'octobre 2022 à septembre 2025.",
+  },
+  owner: {
+    id: "owner",
+    label: "Informations fournies par Marine Courtois",
+    url: "https://orcid.org/0009-0002-3623-1460",
+    kind: "registry",
+    verifies: "Éléments déclarés par la chercheuse (outils hors code publié, format des posters, projets en cours), sans preuve publique à ce jour.",
+  },
 } as const satisfies Record<string, Source>;
 
 export type SourceId = keyof typeof SOURCES;

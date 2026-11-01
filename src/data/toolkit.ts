@@ -4,11 +4,10 @@ import type { z } from "zod";
 
 /**
  * Tools supplied by the site owner (2026-11-01). They do not appear in Marine's
- * public repositories, so they carry no code evidence and are shown apart from TOOLS.
+ * public code (GitLab, Zenodo), so they carry no code evidence and are shown apart from TOOLS.
  * Roles describe the tool itself, not a project: add project details only with a source.
  */
 const RAW_DECLARED: z.input<typeof declaredToolSchema>[] = [
-  { id: "r", name: "R", role: "Langage d'analyse statistique et de modélisation", family: "langages" },
   { id: "r-shiny", name: "R Shiny", role: "Applications web interactives écrites en R", family: "visualisation" },
   { id: "mysql", name: "MySQL", role: "Bases de données relationnelles, requêtes SQL", family: "donnees" },
   { id: "power-bi", name: "Power BI", role: "Tableaux de bord et rapports de données", family: "visualisation" },

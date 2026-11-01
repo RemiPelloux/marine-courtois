@@ -2,16 +2,19 @@ import { test, expect, type Page } from "@playwright/test";
 
 const ROUTES = [
   "/",
+  "/parcours",
   "/recherche",
   "/recherche/fertilite-residuelle",
-  "/methodes",
   "/publications",
-  "/publications/polyandrie-technique-insecte-sterile",
-  "/communication",
+  "/publications/reponse-fonctionnelle-invasivite",
+  "/communications",
+  "/vulgarisation",
   "/enseignement",
+  "/projets",
+  "/projets/modele-individu-centre",
+  "/outils",
   "/these",
   "/laboratoire",
-  "/a-propos",
   "/contact",
 ];
 
@@ -129,4 +132,54 @@ test("the email stays hidden until a visitor asks for it", async ({ page }) => {
   expect(await page.content()).not.toContain("@inrae.fr");
   await page.getByRole("button", { name: "Afficher l'adresse électronique" }).first().click();
   await expect(page.locator('a[href^="mailto:"]').first()).toHaveText(/@inrae\.fr$/, { timeout: 4000 });
+});
+
+test("former URLs redirect to the new sections", async ({ request }) => {
+  for (const [from, to] of [["/a-propos", "/parcours"], ["/methodes", "/outils"], ["/communication", "/communications"]]) {
+    const r = await request.get(from, { maxRedirects: 0 });
+    expect(r.status(), from).toBe(308);
+    expect(r.headers().location).toContain(to);
+  }
+});
+
+test("draft projects stay out of the site", async ({ page }) => {
+  // with Cache Components the not-found page streams (status may stay 200); it must be noindex and show none of the draft
+  for (const slug of ["deep-learning", "application-shiny"]) {
+    await page.goto(`/projets/${slug}`);
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("ne mène nulle part");
+    await expect(page.locator('meta[name="robots"][content*="noindex"]').first()).toBeAttached();
+    await expect(page.locator("body")).not.toContainText(/Expérimentations en deep learning|Application Shiny/);
+  }
+  await page.goto("/projets");
+  await expect(page.locator("#contenu, main").first()).not.toContainText("Expérimentations en deep learning");
+});
+
+test("the career leaf selects a piece and follows the keyboard", async ({ page }) => {
+  await page.goto("/parcours");
+  const leaf = page.getByRole("group", { name: /Parcours en puzzle/ });
+  await leaf.getByRole("button", { name: /^Soutenance/ }).click();
+  await expect(page.getByRole("heading", { level: 3, name: "Soutenance de thèse" })).toBeVisible();
+  await page.keyboard.press("Home");
+  await expect(page.getByRole("heading", { level: 3, name: /Premier poster/ })).toBeVisible();
+});
+
+test("the aquarium pauses and its prey density can be changed", async ({ page }) => {
+  await page.goto("/publications/reponse-fonctionnelle-invasivite");
+  const tank = page.locator("figure").filter({ has: page.getByRole("img", { name: /Aquarium illustratif/ }) });
+  await tank.scrollIntoViewIfNeeded();
+  await tank.getByRole("button", { name: "Pause" }).click();
+  await expect(tank.getByRole("button", { name: "Lecture" })).toBeVisible();
+  const slider = tank.getByRole("slider", { name: /Densité de proies/ });
+  await slider.focus();
+  await page.keyboard.press("End");
+  await expect(tank.locator("output").first()).toHaveText("90");
+});
+
+test("the publication index searches and exports BibTeX", async ({ page }) => {
+  await page.goto("/publications");
+  await page.getByRole("searchbox").fill("drosophila");
+  await expect(page.getByRole("status").first()).toContainText("1 résultat");
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: /Exporter toutes les références/ }).click();
+  expect((await download).suggestedFilename()).toBe("courtois-publications.bib");
 });

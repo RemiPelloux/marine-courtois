@@ -1,12 +1,19 @@
+import { teachingActivitySchema, type TeachingActivity } from "@/types/portfolio";
+import type { z } from "zod";
+
 /**
- * Teaching. `courses` stays empty until the site owner supplies the courses
- * (title, level, institution, year, hours): nothing here is inferred.
- * `resources` are public teaching material that already exists.
+ * Teaching. Activities stay empty until Marine supplies them (title,
+ * institution, level, period, format, objectives, methods, supports):
+ * nothing is inferred from the doctorate. `resources` are public teaching
+ * material that already exists.
  */
-export type Course = { title: string; level: string; institution: string; year: string; hours?: number };
 export type TeachingResource = { title: string; text: string; href: string; external: boolean };
 
-export const COURSES: Course[] = [];
+const RAW_ACTIVITIES: z.input<typeof teachingActivitySchema>[] = [];
+
+export const TEACHING_ACTIVITIES: TeachingActivity[] = RAW_ACTIVITIES.map((t) => teachingActivitySchema.parse(t)).filter(
+  (t) => t.visibility === "public",
+);
 
 export const TEACHING_RESOURCES: TeachingResource[] = [
   {
@@ -24,7 +31,7 @@ export const TEACHING_RESOURCES: TeachingResource[] = [
   {
     title: "L'explorateur de modèles",
     text: "Observer un mécanisme, faire varier ses paramètres, lire le résultat : trois modèles publiés, manipulables dans le navigateur.",
-    href: "/methodes#model-explorer",
+    href: "/laboratoire#model-explorer",
     external: false,
   },
 ];

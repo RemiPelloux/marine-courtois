@@ -6,10 +6,10 @@ export const RESEARCHER = {
   name: "Marine A. Courtois",
   displayName: "Marine Courtois",
   monogram: "MC",
-  title: "Docteure en biologie mathématique — modélisation, data science et écologie",
-  discipline: "Modélisation & data science",
-  tagline: "Mathématiques, code et données : tout s'assemble.",
-  taglineEn: "Mathematics, code and data, fitted together.",
+  title: "Docteure en biologie mathématique — modélisation, simulation et analyse de données",
+  discipline: "Biologie mathématique & données",
+  tagline: "Modéliser le vivant, simuler, analyser.",
+  taglineEn: "Modelling life, simulating, analysing.",
   doctorate: {
     institution: "Université Côte d'Azur",
     defenseDate: "2025-11-27",
@@ -51,18 +51,25 @@ export const RESEARCH_SEQUENCE = [
   { fr: "Comprendre", en: "Understand" },
 ] as const;
 
+/**
+ * Eight universes, seven entries: Vulgarisation and Enseignement share
+ * "Transmettre". `match` lists every path that lights the entry up.
+ */
 export const NAV_ITEMS = [
-  { href: "/recherche", label: "Recherche" },
-  { href: "/communication", label: "Communication" },
-  { href: "/enseignement", label: "Enseignement" },
-  { href: "/publications", label: "Publications" },
-  { href: "/methodes", label: "Méthodes" },
-  { href: "/a-propos", label: "À propos" },
+  { href: "/parcours", label: "Parcours", match: ["/parcours", "/these"] },
+  { href: "/recherche", label: "Recherche", match: ["/recherche"] },
+  { href: "/publications", label: "Publications", match: ["/publications"] },
+  { href: "/communications", label: "Communications", match: ["/communications"] },
+  { href: "/vulgarisation", label: "Transmettre", match: ["/vulgarisation", "/enseignement"] },
+  { href: "/projets", label: "Projets", match: ["/projets", "/laboratoire"] },
+  { href: "/outils", label: "Outils", match: ["/outils"] },
 ] as const;
 
 /** Pages kept out of the main navigation, listed in the footer. */
 export const SECONDARY_NAV = [
+  { href: "/vulgarisation", label: "Vulgarisation" },
+  { href: "/enseignement", label: "Enseignement" },
   { href: "/these", label: "Thèse" },
-  { href: "/laboratoire", label: "Laboratoire" },
+  { href: "/laboratoire", label: "Laboratoire interactif" },
   { href: "/contact", label: "Contact" },
 ] as const;

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, GraduationCap, Microscope, Presentation, type LucideIcon } from "lucide-react";
+import { BookOpen, FlaskConical, Microscope, Presentation, type LucideIcon } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import { a11y } from "@/i18n";
 import { ToolIcon } from "@/components/interactions/tool-icons";
@@ -10,7 +10,7 @@ type PieceProps = { slot: PuzzleSlot; tools: number; dim: boolean; onHover: (id:
 
 /** Short on-piece labels; the caption always gives the full name. */
 const SHORT: Record<string, string> = { tensorflow: "TF / Keras", boosting: "XGB / LGBM" };
-const AXIS_ICON: Record<string, LucideIcon> = { recherche: Microscope, communication: Presentation, enseignement: GraduationCap, publications: BookOpen };
+const AXIS_ICON: Record<string, LucideIcon> = { recherche: Microscope, publications: BookOpen, projets: FlaskConical, transmettre: Presentation };
 
 /** Content sits between the tab zones: icon in the middle band, label in the 67–79 band. */
 const ICON = { x: 34, y: 25, size: 32 };

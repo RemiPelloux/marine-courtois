@@ -4,8 +4,8 @@ import { a11y } from "@/i18n";
 import { motion, useReducedMotion } from "motion/react";
 
 const LINES = [
-  { text: "Mathématiques,", italic: false },
-  { text: "code et données :", italic: false },
+  { text: "Modéliser le vivant,", italic: false },
+  { text: "simuler, analyser :", italic: false },
   { text: "tout s'assemble", italic: true },
 ];
 
