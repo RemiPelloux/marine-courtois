@@ -10,7 +10,7 @@
 <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-171B18?style=flat-square&logo=nextdotjs&logoColor=F5F2EB">
 <img alt="TypeScript strict" src="https://img.shields.io/badge/TypeScript-strict-171B18?style=flat-square&logo=typescript&logoColor=F5F2EB">
 <img alt="Tailwind CSS 4" src="https://img.shields.io/badge/Tailwind-4-171B18?style=flat-square&logo=tailwindcss&logoColor=F5F2EB">
-<img alt="Tests" src="https://img.shields.io/badge/tests-102%20passing-0B2D4F?style=flat-square">
+<img alt="Tests" src="https://img.shields.io/badge/tests-107%20passing-2468B3?style=flat-square">
 <img alt="WCAG 2.2 AA" src="https://img.shields.io/badge/WCAG-2.2%20AA-0B2D4F?style=flat-square">
 </p>
 
@@ -129,7 +129,7 @@ Détails : [`docs/SCIENTIFIC_VISUALIZATIONS.md`](docs/SCIENTIFIC_VISUALIZATIONS.
 | `/publications` · `/publications/[slug]` | 3 articles, la thèse, 8 communications (HAL), filtres, données structurées |
 | `/these` | Explorateur des 6 chapitres, manuscrit PDF, diapositives de soutenance |
 | `/laboratoire` | Model Explorer, séquence TIS, lâchers impulsionnels, modèle individu-centré, explorateur de code |
-| `/a-propos` · `/contact` | Frise animée et jalons vérifiés, intérêts de recherche, courriel et profils |
+| `/a-propos` · `/contact` | Frise animée et jalons vérifiés, intérêts de recherche, profils ; courriel protégé contre le spam (particules qui composent l'adresse au clic, jamais présente en clair dans le HTML ni le JavaScript) |
 
 <br>
 
@@ -158,8 +158,8 @@ pnpm dev                 # http://localhost:3000
 | :-- | :-- |
 | `pnpm build` · `pnpm start` | build et serveur de production |
 | `pnpm lint` · `pnpm typecheck` | ESLint · TypeScript strict |
-| `pnpm test` | 46 tests Vitest (modèles, données, frise, composants) |
-| `pnpm test:e2e` | 56 tests Playwright, desktop 1440 px et mobile 390 px, dont 20 audits d'accessibilité axe WCAG 2.2 AA (après `pnpm build`) |
+| `pnpm test` | 49 tests Vitest (modèles, données, frise, adresse protégée, composants) |
+| `pnpm test:e2e` | 58 tests Playwright, desktop 1440 px et mobile 390 px, dont 20 audits d'accessibilité axe WCAG 2.2 AA (après `pnpm build`) |
 | `pnpm readme:banner` | régénère la bannière animée à partir du modèle |
 | `pnpm readme:screens` · `pnpm readme:tour` | captures et visite vidéo (serveur de production sur `:3300`) |
 
