@@ -505,6 +505,139 @@
 }
 
 /* ------------------------------------------------------------------
+   Coast scene (CoastScene.tsx) — Garoupe lighthouse and the sea, footer.
+   The beam turns with the lens: it shortens as it faces the viewer (the
+   lantern flashes), then reaches out the other way. Still when motion is reduced.
+   ------------------------------------------------------------------ */
+.coast-beam {
+  transform-box: view-box;
+  opacity: 0.85;
+}
+.coast-wave {
+  transform-box: fill-box;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .coast-beam {
+    animation: coast-sweep 12s ease-in-out infinite;
+  }
+  .coast-halo {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: coast-flash 6s ease-in-out infinite;
+  }
+  .coast-lantern {
+    animation: coast-lamp 6s ease-in-out infinite;
+  }
+  .coast-wave--back {
+    animation: coast-drift 70s linear infinite;
+  }
+  .coast-wave--mid {
+    animation: coast-drift 46s linear infinite reverse;
+  }
+  .coast-wave--front {
+    animation: coast-drift 30s linear infinite;
+  }
+  .coast-glint {
+    animation: coast-glint 2.4s ease-in-out infinite;
+  }
+  .coast-star {
+    animation: coast-twinkle 6s ease-in-out infinite;
+  }
+  .coast-boat {
+    animation: coast-sail 140s linear -55s infinite;
+  }
+  .coast-boat-rock {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: coast-rock 4.5s ease-in-out infinite;
+  }
+}
+.coast-boat {
+  transform: translateX(520px);
+}
+@keyframes coast-sail {
+  from {
+    transform: translateX(-60px);
+  }
+  to {
+    transform: translateX(1500px);
+  }
+}
+@keyframes coast-rock {
+  0%,
+  100% {
+    transform: rotate(-3deg) translateY(0);
+  }
+  50% {
+    transform: rotate(3deg) translateY(2px);
+  }
+}
+@keyframes coast-sweep {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.85;
+  }
+  25% {
+    transform: scaleX(0.04);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scaleX(-1);
+    opacity: 0.85;
+  }
+  75% {
+    transform: scaleX(0.04);
+    opacity: 0.35;
+  }
+}
+/* the lantern flashes when the beam faces the viewer: at 25 % and 75 % of the sweep */
+@keyframes coast-flash {
+  0%,
+  100% {
+    transform: scale(1.9);
+    opacity: 1;
+  }
+  20%,
+  80% {
+    transform: scale(0.9);
+    opacity: 0.55;
+  }
+}
+@keyframes coast-lamp {
+  0%,
+  100% {
+    fill: #fff8e1;
+  }
+  50% {
+    fill: #e9c877;
+  }
+}
+@keyframes coast-drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes coast-glint {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes coast-twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ------------------------------------------------------------------
    Toolkit stack (Toolkit.tsx) — builds from the foundation up, once.
    ------------------------------------------------------------------ */
 @media (prefers-reduced-motion: no-preference) {

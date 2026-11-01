@@ -1,7 +1,7 @@
 import Link from "@/i18n/Link";
 import { NAV_ITEMS, RESEARCHER, RESEARCH_SEQUENCE, SECONDARY_NAV } from "@/data/researcher";
 import { Monogram } from "@/components/ui/Monogram";
-import { SeaRibbon } from "@/components/layout/SeaRibbon";
+import { CoastScene } from "@/components/layout/CoastScene";
 import { ProtectedEmail } from "@/components/interactions/ProtectedEmail";
 import { copy, type Lang } from "@/i18n/config";
 import { getLang } from "@/i18n/server";
@@ -95,7 +95,7 @@ export async function SiteFooter() {
   const t = COPY[lang];
   return (
     <footer className="on-dark bg-antibes text-paper">
-      <SeaRibbon />
+      <CoastScene />
       <div className="site-gutter mx-auto max-w-site py-16 md:py-20">
         <ResearchSequence lang={lang} />
         <div className="grid gap-12 md:grid-cols-12">
