@@ -3,6 +3,13 @@
 import { useId, type ReactNode } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { copy } from "@/i18n/config";
+import { useLang } from "@/i18n/client";
+
+const COPY = copy({
+  fr: { pause: "Pause", play: "Lecture", reset: "Relancer" },
+  en: { pause: "Pause", play: "Play", reset: "Restart" },
+});
 
 interface SliderProps {
   label: string;
@@ -129,7 +136,7 @@ export function PlayPauseReset({
   playing,
   onToggle,
   onReset,
-  resetLabel = "Relancer",
+  resetLabel,
   dark = false,
 }: {
   playing: boolean;
@@ -138,15 +145,16 @@ export function PlayPauseReset({
   resetLabel?: string;
   dark?: boolean;
 }) {
+  const t = COPY[useLang()];
   return (
     <div className="flex items-center gap-2">
       <IconButton onClick={onToggle} variant={dark ? "outline-dark" : "solid"}>
         {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
-        {playing ? "Pause" : "Lecture"}
+        {playing ? t.pause : t.play}
       </IconButton>
       <IconButton onClick={onReset} variant={dark ? "outline-dark" : "outline"}>
         <RotateCcw className="size-4" aria-hidden />
-        {resetLabel}
+        {resetLabel ?? t.reset}
       </IconButton>
     </div>
   );

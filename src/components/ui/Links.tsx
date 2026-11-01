@@ -1,6 +1,7 @@
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { NewTabHint } from "@/components/ui/NewTab";
 import type { ComponentProps, ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "ghost-dark" | "primary-dark";
@@ -61,7 +62,7 @@ function ButtonLinkContent({ external, icon, children }: { external: boolean; ic
           aria-hidden
         />
       )}
-      {external && <span className="sr-only">(nouvel onglet)</span>}
+      {external && <NewTabHint />}
     </>
   );
 }
@@ -80,7 +81,7 @@ export function TextLink({
       <a href={href} target="_blank" rel="noopener noreferrer" className={cls} {...rest}>
         {children}
         <ArrowUpRight className="size-[0.85em] shrink-0 translate-y-[0.1em]" aria-hidden />
-        <span className="sr-only">(nouvel onglet)</span>
+        <NewTabHint />
       </a>
     );
   }

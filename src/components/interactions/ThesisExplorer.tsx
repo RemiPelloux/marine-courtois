@@ -1,13 +1,47 @@
 "use client";
 
-import { a11y } from "@/i18n";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import type { CodeFile, Figure, Publication, ThesisChapter } from "@/types/content";
 import { cn } from "@/lib/utils/cn";
+import { copy } from "@/i18n/config";
+import { useA11y, useLang } from "@/i18n/client";
+import type { Lang } from "@/i18n/config";
+import { localizeChapters } from "@/data/thesis";
+import { SpeciesText } from "@/components/ui/Species";
+
+/** Short chapter title shown on the tabs: the French repository title, or the English one. */
+const CHAPTER_TITLE: Record<Lang, (c: ThesisChapter) => string> = { fr: (c) => c.titleFr, en: (c) => c.title };
+
+const COPY = copy({
+  fr: {
+    ch: "CH.",
+    chapter: "Chapitre",
+    approach: "Approche méthodologique",
+    concept: "Concept clé",
+    simple: "En termes simples",
+    figureFrom: "Figure issue de",
+    publication: "Publication associée",
+    noPublication: "Chapitre du manuscrit — voir la thèse.",
+    scripts: "Scripts associés",
+    folder: (name: string) => `Dossier « ${name} » ↗`,
+  },
+  en: {
+    ch: "CH.",
+    chapter: "Chapter",
+    approach: "Method",
+    concept: "Key concept",
+    simple: "In simple terms",
+    figureFrom: "Figure from",
+    publication: "Related publication",
+    noPublication: "Chapter of the thesis — see the manuscript.",
+    scripts: "Related scripts",
+    folder: (name: string) => `Folder “${name}” ↗`,
+  },
+});
 
 type HeadingLevel = "h2" | "h3";
 
@@ -21,8 +55,9 @@ type ThesisSources = {
 
 type ThesisExplorerProps = ThesisSources & { chapters: ThesisChapter[]; headingLevel?: HeadingLevel };
 
-export function ThesisExplorer({ chapters, headingLevel = "h3", ...sources }: ThesisExplorerProps) {
+export function ThesisExplorer({ chapters: raw, headingLevel = "h3", ...sources }: ThesisExplorerProps) {
   const [n, setN] = useState(3);
+  const chapters = localizeChapters(raw, useLang());
   const ch = chapters.find((c) => c.number === n)!;
 
   return (
@@ -36,6 +71,8 @@ export function ThesisExplorer({ chapters, headingLevel = "h3", ...sources }: Th
 }
 
 function ChapterTabs({ chapters, active, onSelect }: { chapters: ThesisChapter[]; active: number; onSelect: (n: number) => void }) {
+  const a11y = useA11y();
+  const lang = useLang();
   return (
     <div role="tablist" aria-label={a11y.chapitresDeLaThese} className="flex gap-1 overflow-x-auto border-b border-paper/20 pb-px">
       {chapters.map((c) => {
@@ -50,8 +87,10 @@ function ChapterTabs({ chapters, active, onSelect }: { chapters: ThesisChapter[]
             onClick={() => onSelect(c.number)}
             className={cn("relative shrink-0 px-4 py-3 text-left transition-colors", on ? "text-paper" : "text-paper/55 hover:text-paper")}
           >
-            <span className="block tabular-nums text-xs text-mist">CH. {c.number}</span>
-            <span className="block max-w-[12rem] truncate font-serif text-lg">{c.titleFr}</span>
+            <span className="block tabular-nums text-xs text-mist">
+              {COPY[lang].ch} {c.number}
+            </span>
+            <span className="block max-w-[12rem] truncate font-serif text-lg">{CHAPTER_TITLE[lang](c)}</span>
             {on && <span className="absolute inset-x-0 -bottom-px h-[2px] bg-azur" />}
           </button>
         );
@@ -82,25 +121,35 @@ function ChapterPanel({ chapter, headingLevel, ...sources }: ChapterPanelProps) 
 }
 
 function ChapterSummary({ chapter: ch, headingLevel }: { chapter: ThesisChapter; headingLevel: HeadingLevel }) {
+  const lang = useLang();
+  const t = COPY[lang];
   return (
     <div className="space-y-7 lg:col-span-5">
       <div>
         <p className="label mb-3 text-accent-light">
-          Chapitre {ch.number} · <span lang="en">{ch.title}</span>
+          {t.chapter} {ch.number}
+          {lang === "fr" && (
+            <>
+              {" · "}
+              <span lang="en">{ch.title}</span>
+            </>
+          )}
         </p>
         {headingLevel === "h2" ? <h2 className="font-serif text-title">{ch.question}</h2> : <h3 className="font-serif text-title">{ch.question}</h3>}
       </div>
       <dl className="space-y-5 text-[0.95rem] leading-relaxed">
         <div>
-          <dt className="label mb-1 text-mist">Approche méthodologique</dt>
-          <dd className="text-paper/85">{ch.approach}</dd>
+          <dt className="label mb-1 text-mist">{t.approach}</dt>
+          <dd className="text-paper/85">
+            <SpeciesText text={ch.approach} />
+          </dd>
         </div>
         <div>
-          <dt className="label mb-1 text-mist">Concept clé</dt>
+          <dt className="label mb-1 text-mist">{t.concept}</dt>
           <dd className="text-paper/85">{ch.keyConcept}</dd>
         </div>
         <div className="border-l-2 border-accent-light pl-4">
-          <dt className="label mb-1 text-mist">En termes simples</dt>
+          <dt className="label mb-1 text-mist">{t.simple}</dt>
           <dd className="font-serif text-xl leading-snug">{ch.accessible}</dd>
         </div>
       </dl>
@@ -124,20 +173,22 @@ function ChapterResources({ chapter: ch, publications, codeFiles, figures, fileU
 }
 
 function ChapterFigure({ figure: fig }: { figure: Figure }) {
+  const t = COPY[useLang()];
   return (
     <figure className="rounded-[3px] bg-paper p-3">
       <Image src={fig.src} alt={fig.alt} width={fig.width} height={fig.height} className="h-auto w-full" sizes="(min-width: 1024px) 40vw, 100vw" />
       <figcaption className="mono-meta mt-2 text-xs text-muted">
-        Figure issue de <span className="text-ink">{fig.notebook.split("/").at(-1)}</span> — {fig.caption}
+        {t.figureFrom} <span className="text-ink">{fig.notebook.split("/").at(-1)}</span> — {fig.caption}
       </figcaption>
     </figure>
   );
 }
 
 function ChapterPublications({ publications }: { publications: Publication[] }) {
+  const t = COPY[useLang()];
   return (
     <div>
-      <p className="label mb-2 text-mist">Publication associée</p>
+      <p className="label mb-2 text-mist">{t.publication}</p>
       {publications.length ? (
         <ul className="space-y-2">
           {publications.map((p) => (
@@ -149,7 +200,7 @@ function ChapterPublications({ publications }: { publications: Publication[] }) 
           ))}
         </ul>
       ) : (
-        <p className="text-sm text-paper/60">Chapitre du manuscrit — voir la thèse.</p>
+        <p className="text-sm text-paper/60">{t.noPublication}</p>
       )}
     </div>
   );
@@ -158,9 +209,10 @@ function ChapterPublications({ publications }: { publications: Publication[] }) 
 type ChapterScriptsProps = { files: CodeFile[]; fileUrls: Record<string, string>; folder: string; folderUrl?: string };
 
 function ChapterScripts({ files, fileUrls, folder, folderUrl }: ChapterScriptsProps) {
+  const t = COPY[useLang()];
   return (
     <div>
-      <p className="label mb-2 text-mist">Scripts associés</p>
+      <p className="label mb-2 text-mist">{t.scripts}</p>
       <ul className="space-y-1.5">
         {files.map((f) => (
           <li key={f.id}>
@@ -173,7 +225,7 @@ function ChapterScripts({ files, fileUrls, folder, folderUrl }: ChapterScriptsPr
       </ul>
       {folderUrl && (
         <a href={folderUrl} target="_blank" rel="noopener noreferrer" className="mono-meta mt-3 inline-block py-1 text-mist underline underline-offset-4 hover:text-paper">
-          Dossier « {folder} » ↗
+          {t.folder(folder)}
         </a>
       )}
     </div>

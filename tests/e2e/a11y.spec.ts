@@ -1,23 +1,8 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { ALL_ROUTES } from "./routes";
 
-const ROUTES = [
-  "/",
-  "/parcours",
-  "/recherche",
-  "/recherche/fertilite-residuelle",
-  "/publications",
-  "/publications/reponse-fonctionnelle-invasivite",
-  "/communications",
-  "/vulgarisation",
-  "/enseignement",
-  "/projets",
-  "/projets/modele-individu-centre",
-  "/outils",
-  "/these",
-  "/laboratoire",
-  "/contact",
-];
+const ROUTES = ALL_ROUTES;
 
 test.use({ reducedMotion: "reduce" });
 

@@ -1,6 +1,5 @@
 "use client";
 
-import { a11y } from "@/i18n";
 import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
@@ -9,34 +8,75 @@ import { LineChart } from "@/components/visualizations/LineChart";
 import { IconButton } from "@/components/interactions/Controls";
 import { mulberry32 } from "@/lib/utils/random";
 import { cn } from "@/lib/utils/cn";
+import { copy } from "@/i18n/config";
+import { useA11y, useLang } from "@/i18n/client";
+import { numberFormats } from "@/lib/utils/format";
 
 /**
  * Lab module 2 — the principle of SIT as a five-step visual sequence.
  * Steps 1–4 are a schematic (illustrative individuals); step 5 uses the
  * residual-fertility model to show that the outcome depends on mechanisms.
  */
-const STEPS = [
-  {
-    title: "Population sauvage",
-    text: "Mâles et femelles sauvages se reproduisent : chaque accouplement peut produire une descendance.",
+const COPY = copy({
+  fr: {
+    steps: [
+      { title: "Population sauvage", text: "Mâles et femelles sauvages se reproduisent : chaque accouplement peut produire une descendance." },
+      { title: "Lâcher de mâles stériles", text: "Des mâles élevés et stérilisés sont relâchés. Ils ne produisent pas de descendance viable." },
+      {
+        title: "Compétition pour l'accouplement",
+        text: "Mâles sauvages et stériles entrent en compétition. Les mâles stériles peuvent être moins compétitifs (paramètre η).",
+      },
+      {
+        title: "Modification de la reproduction",
+        text: "Une femelle accouplée à un mâle stérile ne pond pas d'œufs viables — sauf fertilité résiduelle, ou ré-accouplement avec un mâle fertile.",
+      },
+      {
+        title: "Trajectoire de la population",
+        text: "L'issue n'est pas garantie : elle dépend de l'intensité des lâchers et de mécanismes comme la fertilité résiduelle.",
+      },
+    ],
+    step: (i: number) => `Étape ${i}/5 · `,
+    schematic: (i: number, title: string) => `Schéma, étape ${i} : ${title}.`,
+    series: ["Sans lâchers", "Lâchers faibles", "Lâchers forts", "Lâchers forts + 1 % de mâles fertiles"],
+    legend: (low: string, high: string) => ["— — sans lâchers", `- - - lâchers faibles (σ = ${low}/j)`, `—— lâchers forts (σ = ${high}/j)`, "—— lâchers forts + 1 % de mâles fertiles"],
+    x: "temps (jours)",
+    y: "femelles sauvages",
+    summary:
+      "Quatre trajectoires du modèle de fertilité résiduelle : sans lâchers la population reste stable ; des lâchers faibles la réduisent partiellement ; des lâchers forts l'éliminent ; avec 1 % de mâles relâchés fertiles, elle se stabilise à un niveau réduit.",
+    marks: ["mâle sauvage", "mâle stérile", "femelle", "accouplée à un mâle stérile"],
+    previous: "Étape précédente",
+    next: "Étape suivante",
+    note: "Étapes 1–4 : schéma illustratif. Étape 5 : modèle de fertilité résiduelle (Courtois et al., 2025), paramètres du notebook public.",
   },
-  {
-    title: "Lâcher de mâles stériles",
-    text: "Des mâles élevés et stérilisés sont relâchés. Ils ne produisent pas de descendance viable.",
+  en: {
+    steps: [
+      { title: "Wild population", text: "Wild males and females breed: each mating can produce offspring." },
+      { title: "Release of sterile males", text: "Reared, sterilised males are released. They produce no viable offspring." },
+      { title: "Competition for mating", text: "Wild and sterile males compete. Sterile males can be less competitive (parameter η)." },
+      {
+        title: "Altered reproduction",
+        text: "A female mated with a sterile male lays no viable eggs — unless there is residual fertility, or she remates with a fertile male.",
+      },
+      {
+        title: "Population trajectory",
+        text: "The outcome is not guaranteed: it depends on release intensity and on mechanisms such as residual fertility.",
+      },
+    ],
+    step: (i: number) => `Step ${i}/5 · `,
+    schematic: (i: number, title: string) => `Diagram, step ${i}: ${title}.`,
+    series: ["No releases", "Low releases", "High releases", "High releases + 1% fertile males"],
+    legend: (low: string, high: string) => ["— — no releases", `- - - low releases (σ = ${low}/day)`, `—— high releases (σ = ${high}/day)`, "—— high releases + 1% fertile males"],
+    x: "time (days)",
+    y: "wild females",
+    summary:
+      "Four trajectories of the residual-fertility model: without releases the population stays stable; low releases reduce it partly; high releases eliminate it; with 1% of released males fertile, it settles at a reduced level.",
+    marks: ["wild male", "sterile male", "female", "mated with a sterile male"],
+    previous: "Previous step",
+    next: "Next step",
+    note: "Steps 1–4: illustrative diagram. Step 5: residual-fertility model (Courtois et al., 2025), parameters from the public notebook.",
   },
-  {
-    title: "Compétition pour l'accouplement",
-    text: "Mâles sauvages et stériles entrent en compétition. Les mâles stériles peuvent être moins compétitifs (paramètre η).",
-  },
-  {
-    title: "Modification de la reproduction",
-    text: "Une femelle accouplée à un mâle stérile ne pond pas d'œufs viables — sauf fertilité résiduelle, ou ré-accouplement avec un mâle fertile.",
-  },
-  {
-    title: "Trajectoire de la population",
-    text: "L'issue n'est pas garantie : elle dépend de l'intensité des lâchers et de mécanismes comme la fertilité résiduelle.",
-  },
-];
+});
+type Text = (typeof COPY)["fr"];
 
 type Ind = { x: number; y: number; kind: "M" | "F" | "S"; mated?: "fertile" | "sterile" };
 
@@ -66,21 +106,22 @@ function residualTrajectories() {
 }
 
 export function SITSequence() {
+  const t = COPY[useLang()];
   const [step, setStep] = useState(0);
   const traj = useMemo(() => residualTrajectories(), []);
 
   return (
     <div className="grid gap-8 lg:grid-cols-12">
-      <StepList step={step} onSelect={setStep} />
+      <StepList step={step} onSelect={setStep} t={t} />
       <div className="lg:col-span-8">
-        <StepPanel step={step} traj={traj} />
-        <SequenceFooter onStep={setStep} />
+        <StepPanel step={step} traj={traj} t={t} />
+        <SequenceFooter onStep={setStep} t={t} />
       </div>
     </div>
   );
 }
 
-function StepPanel({ step, traj }: { step: number; traj: ReturnType<typeof residualTrajectories> }) {
+function StepPanel({ step, traj, t }: { step: number; traj: ReturnType<typeof residualTrajectories>; t: Text }) {
   const reduce = useReducedMotion();
   return (
     <AnimatePresence mode="wait" initial={false}>
@@ -92,19 +133,20 @@ function StepPanel({ step, traj }: { step: number; traj: ReturnType<typeof resid
         transition={{ duration: 0.25 }}
       >
         <p className="mb-5 max-w-2xl text-[1.02rem] leading-relaxed" aria-live="polite">
-          <span className="tabular-nums text-xs text-accent-deep">Étape {step + 1}/5 · </span>
-          {STEPS[step].text}
+          <span className="tabular-nums text-xs text-accent-deep">{t.step(step + 1)}</span>
+          {t.steps[step].text}
         </p>
-        {step < 4 ? <Schematic step={step} /> : <TrajectoryFigure traj={traj} />}
+        {step < 4 ? <Schematic step={step} label={t.schematic(step + 1, t.steps[step].title)} /> : <TrajectoryFigure traj={traj} t={t} />}
       </motion.div>
     </AnimatePresence>
   );
 }
 
-function StepList({ step, onSelect }: { step: number; onSelect: (i: number) => void }) {
+function StepList({ step, onSelect, t }: { step: number; onSelect: (i: number) => void; t: Text }) {
+  const a11y = useA11y();
   return (
     <ol className="space-y-1 lg:col-span-4" aria-label={a11y.etapes}>
-      {STEPS.map((s, i) => (
+      {t.steps.map((s, i) => (
         <li key={s.title}>
           <button
             type="button"
@@ -124,10 +166,10 @@ function StepList({ step, onSelect }: { step: number; onSelect: (i: number) => v
   );
 }
 
-function Schematic({ step }: { step: number }) {
+function Schematic({ step, label }: { step: number; label: string }) {
   const pts = useMemo(() => individuals(step), [step]);
   return (
-    <svg viewBox="0 0 400 200" className="h-auto w-full rounded-[3px] border border-rule bg-stone/50" role="img" aria-label={`Schéma, étape ${step + 1} : ${STEPS[step].title}.`}>
+    <svg viewBox="0 0 400 200" className="h-auto w-full rounded-[3px] border border-rule bg-stone/50" role="img" aria-label={label}>
       {step === 2 &&
         pts
           .filter((p) => p.kind === "F")
@@ -161,55 +203,64 @@ function IndividualMark({ ind: p }: { ind: Ind }) {
   );
 }
 
-function TrajectoryFigure({ traj }: { traj: Record<"none" | "low" | "high" | "rf", Trajectory> }) {
+function TrajectoryFigure({ traj, t }: { traj: Record<"none" | "low" | "high" | "rf", Trajectory>; t: Text }) {
+  const { nf } = numberFormats(useLang());
   return (
     <div>
       <LineChart
         height={300}
         series={[
-          { id: "n", label: "Sans lâchers", points: traj.none, color: "#6b7785", dash: "2 4", width: 1.5 },
-          { id: "l", label: "Lâchers faibles", points: traj.low, color: "#0f1d2e", dash: "6 4", width: 1.8 },
-          { id: "h", label: "Lâchers forts", points: traj.high, color: "#0f1d2e", width: 2 },
-          { id: "r", label: "Lâchers forts + 1 % de mâles fertiles", points: traj.rf, color: "#2468b3", width: 2.4 },
+          { id: "n", label: t.series[0], points: traj.none, color: "#6b7785", dash: "2 4", width: 1.5 },
+          { id: "l", label: t.series[1], points: traj.low, color: "#0f1d2e", dash: "6 4", width: 1.8 },
+          { id: "h", label: t.series[2], points: traj.high, color: "#0f1d2e", width: 2 },
+          { id: "r", label: t.series[3], points: traj.rf, color: "#2468b3", width: 2.4 },
         ]}
         xDomain={[0, 300]}
         yDomain={[0, 1050]}
-        xLabel="temps (jours)"
-        yLabel="femelles sauvages"
-        summary="Quatre trajectoires du modèle de fertilité résiduelle : sans lâchers la population reste stable ; des lâchers faibles la réduisent partiellement ; des lâchers forts l'éliminent ; avec 1 % de mâles relâchés fertiles, elle se stabilise à un niveau réduit."
+        xLabel={t.x}
+        yLabel={t.y}
+        summary={t.summary}
       />
       <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-xs text-ink/75">
-        <li>— — sans lâchers</li>
-        <li>- - - lâchers faibles (σ = 150/j)</li>
-        <li>—— lâchers forts (σ = 2 000/j)</li>
-        <li className="text-accent-deep">—— lâchers forts + 1 % de mâles fertiles</li>
+        {t.legend(nf.format(150), nf.format(2000)).map((line, i) => (
+          <li key={line} className={i === 3 ? "text-accent-deep" : undefined}>
+            {line}
+          </li>
+        ))}
       </ul>
     </div>
   );
 }
 
-function SequenceFooter({ onStep }: { onStep: Dispatch<SetStateAction<number>> }) {
+const MARK_CLASS = [
+  "size-2.5 rounded-full bg-ink",
+  "size-2.5 rounded-full bg-accent",
+  "size-3 rounded-full border-[1.5px] border-ink bg-paper",
+  "size-3 rounded-full border-[1.5px] border-accent bg-paper",
+];
+
+function SequenceFooter({ onStep, t }: { onStep: Dispatch<SetStateAction<number>>; t: Text }) {
+  const a11y = useA11y();
   return (
     <>
       <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
         <ul className="flex flex-wrap gap-4 text-xs text-ink/75" aria-label={a11y.legendeDuSchema}>
-          <li className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-ink" /> mâle sauvage</li>
-          <li className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-accent" /> mâle stérile</li>
-          <li className="flex items-center gap-1.5"><span className="size-3 rounded-full border-[1.5px] border-ink bg-paper" /> femelle</li>
-          <li className="flex items-center gap-1.5"><span className="size-3 rounded-full border-[1.5px] border-accent bg-paper" /> accouplée à un mâle stérile</li>
+          {t.marks.map((m, i) => (
+            <li key={m} className="flex items-center gap-1.5">
+              <span className={MARK_CLASS[i]} /> {m}
+            </li>
+          ))}
         </ul>
         <div className="flex gap-2">
-          <IconButton onClick={() => onStep((s) => Math.max(0, s - 1))} label="Étape précédente">
+          <IconButton onClick={() => onStep((s) => Math.max(0, s - 1))} label={t.previous}>
             <ArrowLeft className="size-4" aria-hidden />
           </IconButton>
-          <IconButton onClick={() => onStep((s) => Math.min(4, s + 1))} variant="solid" label="Étape suivante">
+          <IconButton onClick={() => onStep((s) => Math.min(4, s + 1))} variant="solid" label={t.next}>
             <ArrowRight className="size-4" aria-hidden />
           </IconButton>
         </div>
       </div>
-      <p className="mono-meta mt-4 text-muted">
-        Étapes 1–4 : schéma illustratif. Étape 5 : modèle de fertilité résiduelle (Courtois et al., 2025), paramètres du notebook public.
-      </p>
+      <p className="mono-meta mt-4 text-muted">{t.note}</p>
     </>
   );
 }

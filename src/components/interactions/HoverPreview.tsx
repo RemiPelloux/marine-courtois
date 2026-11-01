@@ -4,6 +4,10 @@ import Image from "next/image";
 import { animate, createAnimatable, utils, type AnimatableObject } from "animejs";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { RailFigure } from "@/data/research-rail";
+import { copy } from "@/i18n/config";
+import { useLang } from "@/i18n/client";
+
+const COPY = copy({ fr: { figure: "Figure de la thèse" }, en: { figure: "Thesis figure" } });
 
 const QUERY = "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
 const OFFSET = { x: 28, y: -60 };
@@ -66,6 +70,7 @@ export function HoverPreview({ previews, children }: { previews: Record<string, 
   const root = useRef<HTMLDivElement>(null);
   const card = useRef<HTMLDivElement>(null);
   const { shown, visible } = useCursorCard({ root, card }, previews);
+  const t = COPY[useLang()];
 
   useEffect(() => {
     if (card.current) show(card.current, visible);
@@ -80,7 +85,9 @@ export function HoverPreview({ previews, children }: { previews: Record<string, 
         {fig && (
           <>
             <Image src={fig.src} alt="" width={fig.width} height={fig.height} sizes="22rem" loading="eager" className="h-auto w-full mix-blend-multiply" />
-            <p className="mono-meta mt-2 text-muted">Figure de la thèse — {fig.notebook.split("/").pop()}</p>
+            <p className="mono-meta mt-2 text-muted">
+              {t.figure} — {fig.notebook.split("/").pop()}
+            </p>
           </>
         )}
       </div>

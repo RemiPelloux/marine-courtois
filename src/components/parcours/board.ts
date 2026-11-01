@@ -1,25 +1,13 @@
-import { EXPERIENCES, EXPERIENCE_KIND_LABEL } from "@/data/experiences";
-import { maskCells, maskBumps, growthOrder, scatterFromCentre, leafMask } from "@/lib/puzzle/mask";
+import { COMPETENCE_DOMAINS, DOMAIN_IDS, competencesIn, type Competence, type DomainId } from "@/data/competences";
+import { maskCells, maskBumps, scatterFromCentre } from "@/lib/puzzle/mask";
 import { piecePath } from "@/lib/puzzle/geometry";
-import { formatDateFr } from "@/lib/utils/format";
-import type { Experience } from "@/types/portfolio";
+import type { Lang } from "@/i18n/config";
 
 export const CAREER_CELL = 100;
+/** Each domain is a block three pieces wide. */
+export const BLOCK_COLS = 3;
 
-/** An upright leaf sized to the pieces: it grows from the stalk (bottom) to the tip (top). */
-export const LEAF = leafMask(EXPERIENCES.length);
-
-export type CareerPiece = {
-  id: string;
-  kind: Experience["kind"];
-  kindLabel: string;
-  label: string;
-  year?: string;
-  title: string;
-  detail: string;
-  when?: string;
-  place?: string;
-  href?: string;
+export type CompetencePiece = Competence & {
   r: number;
   c: number;
   order: number;
@@ -27,39 +15,47 @@ export type CareerPiece = {
   scatter: { dx: number; dy: number; rot: number };
 };
 
-function whenLabel(e: Experience) {
-  if (!e.date) return undefined;
-  return e.endDate ? `${formatDateFr(e.date)} — ${formatDateFr(e.endDate)}` : formatDateFr(e.date);
+export type DomainBlock = { id: DomainId; title: string; subtitle: string; rows: number; pieces: CompetencePiece[] };
+
+/** A block of `n` cells: full rows of three, the last row left-aligned. */
+export function blockMask(n: number, cols = BLOCK_COLS): string[] {
+  const rows = Math.ceil(n / cols);
+  return Array.from({ length: rows }, (_, r) => "#".repeat(Math.min(cols, n - r * cols)).padEnd(cols, "."));
 }
 
-/** Dated pieces in chronological order, then the skills that crown the leaf. */
-export function orderedExperiences(list: Experience[] = EXPERIENCES) {
-  const dated = list.filter((e) => e.date).sort((a, b) => a.date!.localeCompare(b.date!));
-  return [...dated, ...list.filter((e) => !e.date)];
+/**
+ * All blocks stacked in one mask, an empty row between two blocks: edges inside
+ * a block interlock, block outlines stay flat, and each block gets its own tabs.
+ */
+function stackBlocks(counts: number[]) {
+  const mask: string[] = [];
+  const starts = counts.map((n) => {
+    const start = mask.length;
+    mask.push(...blockMask(n), ".".repeat(BLOCK_COLS));
+    return start;
+  });
+  return { mask, starts };
 }
 
-export function buildCareerBoard(list: Experience[] = EXPERIENCES, mask: string[] = leafMask(list.length)) {
-  const cells = growthOrder(maskCells(mask));
-  const items = orderedExperiences(list);
-  if (items.length !== cells.length) throw new Error(`Leaf has ${cells.length} cells for ${items.length} pieces`);
-  const pieces: CareerPiece[] = items.map((e, i) => ({
-    id: e.id,
-    kind: e.kind,
-    kindLabel: EXPERIENCE_KIND_LABEL[e.kind],
-    label: e.label,
-    year: e.date?.slice(0, 4),
-    title: e.title,
-    detail: e.detail,
-    when: whenLabel(e),
-    place: e.place,
-    href: e.href,
-    r: cells[i].r,
-    c: cells[i].c,
-    order: i,
-    path: piecePath(maskBumps(mask, cells[i].r, cells[i].c), CAREER_CELL),
-    scatter: scatterFromCentre(cells[i], cells, i),
-  }));
-  return { pieces, rows: mask.length, cols: Math.max(...mask.map((r) => r.length)) };
+/** The career puzzle: four domain blocks, each made of its competence pieces. */
+export function buildCompetenceBoard(lang: Lang, list: Competence[] = competencesIn(lang)) {
+  const stray = list.filter((x) => !(DOMAIN_IDS as readonly string[]).includes(x.domain));
+  if (stray.length) throw new Error(`Competences outside the four domains: ${stray.map((x) => x.id).join(", ")}`);
+  const groups = COMPETENCE_DOMAINS.map((d) => ({ d, items: list.filter((x) => x.domain === d.id) }));
+  const { mask, starts } = stackBlocks(groups.map((g) => g.items.length));
+  let order = 0;
+  const domains: DomainBlock[] = groups.map(({ d, items }, i) => {
+    const cells = maskCells(blockMask(items.length));
+    const pieces = items.map((x, j) => ({
+      ...x,
+      ...cells[j],
+      order: order++,
+      path: piecePath(maskBumps(mask, starts[i] + cells[j].r, cells[j].c), CAREER_CELL),
+      scatter: scatterFromCentre(cells[j], cells, j),
+    }));
+    return { id: d.id, title: d.title[lang], subtitle: d.subtitle[lang], rows: Math.ceil(items.length / BLOCK_COLS), pieces };
+  });
+  return { domains };
 }
 
-export type CareerBoard = ReturnType<typeof buildCareerBoard>;
+export type CompetenceBoard = ReturnType<typeof buildCompetenceBoard>;

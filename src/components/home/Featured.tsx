@@ -1,34 +1,56 @@
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { MaturityBadge } from "@/components/projects/MaturityBadge";
-import { getPublication } from "@/data/publications";
-import { getProject } from "@/data/projects";
-import { getMedia } from "@/data/media";
+import { SpeciesText } from "@/components/ui/Species";
+import { getPublicationIn } from "@/data/publications";
+import { getProjectIn } from "@/data/projects";
+import { getMediaIn } from "@/data/media";
+import { copy } from "@/i18n/config";
+import { getLang } from "@/i18n/server";
+
+const COPY = copy({
+  fr: {
+    title: "À la une.",
+    intro: "Un article, le modèle qui l'accompagne, et une expérimentation technique que l'on peut manipuler.",
+    selected: "Publication sélectionnée",
+    depths: "Découvrir, comprendre, approfondir",
+  },
+  en: {
+    title: "Featured.",
+    intro: "An article, the model that goes with it, and a technical experiment you can handle.",
+    selected: "Selected publication",
+    depths: "Discover, understand, go deeper",
+  },
+});
 
 /** Three doors into the work: one article, one model, one technical experiment. */
-export function FeaturedSection() {
-  const pub = getPublication("pub-2026-polyandry")!;
-  const abm = getProject("modele-individu-centre")!;
-  const explorer = getProject("explorateur-de-modeles")!;
-  const figure = getMedia("fig-ch4-abm")!;
+export async function FeaturedSection() {
+  const lang = await getLang();
+  const t = COPY[lang];
+  const pub = getPublicationIn(lang, "pub-2026-polyandry")!;
+  const abm = getProjectIn(lang, "modele-individu-centre")!;
+  const explorer = getProjectIn(lang, "explorateur-de-modeles")!;
+  const figure = getMediaIn(lang, "fig-ch4-abm")!;
   return (
     <section aria-labelledby="une" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
-      <SectionHeading title={<span id="une">À la une.</span>} intro="Un article, le modèle qui l'accompagne, et une expérimentation technique que l'on peut manipuler." className="mb-12" />
+      <SectionHeading title={<span id="une">{t.title}</span>} intro={t.intro} className="mb-12" />
       <div className="grid gap-12 lg:grid-cols-12">
         <article className="group relative lg:col-span-5">
           <p className="text-sm text-accent-deep">
-            Publication sélectionnée · {pub.journal} {pub.year}
+            {t.selected} · {pub.journal} {pub.year}
           </p>
           <h3 className="mt-3 font-serif text-[2.3rem] leading-[1.05]">
             <Link href={`/publications/${pub.slug}`} className="after:absolute after:inset-0 hover:text-accent-deep">
-              {pub.editorialTitle}
+              <SpeciesText text={pub.editorialTitle ?? pub.title} />
             </Link>
           </h3>
-          <p className="mt-4 text-[1.02rem] leading-relaxed text-ink/80">{pub.questionFr}</p>
+          <p className="mt-4 text-[1.02rem] leading-relaxed text-ink/80">
+            <SpeciesText text={pub.question} />
+          </p>
           <p className="mt-6 inline-flex items-center gap-2 font-serif text-lg">
-            Découvrir, comprendre, approfondir <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
+            {t.depths} <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
           </p>
         </article>
         <article className="group relative lg:col-span-4">
@@ -51,7 +73,9 @@ export function FeaturedSection() {
               {explorer.title}
             </Link>
           </h3>
-          <p className="mt-3 text-[0.98rem] leading-relaxed text-ink/80">{explorer.tagline}</p>
+          <p className="mt-3 text-[0.98rem] leading-relaxed text-ink/80">
+            <SpeciesText text={explorer.tagline} />
+          </p>
         </article>
       </div>
     </section>

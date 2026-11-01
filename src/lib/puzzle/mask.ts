@@ -7,26 +7,6 @@ import type { Bumps } from "@/lib/puzzle/geometry";
  */
 export type Cell = { r: number; c: number };
 
-/**
- * An upright leaf of exactly `n` cells, six columns wide: rows of 2 and 4 at
- * the stalk, as many full rows as needed, then 4 and 2 at the tip; surplus
- * cells are taken off the tip, so any number of pieces still makes a leaf.
- */
-export function leafMask(n: number, cols = 6): string[] {
-  const k = Math.max(0, Math.ceil((n - 12) / cols));
-  const widths = [2, 4, ...Array<number>(k).fill(cols), 4, 2]; // top → bottom
-  let surplus = widths.reduce((a, b) => a + b, 0) - n;
-  for (let i = 0; i < widths.length && surplus > 0; i++) {
-    const cut = Math.min(widths[i], surplus);
-    widths[i] -= cut;
-    surplus -= cut;
-  }
-  return widths.filter((w) => w > 0).map((w) => {
-    const start = Math.floor((cols - w) / 2);
-    return ".".repeat(start) + "#".repeat(w) + ".".repeat(cols - start - w);
-  });
-}
-
 export function maskCells(mask: string[]): Cell[] {
   return mask.flatMap((row, r) => [...row].flatMap((ch, c) => (ch === "#" ? [{ r, c }] : [])));
 }
@@ -43,11 +23,6 @@ export function maskBumps(mask: string[], r: number, c: number): Bumps {
     left: has(r, c - 1) ? -edgeSign(r, c - 1, 1) : 0,
     right: has(r, c + 1) ? edgeSign(r, c, 1) : 0,
   };
-}
-
-/** Growth order: row by row from the bottom (the stalk) to the top (the tip), left to right. */
-export function growthOrder(cells: Cell[]): Cell[] {
-  return [...cells].sort((a, b) => b.r - a.r || a.c - b.c);
 }
 
 /** Where a piece starts: pushed away from the centre of the shape. */

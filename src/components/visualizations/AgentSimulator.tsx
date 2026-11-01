@@ -3,11 +3,69 @@
 import { useRef, type RefObject } from "react";
 import { ABM_SCALE, type ABMSnapshot } from "@/lib/scientific/abm";
 import { LineChart, Legend, type ChartSeries } from "@/components/visualizations/LineChart";
-import { PlayPauseReset, SegmentedControl, Slider, IconButton } from "@/components/interactions/Controls";
+import { SegmentedControl, Slider, IconButton } from "@/components/interactions/Controls";
 import { DAYS, useAgentSimulator, type AgentSimulatorState } from "@/components/visualizations/agent-simulator/useAgentSimulator";
-import { nf } from "@/lib/utils/format";
-import { Shuffle } from "lucide-react";
+import { numberFormats } from "@/lib/utils/format";
+import { Pause, Play, RotateCcw, Shuffle } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
+import { copy } from "@/i18n/config";
+import { useLang } from "@/i18n/client";
+
+type FemaleCounts = ABMSnapshot["femaleStates"];
+
+const COPY = copy({
+  fr: {
+    individual: "Échelle individuelle — femelles et contenu de leur spermathèque",
+    compact: (day: string, n: string) => `jour ${day} · ${n} femelles · 1 point = 1 femelle`,
+    status: (day: number, f: FemaleCounts | undefined) =>
+      `Jour ${day} : ${f ? `${f.fertile} femelles avec uniquement du sperme fertile, ${f.mixed} avec les deux, ${f.sterile} avec uniquement du sperme stérile, ${f.unmated} non accouplées` : ""}.`,
+    swarm: { fertile: "fertile", mixed: "fertile + stérile", sterile: "stérile", unmated: "non accouplée" },
+    rule: "Règle d'utilisation du sperme",
+    release: "Mâles stériles lâchés / jour",
+    hint: (n: string) => `Équivaut à ${n} individus par jour à l'échelle du modèle original.`,
+    play: "Lecture",
+    pause: "Pause",
+    reset: "Réinitialiser",
+    reshuffle: "Autre réplique",
+    population: "Échelle de la population",
+    progress: (day: number, seed: number) => `jour ${day} / ${DAYS} · réplique n° ${seed}`,
+    larvae: "Larves",
+    females: "Femelles",
+    wild: "Mâles sauvages",
+    x: "temps (jours)",
+    y: "individus (échelle 1/50)",
+    summary: (rule: string, release: number, s: ABMSnapshot | undefined) =>
+      `Simulation individu-centrée, règle ${rule}, ${release} mâles stériles par jour. Jour ${s?.t ?? 0} : ${s?.larvae ?? 0} larves, ${s?.females ?? 0} femelles, ${s?.wildMales ?? 0} mâles sauvages, ${s?.sterileMales ?? 0} mâles stériles.`,
+  },
+  en: {
+    individual: "Individual scale — females and the content of their spermatheca",
+    compact: (day: string, n: string) => `day ${day} · ${n} females · 1 dot = 1 female`,
+    status: (day: number, f: FemaleCounts | undefined) =>
+      `Day ${day}: ${f ? `${f.fertile} females with fertile sperm only, ${f.mixed} with both, ${f.sterile} with sterile sperm only, ${f.unmated} unmated` : ""}.`,
+    swarm: { fertile: "fertile", mixed: "fertile + sterile", sterile: "sterile", unmated: "unmated" },
+    rule: "Sperm-use rule",
+    release: "Sterile males released / day",
+    hint: (n: string) => `Equivalent to ${n} individuals per day at the scale of the original model.`,
+    play: "Play",
+    pause: "Pause",
+    reset: "Reset",
+    reshuffle: "Another replicate",
+    population: "Population scale",
+    progress: (day: number, seed: number) => `day ${day} / ${DAYS} · replicate no. ${seed}`,
+    larvae: "Larvae",
+    females: "Females",
+    wild: "Wild males",
+    x: "time (days)",
+    y: "individuals (1/50 scale)",
+    summary: (rule: string, release: number, s: ABMSnapshot | undefined) =>
+      `Individual-based simulation, ${rule} rule, ${release} sterile males per day. Day ${s?.t ?? 0}: ${s?.larvae ?? 0} larvae, ${s?.females ?? 0} females, ${s?.wildMales ?? 0} wild males, ${s?.sterileMales ?? 0} sterile males.`,
+  },
+});
+
+const useText = () => {
+  const lang = useLang();
+  return { t: COPY[lang], nf: numberFormats(lang).nf };
+};
 
 const STATE_COLORS = {
   fertile: "#0f1d2e",
@@ -24,6 +82,7 @@ type FemaleState = keyof typeof STATE_COLORS;
  * the population-level time series.
  */
 export function AgentSimulator({ compact = false, dark = false }: { compact?: boolean; dark?: boolean }) {
+  const { t } = useText();
   const ref = useRef<HTMLDivElement>(null);
   const sim = useAgentSimulator({ ref, compact });
   const last = sim.history.at(-1);
@@ -35,7 +94,7 @@ export function AgentSimulator({ compact = false, dark = false }: { compact?: bo
       <div className="space-y-6 lg:col-span-4">
         <SimulatorControls sim={sim} />
         <div>
-          <p className="label mb-3 text-muted">Échelle individuelle — femelles et contenu de leur spermathèque</p>
+          <p className="label mb-3 text-muted">{t.individual}</p>
           <FemaleSwarm snapshot={last} compact={false} dark={dark} />
         </div>
       </div>
@@ -45,10 +104,11 @@ export function AgentSimulator({ compact = false, dark = false }: { compact?: bo
 }
 
 function CompactView({ ref, snapshot: last, dark }: { ref: RefObject<HTMLDivElement | null>; snapshot: ABMSnapshot | undefined; dark: boolean }) {
+  const { t, nf } = useText();
   return (
     <div ref={ref}>
       <p className={cn("mono-meta mb-2", dark ? "text-mist" : "text-muted")}>
-        jour {String(last?.t ?? 0).padStart(3, "0")} · {nf.format(last?.females ?? 0)} femelles · 1 point = 1 femelle
+        {t.compact(String(last?.t ?? 0).padStart(3, "0"), nf.format(last?.females ?? 0))}
       </p>
       <FemaleSwarm snapshot={last} compact dark={dark} />
     </div>
@@ -73,6 +133,7 @@ function dotStyle(s: FemaleState, dark: boolean) {
 }
 
 function FemaleSwarm({ snapshot: last, compact, dark }: { snapshot: ABMSnapshot | undefined; compact: boolean; dark: boolean }) {
+  const { t } = useText();
   const females = last?.femaleStates;
   const shown = femaleDots(females).slice(0, compact ? 240 : 600);
   return (
@@ -83,7 +144,7 @@ function FemaleSwarm({ snapshot: last, compact, dark }: { snapshot: ABMSnapshot 
         ))}
       </div>
       <p className="sr-only" role="status">
-        Jour {last?.t ?? 0} : {females ? `${females.fertile} femelles avec uniquement du sperme fertile, ${females.mixed} avec les deux, ${females.sterile} avec uniquement du sperme stérile, ${females.unmated} non accouplées` : ""}.
+        {t.status(last?.t ?? 0, females)}
       </p>
       <SwarmLegend dark={dark} />
     </div>
@@ -91,31 +152,33 @@ function FemaleSwarm({ snapshot: last, compact, dark }: { snapshot: ABMSnapshot 
 }
 
 function SwarmLegend({ dark }: { dark: boolean }) {
+  const { swarm } = useText().t;
   return (
     <ul className={cn("mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs", dark ? "text-paper/80" : "text-ink/75")}>
       <li className="flex items-center gap-1.5">
-        <span className={cn("size-2 rounded-full", dark ? "bg-paper" : "bg-ink")} /> fertile
+        <span className={cn("size-2 rounded-full", dark ? "bg-paper" : "bg-ink")} /> {swarm.fertile}
       </li>
       <li className="flex items-center gap-1.5">
-        <span className="size-2 rounded-full bg-[#7d8fa3]" /> fertile + stérile
+        <span className="size-2 rounded-full bg-[#7d8fa3]" /> {swarm.mixed}
       </li>
       <li className="flex items-center gap-1.5">
-        <span className="size-2 rounded-full bg-accent" /> stérile
+        <span className="size-2 rounded-full bg-accent" /> {swarm.sterile}
       </li>
       <li className="flex items-center gap-1.5">
-        <span className="size-2 rounded-full border border-muted-soft" /> non accouplée
+        <span className="size-2 rounded-full border border-muted-soft" /> {swarm.unmated}
       </li>
     </ul>
   );
 }
 
 function SimulatorControls({ sim }: { sim: AgentSimulatorState }) {
+  const { t } = useText();
   return (
     <div className="space-y-5 rounded-[3px] border border-rule p-4">
       <div className="grid gap-2">
-        <p className="text-sm">Règle d&apos;utilisation du sperme</p>
+        <p className="text-sm">{t.rule}</p>
         <SegmentedControl
-          label="Règle d'utilisation du sperme"
+          label={t.rule}
           value={sim.rule}
           onChange={sim.chooseRule}
           options={[
@@ -132,9 +195,10 @@ function SimulatorControls({ sim }: { sim: AgentSimulatorState }) {
 }
 
 function ReleaseSlider({ sim }: { sim: AgentSimulatorState }) {
+  const { t, nf } = useText();
   return (
     <Slider
-      label="Mâles stériles lâchés / jour"
+      label={t.release}
       symbol="×50"
       value={sim.release}
       min={0}
@@ -142,57 +206,64 @@ function ReleaseSlider({ sim }: { sim: AgentSimulatorState }) {
       step={20}
       onChange={sim.chooseRelease}
       format={(v) => nf.format(v)}
-      hint={`Équivaut à ${nf.format(v2(sim.release))} individus par jour à l'échelle du modèle original.`}
+      hint={t.hint(nf.format(v2(sim.release)))}
     />
   );
 }
 
 function RunButtons({ sim }: { sim: AgentSimulatorState }) {
+  const { t } = useText();
+  const playing = sim.playing && (sim.history.at(-1)?.t ?? 0) < DAYS;
   return (
     <div className="flex flex-wrap gap-2">
-      <PlayPauseReset playing={sim.playing && (sim.history.at(-1)?.t ?? 0) < DAYS} onToggle={sim.toggle} onReset={sim.reset} resetLabel="Réinitialiser" />
+      <IconButton onClick={sim.toggle} variant="solid">
+        {playing ? <Pause className="size-4" aria-hidden /> : <Play className="size-4" aria-hidden />}
+        {playing ? t.pause : t.play}
+      </IconButton>
+      <IconButton onClick={sim.reset}>
+        <RotateCcw className="size-4" aria-hidden /> {t.reset}
+      </IconButton>
       <IconButton onClick={sim.reshuffle}>
-        <Shuffle className="size-4" aria-hidden /> Autre réplique
+        <Shuffle className="size-4" aria-hidden /> {t.reshuffle}
       </IconButton>
     </div>
   );
 }
 
-function populationSeries(history: ABMSnapshot[]): ChartSeries[] {
-  const series = (key: "larvae" | "females" | "wildMales") => history.map((h) => [h.t, h[key]] as [number, number]);
-  return [
-    { id: "l", label: "Larves", points: series("larvae"), color: "#2468b3", width: 2.4 },
-    { id: "f", label: "Femelles", points: series("females"), color: "#0f1d2e", width: 1.8 },
-    { id: "w", label: "Mâles sauvages", points: series("wildMales"), color: "#6b7785", dash: "5 4", width: 1.6 },
-  ];
+type Text = (typeof COPY)["fr"];
+
+const SERIES_STYLE = [
+  { id: "l", key: "larvae", color: "#2468b3", width: 2.4 },
+  { id: "f", key: "females", color: "#0f1d2e", width: 1.8 },
+  { id: "w", key: "wildMales", color: "#6b7785", dash: "5 4", width: 1.6 },
+] as const;
+
+const seriesLabel = (t: Text, key: (typeof SERIES_STYLE)[number]["key"]) => ({ larvae: t.larvae, females: t.females, wildMales: t.wild })[key];
+
+function populationSeries(history: ABMSnapshot[], t: Text): ChartSeries[] {
+  return SERIES_STYLE.map(({ key, ...style }) => ({ ...style, label: seriesLabel(t, key), points: history.map((h) => [h.t, h[key]] as [number, number]) }));
 }
 
-const POPULATION_LEGEND = [
-  { label: "Larves", color: "#2468b3" },
-  { label: "Femelles", color: "#0f1d2e" },
-  { label: "Mâles sauvages", color: "#6b7785", dash: "5 4" },
-];
-
 function PopulationPanel({ sim: { history, rule, release, seed } }: { sim: AgentSimulatorState }) {
+  const { t } = useText();
   const last = history.at(-1);
+  const legend = SERIES_STYLE.map((s) => ({ label: seriesLabel(t, s.key), color: s.color, dash: "dash" in s ? s.dash : undefined }));
   return (
     <div className="lg:col-span-8">
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-3">
-        <p className="label text-muted">Échelle de la population</p>
-        <p className="mono-meta text-muted">
-          jour {last?.t ?? 0} / {DAYS} · réplique n° {seed}
-        </p>
+        <p className="label text-muted">{t.population}</p>
+        <p className="mono-meta text-muted">{t.progress(last?.t ?? 0, seed)}</p>
       </div>
       <div className="mb-3">
-        <Legend items={POPULATION_LEGEND} />
+        <Legend items={legend} />
       </div>
       <LineChart
-        series={populationSeries(history)}
+        series={populationSeries(history, t)}
         xDomain={[0, DAYS]}
         yDomain={[0, Math.max(800, ...history.map((h) => Math.max(h.larvae, h.females, h.wildMales))) * 1.05]}
-        xLabel="temps (jours)"
-        yLabel="individus (échelle 1/50)"
-        summary={`Simulation individu-centrée, règle ${rule}, ${release} mâles stériles par jour. Jour ${last?.t ?? 0} : ${last?.larvae ?? 0} larves, ${last?.females ?? 0} femelles, ${last?.wildMales ?? 0} mâles sauvages, ${last?.sterileMales ?? 0} mâles stériles.`}
+        xLabel={t.x}
+        yLabel={t.y}
+        summary={t.summary(rule, release, last)}
       />
     </div>
   );

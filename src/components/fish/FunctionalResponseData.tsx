@@ -2,23 +2,46 @@
 
 import { useId, useState } from "react";
 import { scaleLog, median } from "d3";
-import { a11y } from "@/i18n";
 import { SegmentedControl } from "@/components/interactions/Controls";
 import { FISH_INK, GROUP_LABEL } from "@/components/fish/palette";
 import { GROUPS, type Group } from "@/lib/fish/sim";
 import data from "@/data/generated/functional-responses.json";
+import { copy } from "@/i18n/config";
+import { useA11y, useLang } from "@/i18n/client";
 
 type Row = { species: string; group: Group; temp: number; a: number; h: number };
 type Variable = "a" | "h" | "ratio";
 
 const ROWS = data.rows as Row[];
 const VALUE: Record<Variable, (r: Row) => number> = { a: (r) => r.a, h: (r) => r.h, ratio: (r) => r.a / r.h };
-const OPTIONS: { value: Variable; label: string }[] = [
-  { value: "a", label: "Taux d'attaque a" },
-  { value: "h", label: "Temps de manipulation h" },
-  { value: "ratio", label: "Rapport a/h" },
-];
-const UNIT: Record<Variable, string> = { a: "m³ par prédateur et par jour", h: "jours", ratio: "a / h" };
+const COPY = copy({
+  fr: {
+    options: [
+      { value: "a", label: "Taux d'attaque a" },
+      { value: "h", label: "Temps de manipulation h" },
+      { value: "ratio", label: "Rapport a/h" },
+    ] as { value: Variable; label: string }[],
+    unit: { a: "m³ par prédateur et par jour", h: "jours", ratio: "a / h" } as Record<Variable, string>,
+    title: (label: string, n: number) => `${label} des ${n} estimations, par groupe, en échelle logarithmique.`,
+    count: (n: number) => `${n} estimations`,
+    axis: "échelle logarithmique ; trait noir : médiane du groupe",
+    caption: (obs: number, species: number) =>
+      `Données brutes du dépôt Zenodo (CC BY 4.0), même sélection que l'article : ${obs} estimations, ${species} espèces. Les conclusions publiées reposent sur des modèles bayésiens corrigés de la phylogénie et de la température (MCMCglmm), que ce graphique ne remplace pas.`,
+  },
+  en: {
+    options: [
+      { value: "a", label: "Attack rate a" },
+      { value: "h", label: "Handling time h" },
+      { value: "ratio", label: "Ratio a/h" },
+    ] as { value: Variable; label: string }[],
+    unit: { a: "m³ per predator per day", h: "days", ratio: "a / h" } as Record<Variable, string>,
+    title: (label: string, n: number) => `${label} of the ${n} estimates, by group, on a logarithmic scale.`,
+    count: (n: number) => `${n} estimates`,
+    axis: "logarithmic scale; black line: group median",
+    caption: (obs: number, species: number) =>
+      `Raw data from the Zenodo repository (CC BY 4.0), same selection as the article: ${obs} estimates, ${species} species. The published conclusions rest on Bayesian models corrected for phylogeny and temperature (MCMCglmm), which this plot does not replace.`,
+  },
+});
 
 const W = 680;
 const M = { top: 10, right: 16, bottom: 44, left: 16 };
@@ -36,6 +59,9 @@ const jitter = (i: number) => (((i * 9301 + 49297) % 233280) / 233280 - 0.5) * 3
  * corrected models, which these dots do not replace.
  */
 export function FunctionalResponseData() {
+  const lang = useLang();
+  const a11y = useA11y();
+  const t = COPY[lang];
   const [variable, setVariable] = useState<Variable>("a");
   const titleId = useId();
   const values = ROWS.map(VALUE[variable]);
@@ -48,9 +74,9 @@ export function FunctionalResponseData() {
 
   return (
     <figure>
-      <SegmentedControl label={a11y.variableAfficher} options={OPTIONS} value={variable} onChange={setVariable} />
+      <SegmentedControl label={a11y.variableAfficher} options={t.options} value={variable} onChange={setVariable} />
       <svg viewBox={`0 0 ${W} ${H}`} className="mt-6 h-auto w-full" role="img" aria-labelledby={titleId}>
-        <title id={titleId}>{`${OPTIONS.find((o) => o.value === variable)!.label} des ${ROWS.length} estimations, par groupe, en échelle logarithmique.`}</title>
+        <title id={titleId}>{t.title(t.options.find((o) => o.value === variable)!.label, ROWS.length)}</title>
         {GROUPS.map((g, gi) => {
           const rows = ROWS.map((r, i) => ({ r, i })).filter(({ r }) => r.group === g);
           const mid = M.top + gi * ROW_H + ROW_H / 2;
@@ -58,7 +84,7 @@ export function FunctionalResponseData() {
           return (
             <g key={g}>
               <text x={M.left} y={mid - ROW_H / 2 + 12} className="fill-ink text-[12px]">
-                {GROUP_LABEL[g]} · {rows.length} estimations
+                {GROUP_LABEL[g][lang]} · {t.count(rows.length)}
               </text>
               {rows.map(({ r, i }) => (
                 <circle key={i} cx={r2(x(VALUE[variable](r)))} cy={r2(mid + 6 + jitter(i) * 0.5)} r={3} fill={FISH_INK[g]} fillOpacity={0.55} />
@@ -74,13 +100,11 @@ export function FunctionalResponseData() {
           </text>
         ))}
         <text x={W / 2} y={H - 6} textAnchor="middle" className="fill-muted text-[11px]">
-          {UNIT[variable]} — échelle logarithmique ; trait noir : médiane du groupe
+          {t.unit[variable]} — {t.axis}
         </text>
       </svg>
       <figcaption className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
-        Données brutes du dépôt Zenodo (CC BY 4.0), même sélection que l&apos;article : {data.observations} estimations, {data.species} espèces.
-        Les conclusions publiées reposent sur des modèles bayésiens corrigés de la phylogénie et de la température (MCMCglmm), que ce
-        graphique ne remplace pas.
+        {t.caption(data.observations, data.species)}
       </figcaption>
     </figure>
   );

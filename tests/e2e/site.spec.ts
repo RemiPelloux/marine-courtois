@@ -1,22 +1,7 @@
 import { test, expect, type Page } from "@playwright/test";
+import { ALL_ROUTES } from "./routes";
 
-const ROUTES = [
-  "/",
-  "/parcours",
-  "/recherche",
-  "/recherche/fertilite-residuelle",
-  "/publications",
-  "/publications/reponse-fonctionnelle-invasivite",
-  "/communications",
-  "/vulgarisation",
-  "/enseignement",
-  "/projets",
-  "/projets/modele-individu-centre",
-  "/outils",
-  "/these",
-  "/laboratoire",
-  "/contact",
-];
+const ROUTES = ALL_ROUTES;
 
 function trackErrors(page: Page) {
   const errors: string[] = [];
@@ -154,13 +139,16 @@ test("draft projects stay out of the site", async ({ page }) => {
   await expect(page.locator("#contenu, main").first()).not.toContainText("Expérimentations en deep learning");
 });
 
-test("the career leaf selects a piece and follows the keyboard", async ({ page }) => {
+test("the competence puzzle opens a domain and follows the keyboard", async ({ page }) => {
   await page.goto("/parcours");
-  const leaf = page.getByRole("group", { name: /Parcours en puzzle/ });
-  await leaf.getByRole("button", { name: /^Soutenance/ }).click();
-  await expect(page.getByRole("heading", { level: 3, name: "Soutenance de thèse" })).toBeVisible();
+  const puzzle = page.getByRole("group", { name: /Compétences par domaine/ });
+  await puzzle.getByRole("button", { name: /^Statistiques/ }).click();
+  await expect(page.getByRole("heading", { level: 3, name: /Statistiques/ })).toBeVisible();
   await page.keyboard.press("Home");
-  await expect(page.getByRole("heading", { level: 3, name: /Premier poster/ })).toBeVisible();
+  await expect(puzzle.getByRole("button", { name: /^Mathématiques/ })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("heading", { level: 3, name: /Mathématiques/ })).toBeVisible();
+  await page.keyboard.press("End");
+  await expect(page.getByRole("heading", { level: 3, name: /Écologie/ })).toBeVisible();
 });
 
 test("the aquarium pauses and its prey density can be changed", async ({ page }) => {

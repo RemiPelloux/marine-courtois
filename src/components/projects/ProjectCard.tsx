@@ -1,17 +1,21 @@
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import { ArrowRight } from "lucide-react";
 import { MaturityBadge } from "@/components/projects/MaturityBadge";
 import { ToolIcon } from "@/components/interactions/tool-icons";
+import { SpeciesText } from "@/components/ui/Species";
 import { projectRelations } from "@/data/relations";
-import { getMedia } from "@/data/media";
+import { getMediaIn } from "@/data/media";
 import type { Project } from "@/types/portfolio";
 import Image from "next/image";
-import { a11y } from "@/i18n";
+import { getLang } from "@/i18n/server";
+import { a11yFor } from "@/i18n/locales";
 
-/** A project in the index: picture when there is one, question, maturity, tools. */
-export function ProjectCard({ project, large = false }: { project: Project; large?: boolean }) {
+/** A project in the index: picture when there is one, question, maturity, tools. Expects a project already in the page language. */
+export async function ProjectCard({ project, large = false }: { project: Project; large?: boolean }) {
+  const lang = await getLang();
+  const a11y = a11yFor(lang);
   const { tools } = projectRelations(project);
-  const cover = project.mediaIds.map(getMedia).find((m) => m?.kind === "image");
+  const cover = project.mediaIds.map((id) => getMediaIn(lang, id)).find((m) => m?.kind === "image");
   return (
     <article className="group relative flex h-full flex-col border-t-2 border-antibes pt-5">
       {large && cover && (
@@ -22,10 +26,12 @@ export function ProjectCard({ project, large = false }: { project: Project; larg
       <MaturityBadge status={project.status} />
       <h3 className={large ? "mt-4 font-serif text-[2.2rem] leading-[1.05]" : "mt-4 font-serif text-[1.65rem] leading-tight"}>
         <Link href={`/projets/${project.slug}`} className="after:absolute after:inset-0 hover:text-accent-deep">
-          {project.title}
+          <SpeciesText text={project.title} />
         </Link>
       </h3>
-      <p className="mt-3 text-[1rem] leading-relaxed text-ink/80">{project.tagline}</p>
+      <p className="mt-3 text-[1rem] leading-relaxed text-ink/80">
+        <SpeciesText text={project.tagline} />
+      </p>
       <ul className="mt-auto flex flex-wrap items-center gap-3 pt-6" aria-label={`${a11y.technologies} ${tools.map((t) => t.name).join(", ")}`}>
         {tools.slice(0, 6).map((t) => (
           <li key={t.id} title={t.name}>

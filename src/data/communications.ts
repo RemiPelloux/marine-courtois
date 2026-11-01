@@ -1,5 +1,8 @@
 import { communicationSchema, type Communication } from "@/types/content";
 import type { z } from "zod";
+import type { Lang } from "@/i18n/config";
+import { localizeById } from "@/i18n/localize";
+import { EN_COMMUNICATIONS } from "@/data/en/communications";
 
 /** Communications and posters — verified on HAL (titles, events, places, dates). */
 const RAW_COMMUNICATIONS: z.input<typeof communicationSchema>[] = [
@@ -42,7 +45,7 @@ const RAW_COMMUNICATIONS: z.input<typeof communicationSchema>[] = [
   {
     id: "hal-04808600",
     title:
-      "Analyse de l'impact du ré-accouplement et des biais d'utilisation du sperme chez Drosophila suzukii : élaboration d'un modèle individu-centré",
+      "Analyse de l'impact du ré-accouplement et des biais d'utilisation du sperme chez Drosophila suzukii : élaboration d'un modèle individu-centré",
     type: "communication",
     event: "JFSMA 2024 — 32es Journées Francophones sur les Systèmes Multi-Agents",
     place: "Cargèse, France",
@@ -181,3 +184,5 @@ export const COMMUNICATIONS: Communication[] = RAW_COMMUNICATIONS.map((c) => com
 );
 
 export const getCommunication = (id: string) => COMMUNICATIONS.find((c) => c.id === id);
+export const communicationsIn = (lang: Lang) => localizeById(COMMUNICATIONS, EN_COMMUNICATIONS, lang);
+export const getCommunicationIn = (lang: Lang, id: string) => communicationsIn(lang).find((c) => c.id === id);

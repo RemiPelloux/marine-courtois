@@ -1,43 +1,88 @@
 import { ArrowUpRight, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import Link from "@/i18n/Link";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { ButtonLink } from "@/components/ui/Links";
-import { TEACHING_ACTIVITIES, TEACHING_RESOURCES, type TeachingResource } from "@/data/teaching";
+import { teachingIn, teachingResourcesIn, type TeachingResource } from "@/data/teaching";
+import { copy, type Lang } from "@/i18n/config";
+import { getLang } from "@/i18n/server";
 
-/** Teaching: courses once supplied, and the public material that already teaches. */
-export function TeachingSection({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" }) {
+const COPY = copy({
+  fr: {
+    title: "Transmettre ce que je modélise.",
+    intro:
+      "Expliquer un modèle, apprendre à coder une simulation, lire un jeu de données : la transmission fait partie du travail. Les supports ci-dessous sont en accès libre.",
+    courses: "Enseignements",
+    allCourses: "Tous les enseignements",
+    outreach: "Les modules de vulgarisation",
+    newTab: "(nouvel onglet)",
+    source: "Source : informations fournies par Marine Courtois.",
+  },
+  en: {
+    title: "Teaching what I model.",
+    intro:
+      "Explaining a model, learning to code a simulation, reading a dataset: passing it on is part of the work. The material below is openly available.",
+    courses: "Teaching",
+    allCourses: "All teaching",
+    outreach: "The outreach modules",
+    newTab: "(new tab)",
+    source: "Source: information provided by Marine Courtois.",
+  },
+});
+
+type SectionProps = { headingLevel?: "h1" | "h2"; showCourses?: boolean };
+
+/** Teaching: the courses in brief (home) and the public material that already teaches. */
+export async function TeachingSection({ headingLevel = "h2", showCourses = true }: SectionProps) {
+  const lang = await getLang();
+  const t = COPY[lang];
   return (
     <section id="enseignement" aria-labelledby="enseignement-titre" className="on-dark scroll-mt-20 bg-antibes text-paper">
       <div className="site-gutter mx-auto max-w-site py-24 md:py-32">
-        <SectionHeading
-          as={headingLevel}
-          title={<span id="enseignement-titre">Transmettre ce que je modélise.</span>}
-          intro="Expliquer un modèle, apprendre à coder une simulation, lire un jeu de données : la transmission fait partie du travail. Les supports ci-dessous sont en accès libre."
-          className="mb-12"
-        />
+        <SectionHeading as={headingLevel} title={<span id="enseignement-titre">{t.title}</span>} intro={t.intro} className="mb-12" />
+        {showCourses && <CourseList lang={lang} />}
         <ul className="grid border-y border-paper/25 lg:grid-cols-3">
-          {TEACHING_RESOURCES.map((r, i) => (
-            <li key={r.title} className={i > 0 ? "border-t border-paper/20 lg:border-t-0 lg:border-l" : undefined}>
-              <ResourceLink r={r} />
+          {teachingResourcesIn(lang).map((r, i) => (
+            <li key={r.id} className={i > 0 ? "border-t border-paper/20 lg:border-t-0 lg:border-l" : undefined}>
+              <ResourceLink r={r} newTab={t.newTab} />
             </li>
           ))}
         </ul>
         <div className="mt-10 flex flex-wrap gap-3">
-          <ButtonLink href="/vulgarisation" variant="ghost-dark">
-            Les modules de vulgarisation
-          </ButtonLink>
-          {TEACHING_ACTIVITIES.length > 0 && (
-            <ButtonLink href="/enseignement" variant="ghost-dark" icon={false}>
-              {`${TEACHING_ACTIVITIES.length} enseignements`}
+          {showCourses && (
+            <ButtonLink href="/enseignement" variant="ghost-dark">
+              {t.allCourses}
             </ButtonLink>
           )}
+          <ButtonLink href="/vulgarisation" variant="ghost-dark" icon={!showCourses}>
+            {t.outreach}
+          </ButtonLink>
         </div>
       </div>
     </section>
   );
 }
 
-function ResourceLink({ r }: { r: TeachingResource }) {
+/** One line per programme: where, and what is taught. */
+function CourseList({ lang }: { lang: Lang }) {
+  return (
+    <div className="mb-14">
+      <h3 className="font-serif text-[1.65rem] leading-tight">{COPY[lang].courses}</h3>
+      <ul className="mt-5 border-t border-paper/25">
+        {teachingIn(lang).map((a) => (
+          <li key={a.id} className="grid gap-1 border-b border-paper/15 py-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] md:gap-8">
+            <span className={a.emphasis === "featured" ? "font-semibold" : undefined}>
+              {a.institution ? `${a.institution} · ${a.programme}` : a.programme}
+            </span>
+            <span className="text-[0.95rem] leading-relaxed text-paper/80">{a.subjects}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-3 text-xs text-mist">{COPY[lang].source}</p>
+    </div>
+  );
+}
+
+function ResourceLink({ r, newTab }: { r: TeachingResource; newTab: string }) {
   const body = (
     <>
       <span className="flex items-start justify-between gap-4">
@@ -58,7 +103,7 @@ function ResourceLink({ r }: { r: TeachingResource }) {
   return (
     <a href={r.href} target="_blank" rel="noopener noreferrer" className={cls}>
       {body}
-      <span className="sr-only">(nouvel onglet)</span>
+      <span className="sr-only">{newTab}</span>
     </a>
   );
 }

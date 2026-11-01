@@ -4,8 +4,24 @@ import { type CSSProperties } from "react";
 import { usePlayOnce } from "@/hooks/usePlayOnce";
 import { MILESTONE_KIND_LABEL, type Milestone, type MilestoneKind } from "@/data/milestones";
 import { axisPercent, placeMilestones, yearTicks, SPAN, type PlacedMilestone } from "@/lib/timeline/lanes";
-import { formatDateFr } from "@/lib/utils/format";
+import { formatDate } from "@/lib/utils/format";
 import { cn } from "@/lib/utils/cn";
+import { copy, type Lang } from "@/i18n/config";
+import { useLang } from "@/i18n/client";
+import { NewTabHint } from "@/components/ui/NewTab";
+
+const COPY = copy({
+  fr: {
+    verified: "Jalons vérifiés",
+    note: (from: number, to: number) => `Positions à la date exacte, de ${from} à ${to}. Chaque jalon ouvre sa source : HAL, DOI ou theses.fr.`,
+    articleOrPhd: "Article ou doctorat",
+  },
+  en: {
+    verified: "Verified milestones",
+    note: (from: number, to: number) => `Placed at their exact date, from ${from} to ${to}. Each milestone opens its source: HAL, DOI or theses.fr.`,
+    articleOrPhd: "Article or PhD",
+  },
+});
 
 /** Seconds for the playhead to cross the axis; each milestone appears as it is passed. */
 const SWEEP = 3.4;
@@ -31,12 +47,13 @@ const DOT: Record<MilestoneKind, string> = {
 export function CareerTimeline({ milestones }: { milestones: Milestone[] }) {
   const { ref, play } = usePlayOnce();
   const placed = placeMilestones(milestones);
+  const t = COPY[useLang()];
 
   return (
     <div ref={ref} data-play={play || undefined} className="ctl on-dark relative bg-antibes text-paper">
       <div className="flex flex-wrap items-end justify-between gap-6 px-6 pt-8 md:px-10 md:pt-10">
         <div>
-          <p className="label text-accent-light">Jalons vérifiés</p>
+          <p className="label text-accent-light">{t.verified}</p>
           <p className="mt-2 font-serif text-[clamp(2.4rem,5vw,4rem)] leading-none tabular-nums">2022 — 2026</p>
         </div>
         <Legend />
@@ -44,7 +61,7 @@ export function CareerTimeline({ milestones }: { milestones: Milestone[] }) {
       <SweepAxis placed={placed} />
       <MobileSequence placed={placed} />
       <p className="px-6 pb-8 text-xs text-mist md:px-10 md:pb-10">
-        Positions à la date exacte, de {Math.floor(SPAN[0])} à {Math.floor(SPAN[1])}. Chaque jalon ouvre sa source : HAL, DOI ou theses.fr.
+        {t.note(Math.floor(SPAN[0]), Math.floor(SPAN[1]))}
       </p>
     </div>
   );
@@ -125,24 +142,24 @@ function MobileSequence({ placed }: { placed: PlacedMilestone[] }) {
 
 /** Date · kind, the short title, and the full title for screen readers. */
 function MilestoneCaption({ m, titleClassName }: { m: PlacedMilestone; titleClassName: string }) {
+  const lang: Lang = useLang();
   return (
     <>
       <span className="block text-xs text-mist tabular-nums">
-        {formatDateFr(m.date)} · {MILESTONE_KIND_LABEL[m.kind]}
+        {formatDate(m.date, lang)} · {MILESTONE_KIND_LABEL[m.kind][lang]}
       </span>
       <span className={titleClassName}>{m.short}</span>
-      <span className="sr-only">
-        {m.title} (nouvel onglet)
-      </span>
+      <span className="sr-only">{m.title}</span> <NewTabHint />
     </>
   );
 }
 
 function Legend() {
+  const lang = useLang();
   const items: { kind: MilestoneKind; label: string }[] = [
-    { kind: "communication", label: "Communication" },
-    { kind: "poster", label: "Poster" },
-    { kind: "article", label: "Article ou doctorat" },
+    { kind: "communication", label: MILESTONE_KIND_LABEL.communication[lang] },
+    { kind: "poster", label: MILESTONE_KIND_LABEL.poster[lang] },
+    { kind: "article", label: COPY[lang].articleOrPhd },
   ];
   return (
     <ul className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-paper/80">

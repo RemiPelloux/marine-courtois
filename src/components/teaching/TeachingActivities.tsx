@@ -1,45 +1,74 @@
+import { copy, type Lang } from "@/i18n/config";
 import type { TeachingActivity } from "@/types/portfolio";
 
-/** Teaching cards, each one expandable to its objectives, methods and supports. */
-export function TeachingActivities({ activities }: { activities: TeachingActivity[] }) {
-  if (activities.length === 0) {
-    return (
-      <p className="max-w-3xl border border-dashed border-antibes p-6 text-[1.02rem] leading-relaxed text-ink/80">
-        Les enseignements réalisés (intitulé, établissement, niveau, période, format, objectifs et supports) seront présentés ici dès
-        qu&apos;ils seront renseignés. Aucun enseignement n&apos;est déduit du parcours doctoral.
-      </p>
-    );
-  }
+const COPY = copy({
+  fr: {
+    featured: "Enseignements principaux",
+    others: "Autres formations",
+    source: "Source : informations fournies par Marine Courtois.",
+  },
+  en: {
+    featured: "Main teaching",
+    others: "Other programmes",
+    source: "Source: information provided by Marine Courtois.",
+  },
+});
+
+type Props = { activities: TeachingActivity[]; lang: Lang };
+
+/** Teaching by institution and programme: featured ones first, the rest as rows, the summary group last. */
+export function TeachingActivities({ activities, lang }: Props) {
+  const t = COPY[lang];
+  const featured = activities.filter((a) => a.emphasis === "featured");
+  const standard = activities.filter((a) => a.emphasis === "standard");
+  const summary = activities.filter((a) => a.emphasis === "summary");
   return (
-    <ul className="grid gap-8 md:grid-cols-2">
-      {activities.map((t) => (
-        <li key={t.id} className="border-t-2 border-antibes pt-5">
-          <p className="text-sm text-accent-deep">
-            {t.institution} · {t.level} · {t.period}
-          </p>
-          <h3 className="mt-2 font-serif text-[1.8rem] leading-tight">{t.title}</h3>
-          <p className="mt-1 text-sm text-muted">
-            {t.format}
-            {t.hours ? ` · ${t.hours} h` : ""}
-          </p>
-          <details className="mt-4">
-            <summary className="cursor-pointer py-1 text-sm hover:text-accent-deep">Objectifs, méthodes et supports</summary>
-            <div className="mt-3 space-y-3 text-[0.98rem] text-ink/85">
-              <p>{t.objectives.join(" · ")}</p>
-              <p>{t.methods.join(" · ")}</p>
-              <ul className="space-y-1">
-                {t.supports.map((s) => (
-                  <li key={s.url}>
-                    <a href={s.url} className="link-underline">
-                      {s.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </details>
-        </li>
-      ))}
-    </ul>
+    <div className="space-y-14">
+      <ul aria-label={t.featured} className="grid gap-10 md:grid-cols-2">
+        {featured.map((a) => (
+          <li key={a.id} className="border-t-2 border-antibes pt-5">
+            <h3 className="font-serif text-[2rem] leading-tight">{a.institution}</h3>
+            <p className="mt-2 text-sm text-accent-deep">{a.programme}</p>
+            <p className="mt-4 max-w-xl text-[1.08rem] leading-relaxed text-ink/90">{a.subjects}</p>
+          </li>
+        ))}
+      </ul>
+      <ul aria-label={t.others} className="border-b border-ink/15">
+        {standard.map((a) => (
+          <TeachingRow key={a.id} heading={a.programme} meta={a.institution} text={a.subjects} />
+        ))}
+        {summary.length > 0 && <SummaryRow items={summary} />}
+      </ul>
+      <p className="mono-meta text-muted">{t.source}</p>
+    </div>
+  );
+}
+
+function TeachingRow({ heading, meta, text }: { heading: string; meta?: string; text: string }) {
+  return (
+    <li className="grid gap-2 border-t border-ink/15 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-8">
+      <div>
+        <h3 className="font-serif text-[1.45rem] leading-tight">{heading}</h3>
+        {meta && <p className="mt-1 text-sm text-muted">{meta}</p>}
+      </div>
+      <p className="text-[1.02rem] leading-relaxed text-ink/85">{text}</p>
+    </li>
+  );
+}
+
+/** Several programmes of one institution, condensed into one row. */
+function SummaryRow({ items }: { items: TeachingActivity[] }) {
+  return (
+    <li className="grid gap-2 border-t border-ink/15 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-8">
+      <h3 className="font-serif text-[1.45rem] leading-tight">{items[0].institution}</h3>
+      <dl className="space-y-2 text-[1.02rem] leading-relaxed text-ink/85">
+        {items.map((a) => (
+          <div key={a.id}>
+            <dt className="text-sm text-accent-deep">{a.programme}</dt>
+            <dd>{a.subjects}</dd>
+          </div>
+        ))}
+      </dl>
+    </li>
   );
 }

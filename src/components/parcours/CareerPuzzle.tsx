@@ -1,107 +1,86 @@
 "use client";
 
-import { useRef, useState, type KeyboardEvent } from "react";
-import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { a11y } from "@/i18n";
+import { useState, type KeyboardEvent } from "react";
+import { copy } from "@/i18n/config";
+import { useLang } from "@/i18n/client";
+import { cn } from "@/lib/utils/cn";
 import { usePlayOnce } from "@/hooks/usePlayOnce";
-import { CAREER_CELL, type CareerBoard, type CareerPiece } from "@/components/parcours/board";
-import { CareerPieceShape, KIND_FILL } from "@/components/parcours/CareerPieceShape";
+import { BLOCK_COLS, CAREER_CELL as S, type CompetenceBoard, type DomainBlock } from "@/components/parcours/board";
+import { CompetencePiece, DOMAIN_FILL } from "@/components/parcours/CompetencePiece";
+import { DomainPanel } from "@/components/parcours/DomainPanel";
+import type { DomainId } from "@/data/competences";
 
-const S = CAREER_CELL;
+const COPY = copy({
+  fr: { group: "Compétences par domaine : choisissez un domaine, ou passez de l'un à l'autre avec les flèches" },
+  en: { group: "Competences by domain: pick a domain, or move between them with the arrow keys" },
+});
+
+const STEP: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
 
 /**
- * The career as a leaf that grows piece by piece, from the stalk (first
- * poster, 2022, at the bottom) to the tip (the skills built along the way). One piece is
- * selected at a time; arrows, Home and End move the selection.
+ * The career as four interlocking domains: mathematics, statistics, biology,
+ * ecology. Each block is made of its competence pieces, which fly in and lock
+ * together. One domain is selected at a time; the panel lists its competences
+ * and where each one is used. Arrows, Home and End move between domains.
  */
-export function CareerPuzzle({ board, initial = "doctorat" }: { board: CareerBoard; initial?: string }) {
-  const { pieces, rows, cols } = board;
-  const [selected, setSelected] = useState(initial);
+export function CareerPuzzle({ board, initial = "mathematiques" }: { board: CompetenceBoard; initial?: DomainId }) {
+  const [selected, setSelected] = useState<DomainId>(initial);
   const { ref, play } = usePlayOnce<HTMLDivElement>(0.2);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const current = pieces.find((p) => p.id === selected) ?? pieces[0];
-  const mid = (cols * S) / 2;
+  const t = COPY[useLang()];
+  const { domains } = board;
+  const current = domains.find((d) => d.id === selected) ?? domains[0];
 
-  const move = (to: number) => {
-    const next = pieces[(to + pieces.length) % pieces.length];
-    setSelected(next.id);
-    svgRef.current?.querySelector<SVGGElement>(`[data-piece="${next.id}"]`)?.focus();
-  };
-  const onKey = (e: KeyboardEvent) => {
-    const keys: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 };
-    if (e.key in keys) move(current.order + keys[e.key]);
-    else if (e.key === "Home") move(0);
-    else if (e.key === "End") move(pieces.length - 1);
-    else return;
+  const onKey = (e: KeyboardEvent<HTMLDivElement>) => {
+    const at = domains.indexOf(current);
+    const to = e.key === "Home" ? 0 : e.key === "End" ? domains.length - 1 : e.key in STEP ? at + STEP[e.key] : null;
+    if (to === null) return;
     e.preventDefault();
+    const next = domains[(to + domains.length) % domains.length];
+    setSelected(next.id);
+    e.currentTarget.querySelector<HTMLButtonElement>(`[data-domain="${next.id}"]`)?.focus();
   };
 
   return (
-    <div ref={ref} data-play={play || undefined} className="pz grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
-      <svg
-        ref={svgRef}
-        viewBox={`-6 -6 ${cols * S + 12} ${rows * S + S * 0.9}`}
-        className="mx-auto block h-auto w-full max-w-[34rem] overflow-visible"
-        role="group"
-        aria-label={a11y.puzzleParcours}
-        onKeyDown={onKey}
-      >
-        <path d={`M${mid} ${rows * S - 4} C ${mid} ${rows * S + 30}, ${mid - 12} ${rows * S + 55}, ${mid - 34} ${rows * S + S * 0.82}`} className="cp-stem" />
-        {pieces.map((p) => (
-          <CareerPieceShape key={p.id} piece={p} selected={p.id === current.id} onSelect={() => setSelected(p.id)} />
+    <div ref={ref} data-play={play || undefined} className="pz grid items-start gap-12 lg:grid-cols-12 lg:gap-14">
+      <div role="group" aria-label={t.group} onKeyDown={onKey} className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:sticky lg:top-28 lg:col-span-7">
+        {domains.map((d) => (
+          <DomainButton key={d.id} domain={d} selected={d.id === current.id} onSelect={() => setSelected(d.id)} />
         ))}
-        <path d={`M${mid} ${rows * S - S * 0.2} L ${mid} ${S * 0.25}`} className="cp-midrib" aria-hidden />
+      </div>
+      <DomainPanel domain={current} className="lg:col-span-5" />
+    </div>
+  );
+}
+
+type DomainButtonProps = { domain: DomainBlock; selected: boolean; onSelect: () => void };
+
+/** A domain block: its name above, its competence pieces below; the whole block is the button. */
+function DomainButton({ domain: d, selected, onSelect }: DomainButtonProps) {
+  return (
+    <button
+      type="button"
+      data-domain={d.id}
+      aria-pressed={selected}
+      aria-controls="competences-panel"
+      tabIndex={selected ? 0 : -1}
+      onClick={onSelect}
+      onFocus={onSelect}
+      className="group block w-full cursor-pointer text-left outline-offset-8"
+    >
+      <span className={cn("flex items-center gap-3 border-t-2 pt-3 pb-5 transition-colors duration-300", selected ? "border-antibes" : "border-ink/15 group-hover:border-ink/40")}>
+        <span className="size-3 shrink-0 border border-ink/25" style={{ background: DOMAIN_FILL[d.id].fill }} aria-hidden />
+        <span className="font-serif text-2xl leading-none">{d.title}</span>
+        <span className="text-sm text-muted">{d.subtitle}</span>
+      </span>
+      <svg
+        viewBox={`-4 -4 ${BLOCK_COLS * S + 8} ${d.rows * S + 8}`}
+        className={cn("block h-auto w-full overflow-visible transition-[translate,filter] duration-300", selected && "-translate-y-1 drop-shadow-[0_10px_14px_rgb(11_45_79_/_0.25)]")}
+        aria-hidden
+      >
+        {d.pieces.map((p) => (
+          <CompetencePiece key={p.id} piece={p} />
+        ))}
       </svg>
-      <KindLegend kinds={[...new Set(pieces.map((p) => p.kind))].map((k) => ({ kind: k, label: pieces.find((p) => p.kind === k)!.kindLabel }))} />
-      <PieceDetail piece={current} total={pieces.length} />
-    </div>
-  );
-}
-
-function PieceDetail({ piece, total }: { piece: CareerPiece; total: number }) {
-  const external = piece.href?.startsWith("http");
-  return (
-    <div aria-live="polite" className="border-t-2 border-antibes pt-6 lg:sticky lg:top-28 lg:col-start-2 lg:row-span-2 lg:row-start-1">
-      <p className="text-sm text-accent-deep">
-        {piece.kindLabel}
-        {piece.when && <> · {piece.when}</>}
-        {piece.place && <> · {piece.place}</>}
-      </p>
-      <h3 className="mt-3 font-serif text-[2rem] leading-[1.08]">{piece.title}</h3>
-      <p className="mt-4 text-[1.02rem] leading-relaxed text-ink/85">{piece.detail}</p>
-      {piece.href && <DetailLink href={piece.href} external={external} />}
-      <p className="mt-8 text-sm text-muted">Flèches du clavier ou survol : parcourez les {total} pièces, de la tige à la pointe.</p>
-    </div>
-  );
-}
-
-function KindLegend({ kinds }: { kinds: { kind: CareerPiece["kind"]; label: string }[] }) {
-  return (
-    <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-ink/80 lg:col-start-1 lg:row-start-2">
-      {kinds.map((k) => (
-        <li key={k.kind} className="flex items-center gap-2">
-          <span className="size-3 border border-ink/20" style={{ background: KIND_FILL[k.kind] }} aria-hidden />
-          {k.label}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function DetailLink({ href, external }: { href: string; external?: boolean }) {
-  const cls = "link-underline mt-5 inline-flex items-center gap-2 py-1 font-serif text-lg";
-  if (external) {
-    return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className={cls}>
-        Consulter la source <ArrowUpRight className="size-4" aria-hidden />
-        <span className="sr-only">(nouvel onglet)</span>
-      </a>
-    );
-  }
-  return (
-    <Link href={href} className={cls}>
-      En savoir plus <ArrowRight className="size-4" aria-hidden />
-    </Link>
+    </button>
   );
 }

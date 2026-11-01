@@ -1,5 +1,8 @@
 import { publicationSchema, type Publication } from "@/types/content";
 import { z } from "zod";
+import type { Copy, Lang } from "@/i18n/config";
+import { localizeById } from "@/i18n/localize";
+import { EN_PUBLICATIONS } from "@/data/en/publications";
 
 /**
  * Journal articles and thesis. Titles, authors, volumes and DOIs verified
@@ -11,7 +14,7 @@ const RAW_PUBLICATIONS: z.input<typeof publicationSchema>[] = [
     id: "pub-2026-polyandry",
     slug: "polyandrie-technique-insecte-sterile",
     title: "Polyandry: A threat or an opportunity for the sterile insect technique?",
-    editorialTitle: "Les accouplements multiples peuvent-ils modifier l'efficacité de la lutte biologique ?",
+    editorialTitle: "Les accouplements multiples peuvent-ils modifier l'efficacité de la lutte biologique\u00a0?",
     authors: ["Marine A. Courtois", "Louise van Oudenhove", "Suzanne Touzeau", "Frédéric Grognard", "Ludovic Mailleret"],
     year: 2026,
     date: "2026-04-29",
@@ -19,12 +22,12 @@ const RAW_PUBLICATIONS: z.input<typeof publicationSchema>[] = [
     volume: "22(4)",
     pages: "e1014212",
     doi: "10.1371/journal.pcbi.1014212",
-    summaryFr:
-      "Cette recherche explore l'influence des accouplements multiples et des mécanismes d'utilisation du sperme sur l'efficacité de la technique de l'insecte stérile. En combinant des approches mathématiques et des simulations individu-centrées appliquées à Drosophila suzukii, elle met en évidence des effets différents selon l'horizon temporel considéré.",
-    questionFr:
-      "Lorsque les femelles d'un ravageur s'accouplent plusieurs fois, la manière dont elles utilisent le sperme stocké peut-elle changer l'issue des lâchers de mâles stériles ?",
-    approachFr:
-      "Un modèle compartimental (équations différentielles) et un modèle individu-centré écrit en Python avec la bibliothèque Mesa, qui compare plusieurs règles d'utilisation du sperme : premier mâle, dernier mâle, mélange, choix et préférence.",
+    summary:
+      "Chez Drosophila suzukii, une femelle peut s'accoupler avec plusieurs mâles et conserver leur sperme. À l'aide d'un modèle mathématique et de simulations qui représentent chaque insecte, l'étude montre que ces accouplements multiples n'ont pas le même effet sur la technique de l'insecte stérile à court terme et à long terme.",
+    question:
+      "Lorsque les femelles d'un ravageur s'accouplent plusieurs fois, la manière dont elles utilisent le sperme stocké peut-elle changer l'issue des lâchers de mâles stériles\u00a0?",
+    approach:
+      "Un modèle compartimental (équations différentielles) et un modèle individu-centré écrit en Python avec la bibliothèque Mesa, qui compare plusieurs règles d'utilisation du sperme\u00a0: premier mâle, dernier mâle, mélange, choix et préférence.",
     themes: ["Polyandrie", "TIS", "Comportement reproducteur", "Simulation individu-centrée"],
     publicationType: "article",
     sourceUrl: "https://doi.org/10.1371/journal.pcbi.1014212",
@@ -38,7 +41,7 @@ const RAW_PUBLICATIONS: z.input<typeof publicationSchema>[] = [
     id: "pub-2026-functional-response",
     slug: "reponse-fonctionnelle-invasivite",
     title: "Functional response predicts invasiveness but not trophic impact",
-    editorialTitle: "Peut-on prédire l'impact écologique d'une espèce invasive à partir de sa réponse fonctionnelle ?",
+    editorialTitle: "Peut-on prédire l'impact écologique d'une espèce invasive à partir de sa réponse fonctionnelle\u00a0?",
     authors: [
       "Marine A. Courtois",
       "Chloé Souques",
@@ -54,12 +57,12 @@ const RAW_PUBLICATIONS: z.input<typeof publicationSchema>[] = [
     volume: "95(5)",
     pages: "808–823",
     doi: "10.1111/1365-2656.70232",
-    summaryFr:
-      "À partir d'une analyse comparative de 269 observations de réponses fonctionnelles concernant 45 espèces de poissons d'eau douce, cette étude examine les relations entre efficacité de consommation, invasivité et impact trophique. Les résultats soulignent l'importance du contexte biogéographique dans l'interprétation de ces indicateurs.",
-    questionFr:
-      "La réponse fonctionnelle d'une espèce — la relation entre l'abondance de ses proies et sa consommation — renseigne-t-elle sur son caractère invasif et sur son impact trophique ?",
-    approachFr:
-      "Une analyse statistique comparative de 269 observations de réponses fonctionnelles (45 espèces de poissons d'eau douce), accompagnée d'un jeu de données et de matériel publiés sur Zenodo.",
+    summary:
+      "Les espèces invasives consomment-elles davantage de proies\u00a0? L'étude rassemble 269 estimations de réponses fonctionnelles déjà publiées pour 45 espèces de poissons d'eau douce et les compare statistiquement. Les espèces invasives ont une réponse fonctionnelle plus élevée lorsqu'elles sont étudiées dans leur aire d'origine, mais pas dans les régions où elles ont été introduites\u00a0: le lieu de la mesure compte.",
+    question:
+      "La réponse fonctionnelle d'une espèce — la relation entre l'abondance de ses proies et sa consommation — renseigne-t-elle sur son caractère invasif et sur son impact trophique\u00a0?",
+    approach:
+      "Une analyse statistique comparative de 269 estimations déjà publiées (45 espèces de poissons d'eau douce, base FoRAGE), avec des modèles mixtes bayésiens (MCMCglmm, sous R) qui tiennent compte de la parenté entre espèces et de la température des expériences d'origine. Aucune nouvelle expérience n'a été menée\u00a0; les données et le matériel sont publiés sur Zenodo.",
     themes: ["Écologie des invasions", "Réponses fonctionnelles", "Analyse statistique comparative", "Interactions trophiques"],
     publicationType: "article",
     sourceUrl: "https://doi.org/10.1111/1365-2656.70232",
@@ -74,7 +77,7 @@ const RAW_PUBLICATIONS: z.input<typeof publicationSchema>[] = [
     id: "pub-2025-residual-fertility",
     slug: "fertilite-residuelle-technique-insecte-sterile",
     title: "How Residual Fertility Impacts the Efficiency of Crop Pest Control by the Sterile Insect Technique",
-    editorialTitle: "Quand la stérilité n'est pas totale : quelles conséquences pour le biocontrôle ?",
+    editorialTitle: "Quand la stérilité n'est pas totale\u00a0: quelles conséquences pour le biocontrôle\u00a0?",
     authors: ["Marine A. Courtois", "Ludovic Mailleret", "Suzanne Touzeau", "Louise van Oudenhove", "Frédéric Grognard"],
     year: 2025,
     date: "2025-01-03",
@@ -82,12 +85,12 @@ const RAW_PUBLICATIONS: z.input<typeof publicationSchema>[] = [
     volume: "87(2)",
     pages: "25",
     doi: "10.1007/s11538-024-01401-1",
-    summaryFr:
-      "Cette étude examine comment une fertilité résiduelle chez les insectes stérilisés influence l'efficacité de la technique de l'insecte stérile. Les modèles permettent de distinguer des conditions favorables à la suppression des populations de celles où la stratégie conduit essentiellement à une réduction de leur abondance.",
-    questionFr:
-      "Si une petite fraction des mâles relâchés reste fertile, la technique de l'insecte stérile peut-elle encore conduire à l'élimination d'une population de ravageurs ?",
-    approachFr:
-      "Un modèle en équations différentielles ordinaires décrivant mâles stériles, femelles et mâles sauvages, analysé mathématiquement (équilibres, bifurcations) et numériquement, complété par une analyse de sensibilité.",
+    summary:
+      "La stérilisation laisse parfois une partie des mâles relâchés encore fertiles. L'étude mesure ce que cette fertilité résiduelle change à la technique de l'insecte stérile\u00a0: les modèles séparent les situations où la population de ravageurs peut être éliminée de celles où elle est seulement réduite.",
+    question:
+      "Si une petite fraction des mâles relâchés reste fertile, la technique de l'insecte stérile peut-elle encore conduire à l'élimination d'une population de ravageurs\u00a0?",
+    approach:
+      "Un modèle de trois équations différentielles (mâles stériles, femelles et mâles sauvages), étudié mathématiquement (équilibres et seuils de basculement, ou bifurcations) et par simulation, avec une analyse de sensibilité des paramètres.",
     themes: ["Fertilité résiduelle", "TIS", "Dynamique des populations", "Modélisation mathématique"],
     publicationType: "article",
     sourceUrl: "https://doi.org/10.1007/s11538-024-01401-1",
@@ -105,16 +108,16 @@ const RAW_PUBLICATIONS: z.input<typeof publicationSchema>[] = [
       "Modélisation de la technique de l'insecte stérile dans un contexte agricole : examen des facteurs biologiques et techniques susceptibles d'atténuer son efficacité",
     editorialTitle: "Trois années pour comprendre les limites d'une stratégie de lutte biologique.",
     authors: ["Marine A. Courtois"],
-    authorNote: "Direction et encadrement : Ludovic Mailleret, Suzanne Touzeau, Louise van Oudenhove, Frédéric Grognard.",
+    authorNote: "Direction et encadrement\u00a0: Ludovic Mailleret, Suzanne Touzeau, Louise van Oudenhove, Frédéric Grognard.",
     year: 2025,
     date: "2025-11-27",
     journal: "Thèse de doctorat — Université Côte d'Azur",
     doi: "10.70675/d019d560z1de7z4d84za3e2ze5ba4cf3718f",
-    summaryFr:
-      "Une recherche doctorale sur la technique de l'insecte stérile et les facteurs biologiques (fertilité résiduelle, accouplements multiples) et techniques (budget, fréquence et intensité des lâchers) qui influencent son efficacité, à travers des équations différentielles, des modèles individu-centrés et des approches impulsionnelles.",
-    questionFr:
-      "Comment les comportements biologiques et les contraintes techniques peuvent-ils modifier l'efficacité d'une stratégie de lutte biologique ?",
-    approachFr:
+    summary:
+      "Une thèse sur la technique de l'insecte stérile\u00a0: quels facteurs biologiques (fertilité résiduelle, accouplements multiples) et techniques (budget, fréquence et taille des lâchers) peuvent en réduire l'efficacité\u00a0? Elle s'appuie sur des équations différentielles, des modèles qui représentent chaque insecte (individu-centrés) et des modèles de lâchers ponctuels (impulsionnels).",
+    question:
+      "Comment les comportements biologiques et les contraintes techniques peuvent-ils modifier l'efficacité d'une stratégie de lutte biologique\u00a0?",
+    approach:
       "Plusieurs cadres de modélisation complémentaires — équations différentielles, modèles individu-centrés, modèles impulsionnels — et un dépôt public de notebooks reproduisant les figures du manuscrit.",
     themes: ["TIS", "Fertilité résiduelle", "Polyandrie", "Lâchers impulsionnels", "Modélisation mathématique"],
     publicationType: "these",
@@ -145,10 +148,14 @@ export function getPublication(idOrSlug: string): Publication | undefined {
   return PUBLICATIONS.find((p) => p.id === idOrSlug || p.slug === idOrSlug);
 }
 
-export const PUBLICATION_TYPE_LABEL: Record<Publication["publicationType"], string> = {
-  article: "Article",
-  these: "Thèse",
-  preprint: "Préprint",
+/** Publications in a language (same order and facts; editorial text translated). */
+export const publicationsIn = (lang: Lang) => localizeById(PUBLICATIONS, EN_PUBLICATIONS, lang);
+export const getPublicationIn = (lang: Lang, idOrSlug: string) => publicationsIn(lang).find((p) => p.id === idOrSlug || p.slug === idOrSlug);
+
+export const PUBLICATION_TYPE_LABEL: Record<Publication["publicationType"], Copy<string>> = {
+  article: { fr: "Article", en: "Article" },
+  these: { fr: "Thèse", en: "Thesis" },
+  preprint: { fr: "Préprint", en: "Preprint" },
 };
 
 export { COMMUNICATIONS } from "@/data/communications";

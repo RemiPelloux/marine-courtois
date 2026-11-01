@@ -1,4 +1,7 @@
 import type { Source } from "@/types/content";
+import type { Lang } from "@/i18n/config";
+import { merge } from "@/i18n/localize";
+import { EN_SOURCE_LABELS } from "@/data/en/sources";
 
 /**
  * Registry of every external source used to verify a claim on the site.
@@ -59,7 +62,8 @@ export const SOURCES = {
     label: "Journal of Animal Ecology 95(5): 808–823 (2026)",
     url: "https://doi.org/10.1111/1365-2656.70232",
     kind: "article",
-    verifies: "Titre, auteurs, revue et DOI de l'article sur les réponses fonctionnelles (Crossref, licence CC BY 4.0).",
+    verifies:
+      "Titre, auteurs, revue et DOI de l'article sur les réponses fonctionnelles (Crossref, licence CC BY 4.0). Affiliations des co-auteurs lues sur Crossref le 2026-11-01 : LEHNA (UMR 5023, Université Claude Bernard Lyon 1, CNRS, ENTPE, Villeurbanne) ; Vincent Médoc, ENES (CRNL, Saint-Étienne).",
   },
   preprintInvasion: {
     id: "preprintInvasion",
@@ -123,4 +127,11 @@ export type SourceId = keyof typeof SOURCES;
 
 export function getSource(id: string): Source | undefined {
   return (SOURCES as Record<string, Source>)[id];
+}
+
+/** A source in a language: only the label is translated, the URL never changes. */
+export function getSourceIn(lang: Lang, id: string): Source | undefined {
+  const source = getSource(id);
+  const label = EN_SOURCE_LABELS[id];
+  return source && lang === "en" && label ? merge(source, { label }) : source;
 }
