@@ -15,8 +15,8 @@
 | --- | --- |
 | `pnpm lint` | 0 erreur, 0 avertissement |
 | `pnpm typecheck` | OK |
-| `pnpm test` (Vitest) | 24/24 : modèles reproduisant les figures des notebooks, intégrité des données, filtres et lignes extensibles des publications |
-| `pnpm test:e2e` (Playwright) | 36/36 sur desktop 1440 px et mobile 390 px : 10 routes en HTTP 200 avec un seul h1, sans débordement horizontal ni erreur console, avec métadonnées et lien canonique ; liens internes valides ; navigation ; filtres ; DOI et dépôts ; contrôles et réinitialisation du Model Explorer ; pause et comparaison du hero ; mouvement réduit ; sitemap et robots |
+| `pnpm test` (Vitest) | 46/46 : modèles reproduisant les figures des notebooks, intégrité des données, géométrie de la frise (aucun chevauchement), filtres de la pile d'outils et des publications |
+| `pnpm test:e2e` (Playwright) | 56/56, dont 20 audits axe WCAG 2.2 AA sans violation (10 routes × desktop/mobile) ; sur desktop 1440 px et mobile 390 px : 10 routes en HTTP 200 avec un seul h1, sans débordement horizontal ni erreur console, avec métadonnées et lien canonique ; liens internes valides ; navigation ; filtres ; DOI et dépôts ; contrôles et réinitialisation du Model Explorer ; pause et comparaison du hero ; mouvement réduit ; sitemap et robots |
 | `pnpm build` | OK, 26 pages statiques |
 | Hook `check-quality.sh` | OK (avertissements restants : longueur de certains composants de visualisation) |
 | Inspection visuelle | captures à 1440 et 390 px de toutes les routes |

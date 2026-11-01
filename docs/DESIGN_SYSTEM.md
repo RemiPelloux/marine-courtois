@@ -1,25 +1,32 @@
 # Design system
 
 ## Intention
-Une revue scientifique devenue interactive : papier chaud, encre presque noire, un seul accent vermillon réservé aux
+Une revue scientifique devenue interactive : papier sable, encre bleu nuit, un seul accent bleu Méditerranée réservé aux
 variables du modèle, aux actions et à l'état actif. La mise en scène vient de la composition, de l'échelle typographique
 et des figures scientifiques, pas d'ornements.
 
 ## Couleurs (tokens Tailwind, `src/app/globals.css`)
 | Token | Valeur | Usage |
 | --- | --- | --- |
-| `paper` | `#F5F2EB` | fond principal |
-| `stone` | `#E8E5DD` | fond secondaire (changement de ton entre sections) |
-| `ink` | `#171B18` | texte |
-| `vermilion` | `#F04A2D` | accent : bouton principal (texte encre, contraste 4,7:1), courbes « stériles », état actif |
-| `vermilion-deep` | `#C5361D` | accent en texte sur papier (4,8:1) |
-| `vermilion-light` | `#FF6A4D` | accent en texte sur fond sombre (5,6:1) |
-| `botanical` | `#19241F` | chapitres sombres |
-| `muted` | `#686D67` | texte secondaire (#747973 assombri pour atteindre AA) |
-| `rule` | `#CACCC4` | séparateurs (avec parcimonie) |
+| `paper` | `#F5F2EB` | fond principal (sable) |
+| `stone` | `#E4EAEF` | fond secondaire, brume marine (changement de ton entre sections) |
+| `ink` | `#0F1D2E` | texte, encre bleu nuit |
+| `antibes` | `#0B2D4F` | chapitres sombres, bleu Antibes |
+| `antibes-2` | `#123A63` | surface relevée, survol, ruban marin |
+| `antibes-3` | `#1D4E80` | bleu azur profond (houle du ruban) |
+| `azur` | `#8FC1EA` | séries secondaires des graphiques sur fond bleu |
+| `accent` | `#2468B3` | accent bleu Méditerranée : bouton principal (texte blanc, 5,1:1), courbes « stériles », état actif |
+| `accent-deep` | `#1D5A9E` | accent en texte sur sable et brume (≥ 5,8:1) |
+| `accent-light` | `#6FB3F2` | accent sur bleu Antibes (≥ 5,2:1, y compris sur `antibes-2`) ; les graphiques basculent via `--viz-accent` |
+| `muted` | `#55626F` | texte secondaire, ardoise (≥ 5,1:1 sur sable et brume) |
+| `mist` | `#A8BFD6` | texte secondaire sur bleu (7,4:1) |
+| `rule` | `#C5CED6` | séparateurs (avec parcimonie) |
+
+Le **ruban marin** en haut du pied de page (`SeaRibbon`) est un clin d'œil discret à Antibes : deux houles lentes en bleu
+Antibes (la Méditerranée, et les oscillations des modèles) et les coordonnées de la vieille ville, sans la nommer.
 
 ## Typographie
-- **Instrument Serif** : titres, navigation, grands chiffres. L'italique vermillon est réservé à « Par le modèle. » (hero).
+- **Instrument Serif** : titres, navigation, grands chiffres. L'italique bleu est réservé à « Par le modèle. » (hero).
 - **Montserrat** : texte, interface, légendes et métadonnées (chiffres tabulaires).
 - **IBM Plex Mono** : uniquement les blocs de code de l'explorateur de code.
 - Échelle : `text-display` (hero), `text-headline` (titres de chapitre), `text-title`, texte de 16 à 18 px.

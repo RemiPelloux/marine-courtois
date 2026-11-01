@@ -10,8 +10,8 @@
 <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-171B18?style=flat-square&logo=nextdotjs&logoColor=F5F2EB">
 <img alt="TypeScript strict" src="https://img.shields.io/badge/TypeScript-strict-171B18?style=flat-square&logo=typescript&logoColor=F5F2EB">
 <img alt="Tailwind CSS 4" src="https://img.shields.io/badge/Tailwind-4-171B18?style=flat-square&logo=tailwindcss&logoColor=F5F2EB">
-<img alt="Tests" src="https://img.shields.io/badge/tests-60%20passing-F04A2D?style=flat-square">
-<img alt="WCAG 2.2 AA" src="https://img.shields.io/badge/WCAG-2.2%20AA-19241F?style=flat-square">
+<img alt="Tests" src="https://img.shields.io/badge/tests-102%20passing-0B2D4F?style=flat-square">
+<img alt="WCAG 2.2 AA" src="https://img.shields.io/badge/WCAG-2.2%20AA-0B2D4F?style=flat-square">
 </p>
 
 <p>
@@ -38,7 +38,7 @@
 <div align="center">
 <img src="docs/assets/tour.gif" alt="Visite animée du site : le Living System se construit, le curseur des lâchers modifie les trajectoires, le mode Comparer ajoute la fertilité résiduelle, puis le Model Explorer et l'index des publications." width="100%">
 <br>
-<sub>Visite enregistrée dans le navigateur (31 s) — <a href="docs/assets/tour.mp4">version MP4 haute définition</a></sub>
+<sub>Visite enregistrée dans le navigateur (41 s) — <a href="docs/assets/tour.mp4">version MP4 haute définition</a></sub>
 </div>
 
 <br>
@@ -107,7 +107,11 @@ Détails : [`docs/SCIENTIFIC_VISUALIZATIONS.md`](docs/SCIENTIFIC_VISUALIZATIONS.
 <td width="50%"><img src="docs/assets/screens/code.webp" alt="Explorateur de code : extraits verbatim des notebooks, métadonnées et figure produite."></td>
 </tr>
 <tr>
-<td width="50%"><img src="docs/assets/screens/thesis.webp" alt="Chapitre de la thèse : explorateur des six chapitres, avec figure, publication et scripts associés."></td>
+<td width="50%"><img src="docs/assets/screens/toolkit.webp" alt="Pile d'outils : cinq couches en bleu Antibes, des langages au partage, avec les logos des outils."></td>
+<td width="50%"><img src="docs/assets/screens/timeline.webp" alt="Frise animée 2022–2026 : communications, posters, articles et soutenance placés à leur date exacte."></td>
+</tr>
+<tr>
+<td width="50%"><img src="docs/assets/screens/thesis.webp" alt="Chapitre Doctorat de l'accueil : faits clés, actions et sommaire cliquable des six chapitres."></td>
 <td width="50%"><img src="docs/assets/screens/publications.webp" alt="Index des publications avec filtres par année, type et thème."></td>
 </tr>
 </table>
@@ -119,13 +123,13 @@ Détails : [`docs/SCIENTIFIC_VISUALIZATIONS.md`](docs/SCIENTIFIC_VISUALIZATIONS.
 
 | Route | Contenu |
 | :-- | :-- |
-| `/` | Living System, introduction, méthodes et Model Explorer, publications, thèse, code, contact |
+| `/` | Living System, six axes en défilement horizontal, Model Explorer, pile d'outils, publications, thèse, mur de figures, frise animée du parcours, contact |
 | `/recherche` · `/recherche/[slug]` | 6 axes : TIS, fertilité résiduelle, accouplements multiples, individu-centré, stratégies de lâchers, écologie des invasions |
 | `/methodes` | Boîte à outils : chaque compétence reliée à une publication et aux imports réels du code |
 | `/publications` · `/publications/[slug]` | 3 articles, la thèse, 8 communications (HAL), filtres, données structurées |
 | `/these` | Explorateur des 6 chapitres, manuscrit PDF, diapositives de soutenance |
 | `/laboratoire` | Model Explorer, séquence TIS, lâchers impulsionnels, modèle individu-centré, explorateur de code |
-| `/a-propos` · `/contact` | Parcours vérifié, intérêts de recherche, courriel et profils |
+| `/a-propos` · `/contact` | Frise animée et jalons vérifiés, intérêts de recherche, courriel et profils |
 
 <br>
 
@@ -154,8 +158,8 @@ pnpm dev                 # http://localhost:3000
 | :-- | :-- |
 | `pnpm build` · `pnpm start` | build et serveur de production |
 | `pnpm lint` · `pnpm typecheck` | ESLint · TypeScript strict |
-| `pnpm test` | 24 tests Vitest (modèles, données, composants) |
-| `pnpm test:e2e` | 36 tests Playwright, desktop 1440 px et mobile 390 px (après `pnpm build`) |
+| `pnpm test` | 46 tests Vitest (modèles, données, frise, composants) |
+| `pnpm test:e2e` | 56 tests Playwright, desktop 1440 px et mobile 390 px, dont 20 audits d'accessibilité axe WCAG 2.2 AA (après `pnpm build`) |
 | `pnpm readme:banner` | régénère la bannière animée à partir du modèle |
 | `pnpm readme:screens` · `pnpm readme:tour` | captures et visite vidéo (serveur de production sur `:3300`) |
 
@@ -213,8 +217,8 @@ src/
 
 ## ◗ Design
 
-Papier chaud `#F5F2EB`, encre `#171B18`, un seul accent vermillon `#F04A2D` réservé aux variables du modèle et aux actions,
-chapitres sombres `#19241F`. **Instrument Serif** pour les titres, **Montserrat** pour le texte et l'interface, monospace
+Papier sable `#F5F2EB`, encre bleu nuit `#0F1D2E`, un seul accent, le bleu Méditerranée `#2468B3` (et `#6FB3F2` sur les fonds sombres), réservé aux variables du modèle et aux actions,
+chapitres sombres en **bleu Antibes** `#0B2D4F` et ses nuances (`#123A63`, `#1D4E80`, azur `#8FC1EA`). **Instrument Serif** pour les titres, **Montserrat** pour le texte et l'interface, monospace
 réservé au code. Passe anti-slop avec [taste-skill](https://github.com/Leonxlnx/taste-skill) : pas de micro-libellés en
 capitales, de dégradés, de verre, de cartes à icône ni de jauges. Le mouvement respecte `prefers-reduced-motion` et se met
 en pause hors écran. Détails : [`docs/DESIGN_SYSTEM.md`](docs/DESIGN_SYSTEM.md).

@@ -44,7 +44,7 @@ async function press(locator, key, times, gap = 140) {
 const top = (sel) => page.evaluate((s) => document.querySelector(s).getBoundingClientRect().top + window.scrollY - 90, sel);
 const stage = () =>
   page.evaluate(() => {
-    const h = [...document.querySelectorAll("#model-explorer h4")].find((e) => e.textContent?.startsWith("Explorer"));
+    const h = [...document.querySelectorAll("#model-explorer h3")].find((e) => e.textContent?.startsWith("Explorer"));
     return h.getBoundingClientRect().top + window.scrollY - 96;
   });
 
@@ -83,7 +83,20 @@ await glide(await stage(), 900);
 await press(panel.getByRole("slider", { name: /Population initiale/ }), "ArrowRight", 10, 160);
 await pause(1600);
 
-// 3 — publications
+// 3 — toolkit stack builds from the foundation up
+await glide(await top(".tk-stack"), 1600);
+await pause(2200);
+await page.locator('[data-testid="tool-python"]').hover();
+await pause(1100);
+await page.locator('[data-testid="tool-numpy"]').hover();
+await pause(900);
+await page.mouse.move(40, 400);
+
+// 4 — career timeline sweeps 2022 → 2026
+await glide(await top(".ctl"), 1800);
+await pause(4600);
+
+// 5 — publications
 await glide(await top("#publications"), 1600);
 await pause(1200);
 await page.getByRole("button", { name: /Résumé/ }).first().click();

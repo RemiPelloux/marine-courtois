@@ -40,8 +40,10 @@ await shot("model-explorer", {
 });
 await shot("agents", { path: "/laboratoire", selector: "#module-3", scrollTo: "#module-3", wait: 9000 });
 await shot("code", { path: "/laboratoire", selector: "#code", scrollTo: "#code" });
+await shot("toolkit", { path: "/", selector: ".tk-stack", scrollTo: ".tk-stack", wait: 3000 });
+await shot("timeline", { path: "/", selector: ".ctl", scrollTo: ".ctl", wait: 5500 });
 await shot("publications", { path: "/publications", wait: 1500 });
-await shot("thesis", { path: "/these", selector: "#these", height: 1000 });
+await shot("thesis", { path: "/", selector: "#these", scrollTo: "#these", height: 1000 });
 await shot("mobile-hero", { path: "/", width: 390, height: 844, wait: 10500 });
 await shot("mobile-explorer", { path: "/laboratoire", width: 390, height: 844, scrollTo: "#module-1 [role=tablist]", wait: 1500 });
 await browser.close();

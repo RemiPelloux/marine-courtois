@@ -18,7 +18,7 @@ const font = (f: string) => readFileSync(resolve(import.meta.dirname, "fonts", f
 
 const W = 1600;
 const H = 800;
-const C = { paper: "#F5F2EB", ink: "#171B18", ver: "#F04A2D", muted: "#686D67", rule: "#CACCC4" };
+const C = { paper: "#F5F2EB", ink: "#0F1D2E", ver: "#2468B3", muted: "#55626F", rule: "#C5CED6" };
 
 // chart frame
 const X0 = 880;
@@ -68,9 +68,23 @@ const ticksY = [0, 0.2, 0.4, 0.6, 0.8, 1]
   .map((v) => `<line x1="${X0 - 8}" y1="${y(v)}" x2="${X0}" y2="${y(v)}" stroke="${C.ink}"/><text x="${X0 - 16}" y="${y(v) + 6}" class="tick" text-anchor="end">${v.toFixed(1)}</text>`)
   .join("");
 
+function swellPath(amp: number, period: number, y: number) {
+  let d = `M0 ${y}`;
+  for (let px = 0; px <= W * 2; px += 10) d += ` L${px} ${(y + amp * Math.sin((px / period) * Math.PI * 2)).toFixed(1)}`;
+  return `${d} L${W * 2} ${H} L0 ${H} Z`;
+}
+/** bleu Antibes ribbon with two slow swells — same signature as the site footer */
+function ribbon() {
+  const top = H - 40;
+  return `<rect x="0" y="${top}" width="${W}" height="40" fill="#123A63"/>
+<g class="swell2"><path d="${swellPath(4, 400, top + 16)}" fill="#1D4E80"/></g>
+<g class="swell"><path d="${swellPath(3, 320, top + 26)}" fill="#0B2D4F"/></g>
+<text x="${W - 80}" y="${top + 15}" class="sans" font-size="13" font-weight="500" fill="#A8BFD6" text-anchor="end">43°34′ N · 7°07′ E</text>`;
+}
+
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-labelledby="t d">
 <title id="t">Marine Courtois — Comprendre le vivant. Par le modèle.</title>
-<desc id="d">Animated banner: the residual-fertility model of the sterile insect technique draws the decline of a wild population (black) as sterile males are released (vermilion).</desc>
+<desc id="d">Animated banner: the residual-fertility model of the sterile insect technique draws the decline of a wild population (black) as sterile males are released (accent).</desc>
 <style>
 @font-face{font-family:IS;src:url(data:font/woff2;base64,${font("instrument-serif-regular.woff2")}) format("woff2");}
 @font-face{font-family:IS;font-style:italic;src:url(data:font/woff2;base64,${font("instrument-serif-italic.woff2")}) format("woff2");}
@@ -90,9 +104,11 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
 @keyframes cursor{0%,${pct(START)}{transform:translateX(0);opacity:1}${pct(START + DRAW)}{transform:translateX(${X1 - X0}px);opacity:1}${pct(START + DRAW + 0.8)}{transform:translateX(${X1 - X0}px);opacity:0}100%{transform:translateX(${X1 - X0}px);opacity:0}}
 .ann{opacity:0;animation:ann ${CYCLE}s ease-out infinite}
 @keyframes ann{0%,${pct(START + DRAW)}{opacity:0}${pct(START + DRAW + 0.8)}{opacity:1}${pct(CYCLE - 1.2)}{opacity:1}100%{opacity:0}}
+.swell{animation:swell 26s linear infinite}.swell2{animation:swell 41s linear infinite reverse}
+@keyframes swell{to{transform:translateX(-${W}px)}}
 .step{fill:${C.muted};animation:step ${CYCLE}s steps(1) infinite}
 @keyframes step{0%{fill:${C.ver}}33.3%{fill:${C.muted}}100%{fill:${C.muted}}}
-@media (prefers-reduced-motion:reduce){.rise,.reveal,.curves,.bin,.cursor,.ann,.step{animation:none;opacity:1;transform:none}.cursor{transform:translateX(${X1 - X0}px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.swell,.swell2,.rise,.reveal,.curves,.bin,.cursor,.ann,.step{animation:none;opacity:1;transform:none}.cursor{transform:translateX(${X1 - X0}px);opacity:0}}
 </style>
 <rect width="${W}" height="${H}" fill="${C.paper}"/>
 
@@ -150,7 +166,8 @@ ${ticksX}${ticksY}
   <text x="${x(200)}" y="${y(0.66)}" class="serif" font-size="23" font-style="italic" fill="${C.ink}"><tspan>Lâchers répétés</tspan><tspan x="${x(200)}" dy="26">de mâles stériles</tspan></text>
 </g>
 
-<text x="${(X0 + X1) / 2}" y="${H - 52}" class="sans" font-size="15" font-weight="500" fill="${C.muted}" text-anchor="middle">Courbes : modèle de fertilité résiduelle (Courtois et al., 2025), σ = 400 ind./jour · nuage de points illustratif</text>
+${ribbon()}
+<text x="${(X0 + X1) / 2}" y="${H - 66}" class="sans" font-size="15" font-weight="500" fill="${C.muted}" text-anchor="middle">Courbes : modèle de fertilité résiduelle (Courtois et al., 2025), σ = 400 ind./jour · nuage de points illustratif</text>
 </svg>
 `;
 
