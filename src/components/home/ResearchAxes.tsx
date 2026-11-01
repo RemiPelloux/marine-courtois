@@ -42,7 +42,7 @@ export async function ResearchAxesSection() {
   const axes = researchAxesIn(lang);
   return (
     <section id="recherche" aria-labelledby="recherche-titre" className="border-t border-ink bg-stone scroll-mt-20">
-      <div className="site-gutter mx-auto max-w-site py-24 md:py-32">
+      <div className="site-gutter mx-auto max-w-site py-16 md:py-24">
         <SectionHeading title={<span id="recherche-titre">{t.title(axes.length)}</span>} intro={t.intro} className="mb-14" />
         <ol className="grid border-y border-ink lg:grid-cols-3">
           {axes.map((axis, i) => (

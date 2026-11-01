@@ -21,7 +21,7 @@ export async function ProfileSection() {
   const lang = await getLang();
   const t = COPY[lang];
   return (
-    <section aria-labelledby="profil" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
+    <section aria-labelledby="profil" className="site-gutter mx-auto max-w-site scroll-mt-20 py-16 md:py-24">
       <div className="grid gap-12 lg:grid-cols-12">
         <KineticTitle as="h2" className="font-serif text-headline lg:col-span-5">
           <span id="profil">{t.title}</span>

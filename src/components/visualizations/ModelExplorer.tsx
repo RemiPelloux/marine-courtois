@@ -1,8 +1,9 @@
 "use client";
 
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useA11y, useLang } from "@/i18n/client";
 import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { cn } from "@/lib/utils/cn";
 import type { ExplorerContent } from "./explorer/PanelLayout";
 import { ResidualFertilityPanel } from "./explorer/ResidualFertilityPanel";
@@ -156,7 +157,7 @@ export function ModelExplorer({
   dark?: boolean;
 }) {
   const [tab, setTab] = useState<ExplorerTab>(initialTab);
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const rootRef = useRef<HTMLDivElement>(null);
   useHashTab({ setTab, rootRef });
 

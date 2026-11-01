@@ -23,7 +23,9 @@ const STEP: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -
  * together. One domain is selected at a time; the panel lists its competences
  * and where each one is used. Arrows, Home and End move between domains.
  */
-export function CareerPuzzle({ board, initial = "mathematiques" }: { board: CompetenceBoard; initial?: DomainId }) {
+type CareerPuzzleProps = { board: CompetenceBoard; initial?: DomainId; compact?: boolean };
+
+export function CareerPuzzle({ board, initial = "mathematiques", compact = false }: CareerPuzzleProps) {
   const [selected, setSelected] = useState<DomainId>(initial);
   const { ref, play } = usePlayOnce<HTMLDivElement>(0.2);
   const t = COPY[useLang()];
@@ -47,7 +49,7 @@ export function CareerPuzzle({ board, initial = "mathematiques" }: { board: Comp
           <DomainButton key={d.id} domain={d} selected={d.id === current.id} onSelect={() => setSelected(d.id)} />
         ))}
       </div>
-      <DomainPanel domain={current} className="lg:col-span-5" />
+      <DomainPanel domain={current} compact={compact} className="lg:col-span-5" />
     </div>
   );
 }

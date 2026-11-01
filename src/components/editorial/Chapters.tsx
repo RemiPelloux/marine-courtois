@@ -3,7 +3,6 @@ import { copy, type Lang } from "@/i18n/config";
 import { getA11y, getLang } from "@/i18n/server";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { ButtonLink } from "@/components/ui/Links";
-import { Kicker } from "@/components/ui/Kicker";
 import { NewTabHint } from "@/components/ui/NewTab";
 import { SpeciesText } from "@/components/ui/Species";
 import { CodeSection } from "@/components/scientific/Sections";
@@ -20,7 +19,6 @@ export { ThesisChapter } from "@/components/editorial/ThesisChapter";
 
 const COPY = copy({
   fr: {
-    pubKicker: "Contributions scientifiques",
     pubTitle: "Des questions. Des modèles. Des résultats.",
     pubIntro:
       "Mes travaux explorent différents aspects des interactions biologiques, de la dynamique des populations et de l'écologie, en mobilisant des approches mathématiques et computationnelles.",
@@ -31,7 +29,6 @@ const COPY = copy({
     codeTitle: "La recherche ne s'arrête pas aux figures.",
     codeIntro:
       "Les scripts et notebooks associés à ma thèse permettent de retrouver les analyses numériques et les visualisations utilisées dans le manuscrit. Ils constituent une partie essentielle de la documentation et de la reproductibilité du travail.",
-    contactKicker: "Échanger",
     contactTitle: "La recherche avance aussi par les échanges.",
     contactText:
       "Pour discuter d'une question scientifique, d'une collaboration, d'un projet ou simplement échanger autour des mathématiques du vivant, vous pouvez me contacter.",
@@ -39,7 +36,6 @@ const COPY = copy({
     career: "En savoir plus sur mon parcours →",
   },
   en: {
-    pubKicker: "Scientific contributions",
     pubTitle: "Questions. Models. Results.",
     pubIntro:
       "My work explores several aspects of biological interactions, population dynamics and ecology, using mathematical and computational approaches.",
@@ -50,7 +46,6 @@ const COPY = copy({
     codeTitle: "Research does not stop at the figures.",
     codeIntro:
       "The scripts and notebooks of my thesis make it possible to retrace the numerical analyses and visualisations used in the manuscript. They are an essential part of the documentation and reproducibility of the work.",
-    contactKicker: "Get in touch",
     contactTitle: "Research also moves forward through conversation.",
     contactText:
       "To discuss a scientific question, a collaboration or a project, or simply to talk about the mathematics of living systems, you can contact me.",
@@ -85,11 +80,11 @@ export async function PublicationsChapter() {
   const t = COPY[lang];
   const publications = publicationsIn(lang);
   return (
-    <section id="publications" aria-labelledby="publications-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
-      <SectionHeading kicker={t.pubKicker} title={<span id="publications-titre">{t.pubTitle}</span>} intro={t.pubIntro} />
+    <section id="publications" aria-labelledby="publications-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-16 md:py-24">
+      <SectionHeading title={<span id="publications-titre">{t.pubTitle}</span>} intro={t.pubIntro} />
       <div className="mt-14">
         <HoverPreview previews={publicationPreviews(publications, lang)}>
-          <PublicationIndex publications={publications} showFilters={false} />
+          <PublicationIndex publications={publications} showFilters={false} highlightFeatured={false} />
         </HoverPreview>
       </div>
       <CommunicationsSummary lang={lang} t={t} />
@@ -153,9 +148,8 @@ export async function ContactChapter({ headingLevel = "h2" }: { headingLevel?: "
   const t = COPY[await getLang()];
   return (
     <section aria-labelledby="contact-titre" className="border-t border-ink bg-stone">
-      <div className="site-gutter mx-auto max-w-site py-24 md:py-32">
-        <Kicker>{t.contactKicker}</Kicker>
-        <div className="mt-8 grid gap-12 lg:grid-cols-12">
+      <div className="site-gutter mx-auto max-w-site py-16 md:py-24">
+        <div className="grid gap-12 lg:grid-cols-12">
           <H id="contact-titre" className="font-serif text-headline lg:col-span-7">
             {t.contactTitle}
           </H>

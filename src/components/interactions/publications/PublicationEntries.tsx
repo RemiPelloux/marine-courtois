@@ -1,8 +1,9 @@
 "use client";
 
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import Link from "@/i18n/Link";
 import { ViewTransition, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Plus, Minus } from "lucide-react";
 import type { Publication } from "@/types/content";
 import { cn } from "@/lib/utils/cn";
@@ -179,9 +180,9 @@ function RowBody({ p, H, expanded }: Omit<RowProps, "onToggle">) {
     <div className="md:col-span-8">
       <p className="mono-meta mb-2 text-muted">{p.journal}</p>
       <PublicationTitle p={p} H={H} className="font-serif text-[1.65rem] leading-tight md:text-[1.9rem]">
-        {p.publicationType === "these" ? <OriginalTitle p={p} /> : (p.editorialTitle ?? <OriginalTitle p={p} />)}
+        {p.editorialTitle ?? <OriginalTitle p={p} />}
       </PublicationTitle>
-      {p.publicationType !== "these" && (
+      {p.editorialTitle && (
         <p className="mt-2 text-[0.95rem] text-ink/70 italic [&_i]:not-italic">
           <OriginalTitle p={p} />
         </p>
@@ -195,7 +196,7 @@ function RowBody({ p, H, expanded }: Omit<RowProps, "onToggle">) {
 }
 
 function RowDetails({ p }: { p: Publication }) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const t = COPY[useLang()];
   return (
     <motion.div

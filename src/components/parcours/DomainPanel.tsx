@@ -25,8 +25,10 @@ const COPY = copy({
 
 type T = (typeof COPY)["fr"];
 
-/** The selected domain: each competence, what it covers, and where it is used. */
-export function DomainPanel({ domain, className }: { domain: DomainBlock; className?: string }) {
+type PanelProps = { domain: DomainBlock; className?: string; compact?: boolean };
+
+/** The selected domain: each competence, what it covers, and where it is used. Compact: names only, linked to their first use. */
+export function DomainPanel({ domain, className, compact = false }: PanelProps) {
   const t = COPY[useLang()];
   return (
     <div id="competences-panel" className={className}>
@@ -39,9 +41,7 @@ export function DomainPanel({ domain, className }: { domain: DomainBlock; classN
       </h3>
       <p className="mt-1 text-[1.02rem] text-muted">{domain.subtitle}</p>
       <ul className="mt-6 divide-y divide-rule border-y border-ink">
-        {domain.pieces.map((p) => (
-          <CompetenceItem key={p.id} piece={p} t={t} />
-        ))}
+        {domain.pieces.map((p) => (compact ? <CompetenceName key={p.id} piece={p} t={t} /> : <CompetenceItem key={p.id} piece={p} t={t} />))}
       </ul>
       <p className="mt-5 text-sm text-muted">{t.hint}</p>
     </div>
@@ -71,6 +71,25 @@ function CompetenceItem({ piece: p, t }: { piece: CompetencePiece; t: T }) {
       ) : (
         <p className="mt-1.5 text-sm text-muted">{t.unpublished}</p>
       )}
+    </li>
+  );
+}
+
+function CompetenceName({ piece: p, t }: { piece: CompetencePiece; t: T }) {
+  const use = p.uses[0];
+  const label = (
+    <>
+      {p.title}
+      {p.ongoing && <span className="ml-2 inline-block border border-ink/30 px-1.5 align-middle font-sans text-xs text-muted">{t.ongoing}</span>}
+    </>
+  );
+  if (!use) return <li className="py-3 font-serif text-lg leading-snug">{label}</li>;
+  return (
+    <li>
+      <Link href={use.href} className="group flex min-h-11 items-center justify-between gap-4 py-3 font-serif text-lg leading-snug hover:text-accent-deep">
+        <span>{label}</span>
+        <ArrowRight className="size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+      </Link>
     </li>
   );
 }

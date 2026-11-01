@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { makeTank, step, captureRates, setPrey, rng, type Group, type Tank } from "@/lib/fish/sim";
 import { drawTank } from "@/components/fish/draw";
 
@@ -16,7 +16,7 @@ export function useAquarium(preyCount: number) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tankRef = useRef<Tank | null>(null);
   const randRef = useRef(rng(11));
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const [playing, setPlaying] = useState<boolean | null>(null);
   const [rates, setRates] = useState(ZERO);
   const [visible, setVisible] = useState(false);
