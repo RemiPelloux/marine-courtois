@@ -1,0 +1,37 @@
+---
+description: Git workflow and commit standards
+alwaysApply: true
+---
+
+# Git Workflow
+
+## Before work
+
+```bash
+git fetch && git pull   # when a remote exists
+```
+
+## Commit format
+
+```
+<type>(<scope>): <imperative subject ≤ 72 chars>
+
+Optional body: why, not what.
+```
+
+Types: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`, `ci`, `perf`
+
+## Rules
+
+- One logical change per commit
+- Never `--no-verify` except emergencies
+- Never force-push a shared branch
+- Push after every commit when a remote exists
+
+## Hooks
+
+```bash
+bash scripts/setup-hooks.sh   # once after clone
+```
+
+Pre-commit and pre-push enforce quality — see `pre-commit-enforcement.mdc`.

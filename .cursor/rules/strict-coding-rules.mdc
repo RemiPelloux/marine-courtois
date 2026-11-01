@@ -1,0 +1,32 @@
+---
+description: Strict coding standards — enforced on every change
+alwaysApply: true
+---
+
+# Strict Coding Rules
+
+Mandatory for all code. Violations block commit via `scripts/check-quality.sh`.
+
+## TypeScript / React / Next.js
+
+- `strict` mode — no `any`, no `@ts-ignore` / `@ts-expect-error`
+- Validate every external boundary (forms, route handlers, server actions, env) with Zod or equivalent
+- Functions ≤ 25 lines; files ≤ 300 target / 400 hard max
+- Parameters ≤ 3 — options object when more
+- Imports at top of file — no inline imports
+- Every `catch` handles or reports with context — no silent swallowing
+- No `console.*` in production code
+- No raw `fetch`/`axios` scattered in UI — go through one project API module
+- Server Components by default; `"use client"` only where interactivity requires it
+- Next.js in this repo has breaking changes vs. training data — read
+  `node_modules/next/dist/docs/` before using an API
+
+## Security
+
+- Secrets in env — never committed; only `NEXT_PUBLIC_*` reaches the client
+- Never trust client input in server actions / route handlers
+- No `dangerouslySetInnerHTML` with unsanitized content
+
+## Testing
+
+See `testing-standards.mdc`. Tests are mandatory for behavior changes — not optional follow-up.

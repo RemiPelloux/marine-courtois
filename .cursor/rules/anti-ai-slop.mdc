@@ -1,0 +1,52 @@
+---
+description: Anti AI slop — design, copy, and code must not look machine-averaged
+alwaysApply: true
+---
+
+# Anti AI Slop
+
+Slop is what a model produces when it averages over its training data. Test: could this
+page, section, or sentence ship on a different site by changing one noun? Then it is slop.
+
+## Process (mandatory for any UI work)
+
+1. Use the **Impeccable** skill (`/impeccable`). Run `/impeccable init` once to write
+   `PRODUCT.md` and `/impeccable document` to write `DESIGN.md`; both are the design brief.
+2. Before any UI edit, read `.claude/skills/impeccable/reference/craft-floor.md`.
+3. After edits: `pnpm design:detect` (source) and
+   `pnpm design:detect:live` with `pnpm dev` running (catches contrast and tiny text).
+4. Look at the rendered page at mobile and desktop widths before calling it done.
+5. Before shipping a surface: `/impeccable critique` then `/impeccable polish`.
+
+## Visual slop (reject)
+
+- Default faces chosen by reflex: Inter, Roboto, Geist, Arial, Space Grotesk, Plus Jakarta Sans
+- Purple/blue/violet gradients, gradient text, glow blobs, glassmorphism by default
+- Centered hero + three identical feature cards + CTA band — the template layout
+- Everything in rounded cards with the same shadow; uniform spacing with no rhythm
+- Emoji or generic line icons as decoration; stock "diverse team smiling" imagery
+- Fade-up-on-scroll applied to every element; motion without a purpose
+- Gray text on colored backgrounds; contrast below WCAG AA
+
+## Copy slop (reject)
+
+- Buzzwords: empower, seamless, leverage, innovative, cutting-edge, revolutionary, unlock,
+  holistic, ecosystem, journey, game-changing, powerful, elevate, transform, delve
+- "Welcome to…", "Discover…", "Your one-stop…", "Whether you're X or Y…"
+- Triads of adjectives, rhetorical questions as headings, exactly-five lists of equal shape
+- Placeholder text (Lorem ipsum, "Your Name", fake testimonials, invented numbers or clients)
+
+Write like a working professional describing their own work to a peer: flat, specific,
+concrete nouns (real places, real work, real numbers the client supplied). Never invent
+facts, clients, quotes, or metrics — ask for them.
+
+## Code slop (reject)
+
+- Comments that restate the code; "// Helper function to…"
+- Defensive branches for impossible states; wrappers around a single call
+- Unused props/variants "for flexibility"; copy-pasted near-duplicate components
+
+## Exceptions
+
+The brief wins: a pinned font, palette, or style from the client overrides a detector
+warning. Record it: `npx impeccable ignores add-value <rule> <value> --reason "<why>"`.
