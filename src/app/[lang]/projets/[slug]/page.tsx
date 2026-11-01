@@ -72,6 +72,7 @@ export default async function ProjectPage({ params }: PageProps<"/[lang]/projets
     <>
       <PageHeader
         chapter={t.chapter}
+        morphName={`project-${project.slug}`}
         kicker={pick(t.kind, project.kind)}
         title={<SpeciesText text={project.title} />}
         intro={<SpeciesText text={project.tagline} />}

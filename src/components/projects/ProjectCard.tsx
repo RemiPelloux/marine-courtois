@@ -7,10 +7,14 @@ import { projectRelations } from "@/data/relations";
 import { getMediaIn } from "@/data/media";
 import type { Project } from "@/types/portfolio";
 import Image from "next/image";
+import { ViewTransition } from "react";
 import { getLang } from "@/i18n/server";
 import { a11yFor } from "@/i18n/locales";
 
-/** A project in the index: picture when there is one, question, maturity, tools. Expects a project already in the page language. */
+/**
+ * A project in the index: picture when there is one, question, maturity, tools. Expects a project already in the page language.
+ * The title morphs into the project page header; render each project once per page so the name stays unique.
+ */
 export async function ProjectCard({ project, large = false }: { project: Project; large?: boolean }) {
   const lang = await getLang();
   const a11y = a11yFor(lang);
@@ -26,7 +30,11 @@ export async function ProjectCard({ project, large = false }: { project: Project
       <MaturityBadge status={project.status} />
       <h3 className={large ? "mt-4 font-serif text-[2.2rem] leading-[1.05]" : "mt-4 font-serif text-[1.65rem] leading-tight"}>
         <Link href={`/projets/${project.slug}`} className="after:absolute after:inset-0 hover:text-accent-deep">
-          <SpeciesText text={project.title} />
+          <ViewTransition name={`project-${project.slug}`} share="morph" default="none">
+            <span className="inline-block">
+              <SpeciesText text={project.title} />
+            </span>
+          </ViewTransition>
         </Link>
       </h3>
       <p className="mt-3 text-[1rem] leading-relaxed text-ink/80">
