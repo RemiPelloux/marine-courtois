@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { motion } from "motion/react";
 import type { ReactNode } from "react";
 
 /** Subtle section reveal. Content is visible without JS and with reduced motion. */
@@ -17,16 +18,16 @@ export function Reveal({
   y?: number;
   as?: "div" | "section" | "li" | "article";
 }) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const Comp = motion[as];
-  if (reduce) return <Comp className={className}>{children}</Comp>;
+  // one structure on server and client: reduced motion only shortens the transition (no hydration mismatch)
   return (
     <Comp
       className={className}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -8% 0px" }}
-      transition={{ duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
+      transition={reduce ? { duration: 0 } : { duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
     </Comp>

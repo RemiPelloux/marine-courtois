@@ -37,7 +37,7 @@ export async function TeachingSection({ headingLevel = "h2", showCourses = true 
   const t = COPY[lang];
   return (
     <section id="enseignement" aria-labelledby="enseignement-titre" className="on-dark scroll-mt-20 bg-antibes text-paper">
-      <div className="site-gutter mx-auto max-w-site py-24 md:py-32">
+      <div className="site-gutter mx-auto max-w-site py-16 md:py-24">
         <SectionHeading as={headingLevel} title={<span id="enseignement-titre">{t.title}</span>} intro={t.intro} className="mb-12" />
         {showCourses && <CourseList lang={lang} />}
         <ul className="grid border-y border-paper/25 lg:grid-cols-3">

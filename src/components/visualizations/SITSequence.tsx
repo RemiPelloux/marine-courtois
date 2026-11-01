@@ -1,7 +1,8 @@
 "use client";
 
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { useMemo, useState, type Dispatch, type SetStateAction } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { simulateRF } from "@/lib/scientific/residual-fertility";
 import { LineChart } from "@/components/visualizations/LineChart";
@@ -122,7 +123,7 @@ export function SITSequence() {
 }
 
 function StepPanel({ step, traj, t }: { step: number; traj: ReturnType<typeof residualTrajectories>; t: Text }) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   return (
     <AnimatePresence mode="wait" initial={false}>
       <motion.div

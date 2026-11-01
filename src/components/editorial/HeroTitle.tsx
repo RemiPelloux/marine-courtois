@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { motion } from "motion/react";
 import { copy } from "@/i18n/config";
 import { useA11y, useLang } from "@/i18n/client";
 
@@ -11,7 +12,7 @@ const LINES = copy({
 
 /** Staggered line-by-line reveal of the hero title; the last line is the accent. Static when reduced motion is requested. */
 export function HeroTitle() {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const a11y = useA11y();
   const lines = LINES[useLang()];
   return (

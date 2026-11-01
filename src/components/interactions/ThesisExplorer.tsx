@@ -1,9 +1,10 @@
 "use client";
 
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import Image from "next/image";
 import Link from "@/i18n/Link";
 import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import type { CodeFile, Figure, Publication, ThesisChapter } from "@/types/content";
 import { cn } from "@/lib/utils/cn";
@@ -102,7 +103,7 @@ function ChapterTabs({ chapters, active, onSelect }: { chapters: ThesisChapter[]
 type ChapterPanelProps = ThesisSources & { chapter: ThesisChapter; headingLevel: HeadingLevel };
 
 function ChapterPanel({ chapter, headingLevel, ...sources }: ChapterPanelProps) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   return (
     <motion.div
       id="thesis-panel"

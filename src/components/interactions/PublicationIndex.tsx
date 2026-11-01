@@ -50,13 +50,15 @@ type PublicationIndexProps = {
   publications: Publication[];
   showFilters?: boolean;
   headingLevel?: "h2" | "h3";
+  /** Show the featured article as a large block above the list (off where it is already featured, e.g. the home page). */
+  highlightFeatured?: boolean;
 };
 
-export function PublicationIndex({ publications, showFilters = true, headingLevel = "h3" }: PublicationIndexProps) {
+export function PublicationIndex({ publications, showFilters = true, headingLevel = "h3", highlightFeatured = true }: PublicationIndexProps) {
   const lang = useLang();
   const { options, filters, update, filtered } = usePublicationFilters(publications, lang);
   const [open, setOpen] = useState<string | null>(null);
-  const featured = !isFiltering(filters) ? filtered.find((p) => p.featured) : undefined;
+  const featured = highlightFeatured && !isFiltering(filters) ? filtered.find((p) => p.featured) : undefined;
   const rows = filtered.filter((p) => p !== featured);
 
   return (

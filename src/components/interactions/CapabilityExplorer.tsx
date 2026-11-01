@@ -1,8 +1,9 @@
 "use client";
 
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import Link from "@/i18n/Link";
 import { useState, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { copy } from "@/i18n/config";
 import { useA11y, useLang } from "@/i18n/client";
@@ -98,7 +99,7 @@ function CapabilityList({ capabilities, active, onSelect }: { capabilities: Capa
 }
 
 function CapabilityPanel({ capability: cap, publications, research, tools, projects, visuals }: CapabilitySources & { capability: Capability }) {
-  const reduce = useReducedMotion();
+  const reduce = usePrefersReducedMotion();
   const t = COPY[useLang()];
   const linked = {
     publications: pickAll(cap.publicationIds, publications, (p) => p.id),

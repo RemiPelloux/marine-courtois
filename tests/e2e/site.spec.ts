@@ -53,7 +53,7 @@ test("main navigation works", async ({ page, isMobile }) => {
 test("publication filters update the index", async ({ page }) => {
   await page.goto("/publications");
   await expect(page.getByRole("status").first()).toContainText("4 résultats");
-  await page.getByLabel("Année").selectOption("2026");
+  await page.getByRole("combobox", { name: /^Année/ }).selectOption("2026");
   await expect(page.getByRole("status").first()).toContainText("2 résultats");
 });
 
@@ -96,6 +96,14 @@ test("hero puzzle highlights a family and leads to contact", async ({ page }) =>
 
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
+  test("pages hydrate without errors for visitors who reduce motion", async ({ page }) => {
+    const errors = trackErrors(page);
+    for (const route of ["/", "/en", "/publications/reponse-fonctionnelle-invasivite", "/outils"]) {
+      await page.goto(route);
+      await page.waitForLoadState("networkidle");
+    }
+    expect(errors).toEqual([]);
+  });
   test("hero renders its final state immediately", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("#hero-title")).toBeVisible();

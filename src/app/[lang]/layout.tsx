@@ -10,6 +10,7 @@ import { RESEARCHER } from "@/data/researcher";
 import { LANGS, OG_LOCALE, copy, type Lang } from "@/i18n/config";
 import { getLang } from "@/i18n/server";
 import { LangProvider } from "@/i18n/client";
+import { MotionProvider } from "@/components/layout/MotionProvider";
 import { languageAlternates } from "@/lib/content/metadata";
 
 const instrument = Instrument_Serif({
@@ -69,29 +70,37 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#f5f2eb",
+  themeColor: "#0b2d4f",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const lang: Lang = await getLang();
   return (
-    <html lang={lang} data-scroll-behavior="smooth" suppressHydrationWarning className={`${instrument.variable} ${montserrat.variable} ${plexMono.variable} antialiased`}>
+    <html
+      lang={lang}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+      className={`${instrument.variable} ${montserrat.variable} ${plexMono.variable} antialiased`}
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.dataset.js=''" }} />
       </head>
-      <body className="flex min-h-dvh flex-col">
+      {/* extensions (e.g. ColorZilla: cz-shortcut-listen) add attributes to <body> before React loads */}
+      <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
         <LangProvider lang={lang}>
-        <a
-          href="#contenu"
-          className="label fixed top-2 left-2 z-[100] -translate-y-20 bg-ink px-4 py-3 text-paper transition-transform focus:translate-y-0"
-        >
-          {SITE[lang].skip}
-        </a>
-        <SiteHeader />
-        <main id="contenu" className="flex-1">
-          <PageTransition>{children}</PageTransition>
-        </main>
-        <SiteFooter />
+          <MotionProvider>
+            <a
+              href="#contenu"
+              className="label bg-ink text-paper fixed top-2 left-2 z-[100] -translate-y-20 px-4 py-3 transition-transform focus:translate-y-0"
+            >
+              {SITE[lang].skip}
+            </a>
+            <SiteHeader />
+            <main id="contenu" className="flex-1">
+              <PageTransition>{children}</PageTransition>
+            </main>
+            <SiteFooter />
+          </MotionProvider>
         </LangProvider>
       </body>
     </html>

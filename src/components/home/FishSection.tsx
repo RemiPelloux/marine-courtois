@@ -27,7 +27,7 @@ export async function FishSection() {
   const t = COPY[await getLang()];
   return (
     <section id="poissons" aria-labelledby="poissons-titre" className="border-y border-ink bg-stone scroll-mt-20">
-      <div className="site-gutter mx-auto max-w-site py-24 md:py-32">
+      <div className="site-gutter mx-auto max-w-site py-16 md:py-24">
         <SectionHeading title={<span id="poissons-titre">{t.title}</span>} intro={t.intro} className="mb-12" />
         <FishAquarium />
         <div className="mt-10 flex flex-wrap gap-x-10 gap-y-3">

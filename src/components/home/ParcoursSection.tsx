@@ -25,9 +25,9 @@ export async function ParcoursSection() {
   const lang = await getLang();
   const t = COPY[lang];
   return (
-    <section aria-labelledby="parcours-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
+    <section aria-labelledby="parcours-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-16 md:py-24">
       <SectionHeading title={<span id="parcours-titre">{t.title}</span>} intro={t.intro} className="mb-12" />
-      <CareerPuzzle board={buildCompetenceBoard(lang)} />
+      <CareerPuzzle board={buildCompetenceBoard(lang)} compact />
       <div className="mt-12">
         <ButtonLink href="/parcours" variant="secondary">
           {t.more}

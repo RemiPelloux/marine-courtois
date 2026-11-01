@@ -34,7 +34,7 @@ export async function FeaturedSection() {
   const explorer = getProjectIn(lang, "explorateur-de-modeles")!;
   const figure = getMediaIn(lang, "fig-ch4-abm")!;
   return (
-    <section aria-labelledby="une" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
+    <section aria-labelledby="une" className="site-gutter mx-auto max-w-site scroll-mt-20 py-16 md:py-24">
       <SectionHeading title={<span id="une">{t.title}</span>} intro={t.intro} className="mb-12" />
       <div className="grid gap-12 lg:grid-cols-12">
         <article className="group relative lg:col-span-5">
