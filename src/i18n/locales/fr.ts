@@ -25,6 +25,8 @@ export const a11y = {
   etapes: "Étapes",
   legendeDuSchema: "Légende du schéma",
   modeles: "Modèles",
+  filmDuParcours: "Film du parcours : chaque jalon vérifié de 2022 à 2026, placé sur un axe du temps",
+  mettreEnEvidenceLesOutils: "Mettre en évidence les outils",
 } as const;
 
 export type A11yKey = keyof typeof a11y;

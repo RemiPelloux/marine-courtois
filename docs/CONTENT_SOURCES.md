@@ -16,6 +16,8 @@ Vérification effectuée le 1er novembre 2026. Identifiants de sources : `src/da
 | Jeu de données Zenodo 10.5281/zenodo.18377688 | DataCite |
 | 8 communications et posters (titres, événements, lieux, dates, co-auteurs) | API HAL (identifiants hal-…) |
 | Outils logiciels (Python, Jupyter, NumPy, SciPy, SymPy, pandas, statsmodels, Matplotlib, seaborn, Mesa, python-control) et versions | imports et commentaires des notebooks et de script_ABM_batchrun.py |
+| Outils déclarés hors code publié : R, R Shiny, MySQL, Power BI (`src/data/toolkit.ts`) | indiqués par le commanditaire le 1/11/2026 ; absents des dépôts publics, donc affichés à part (cercle vide), sans preuve ni projet associé |
+| Film « Parcours » (Remotion) et frise animée de la page À propos | générés à partir des mêmes données vérifiées (`src/data/milestones.ts`) : communications HAL, articles Crossref, soutenance theses.fr |
 | Manuscrit et diapositives de soutenance en PDF | fichiers présents dans thesisData (`Thesis - Manuscript/`, `Defense - Slides/`) |
 | Paramètres du modèle individu-centré (durées de vie, η = 0,59, périodes réfractaires, ponte, capacité) | script_ABM_batchrun.py (références bibliographiques citées dans le code) |
 | Courriel marine.courtois@inrae.fr, ORCID, GitLab | brief + profils publics |

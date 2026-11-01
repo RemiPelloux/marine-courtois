@@ -4,9 +4,10 @@ import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { SourceNote } from "@/components/scientific/SourceNote";
 import { ButtonLink } from "@/components/ui/Links";
 import { RESEARCHER } from "@/data/researcher";
-import { COMMUNICATIONS, ARTICLES } from "@/data/publications";
+import { MILESTONES } from "@/data/milestones";
 import { THESIS } from "@/data/thesis";
-import { formatDateFr } from "@/lib/utils/format";
+import { AnimatedTimeline } from "@/components/timeline/AnimatedTimeline";
+import { CareerFilmEmbed } from "@/components/timeline/CareerFilmEmbed";
 import { pageMetadata } from "@/lib/content/metadata";
 
 export const metadata = pageMetadata({
@@ -24,12 +25,6 @@ const BIO = [
 ];
 
 export default function AboutPage() {
-  const timeline = [
-    ...COMMUNICATIONS.map((c) => ({ date: c.date, label: c.type === "poster" ? "Poster" : "Communication", title: c.event, url: c.url })),
-    ...ARTICLES.map((a) => ({ date: a.date ?? String(a.year), label: "Article", title: `${a.journal} — ${a.title}`, url: `https://doi.org/${a.doi}` })),
-    { date: THESIS.defenseDate, label: "Doctorat", title: `Soutenance de thèse — ${THESIS.institution}`, url: "https://theses.fr/s352892" },
-  ].sort((a, b) => b.date.localeCompare(a.date));
-
   return (
     <>
       <PageHeader
@@ -85,19 +80,13 @@ export default function AboutPage() {
       <section aria-labelledby="jalons" className="border-t border-ink bg-stone">
         <div className="site-gutter mx-auto max-w-site py-20">
           <SectionHeading kicker="Jalons vérifiés" title={<span id="jalons">Parcours scientifique.</span>} size="title" intro="Publications, communications et soutenance, telles que référencées dans ORCID, HAL et theses.fr." />
-          <ol className="relative mt-12 border-l border-ink/40 pl-8">
-            {timeline.map((t) => (
-              <li key={t.url + t.date} className="relative pb-8">
-                <span className={`absolute top-1.5 -left-[37px] size-[9px] rounded-full ${t.label === "Doctorat" || t.label === "Article" ? "bg-vermilion" : "bg-ink"}`} aria-hidden />
-                <p className="mono-meta text-muted">
-                  {formatDateFr(t.date)} · <span className="text-vermilion-deep">{t.label}</span>
-                </p>
-                <a href={t.url} target="_blank" rel="noopener noreferrer" className="mt-1 block font-serif text-xl leading-snug hover:text-vermilion-deep">
-                  {t.title}
-                </a>
-              </li>
-            ))}
-          </ol>
+          <figure className="mt-12">
+            <CareerFilmEmbed />
+            <figcaption className="mono-meta mt-3 text-muted">
+              Film généré avec Remotion à partir des mêmes données que la liste ci-dessous. Lecture, pause et défilement au clavier.
+            </figcaption>
+          </figure>
+          <AnimatedTimeline milestones={MILESTONES} />
           <SourceNote ids={["inriaReport", "thesesFr", "orcid", "hal"]} />
         </div>
       </section>

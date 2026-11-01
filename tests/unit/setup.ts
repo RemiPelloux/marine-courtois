@@ -27,3 +27,11 @@ class IntersectionObserverStub {
 if (!("IntersectionObserver" in window)) {
   Object.defineProperty(window, "IntersectionObserver", { writable: true, value: IntersectionObserverStub });
 }
+class ResizeObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+if (!("ResizeObserver" in window)) {
+  Object.defineProperty(window, "ResizeObserver", { writable: true, value: ResizeObserverStub });
+}

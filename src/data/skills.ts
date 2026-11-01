@@ -9,6 +9,7 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
   {
     id: "python",
     name: "Python",
+    family: "langages",
     role: "Langage de l'ensemble des modèles, simulations et figures",
     evidence: ["thesisData — tous les notebooks", "sit_remating_abm/script_ABM_batchrun.py"],
     versionNote: "Python 3.9.12 et 3.12.5 (métadonnées des notebooks)",
@@ -16,12 +17,14 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
   {
     id: "jupyter",
     name: "Jupyter",
+    family: "partage",
     role: "Notebooks reproduisant chaque figure du manuscrit",
     evidence: ["thesisData — 11 notebooks .ipynb", "sit_remating_abm — 5 notebooks .ipynb"],
   },
   {
     id: "numpy",
     name: "NumPy",
+    family: "calcul",
     role: "Calcul numérique, tirages aléatoires des agents",
     evidence: ["Script_Manuscrit_SIT_RF.ipynb", "script_ABM_batchrun.py"],
     versionNote: "numpy 1.23.5",
@@ -29,6 +32,7 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
   {
     id: "scipy",
     name: "SciPy",
+    family: "calcul",
     role: "Intégration d'EDO (odeint, solve_ivp), statistiques",
     evidence: ["Script_Manuscrit_SIT_RF.ipynb", "Compartmental_model_output_vAvril.ipynb", "Notebook_part_impulsive_releases.ipynb"],
     versionNote: "scipy 1.10.1",
@@ -36,6 +40,7 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
   {
     id: "sympy",
     name: "SymPy",
+    family: "calcul",
     role: "Calcul symbolique des équilibres",
     evidence: ["Script_Manuscrit_SIT_RF.ipynb", "Sensitivity_Analysis_SIT.ipynb"],
     versionNote: "sympy 1.11.1",
@@ -43,12 +48,14 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
   {
     id: "mesa",
     name: "Mesa",
+    family: "calcul",
     role: "Cadre de modélisation individu-centrée (agents, ordonnanceur, collecte de données)",
     evidence: ["script_ABM_batchrun.py"],
   },
   {
     id: "pandas",
     name: "pandas",
+    family: "donnees",
     role: "Gestion des sorties de simulation et des tableaux de résultats",
     evidence: ["script_ABM_batchrun.py", "ABM_model_output.ipynb", "Sensitivity_Analysis_SIT.ipynb"],
     versionNote: "pandas 2.0.1",
@@ -56,6 +63,7 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
   {
     id: "statsmodels",
     name: "statsmodels",
+    family: "calcul",
     role: "Modèles linéaires pour l'analyse de sensibilité",
     evidence: ["Sensitivity_Analysis_SIT.ipynb"],
     versionNote: "statsmodels 0.13.5",
@@ -63,6 +71,7 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
   {
     id: "matplotlib",
     name: "Matplotlib",
+    family: "visualisation",
     role: "Figures scientifiques du manuscrit",
     evidence: ["thesisData — tous les notebooks"],
     versionNote: "matplotlib 3.7.1",
@@ -70,18 +79,21 @@ const RAW_TOOLS: z.input<typeof toolSchema>[] = [
   {
     id: "seaborn",
     name: "seaborn",
+    family: "visualisation",
     role: "Visualisation des distributions de sorties du modèle individu-centré",
     evidence: ["ABM_model_output.ipynb"],
   },
   {
     id: "python-control",
     name: "python-control",
+    family: "calcul",
     role: "Portraits de phase (control.phaseplot)",
     evidence: ["fig_chapter2_thesis.ipynb"],
   },
   {
     id: "gitlab",
     name: "GitLab",
+    family: "partage",
     role: "Partage public du code, des données et du manuscrit",
     evidence: ["gitlab.com/marinecourtois"],
   },

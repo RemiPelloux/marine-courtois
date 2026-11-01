@@ -80,15 +80,22 @@ export const researchThemeSchema = z.object({
 });
 export type ResearchTheme = z.infer<typeof researchThemeSchema>;
 
+export const TOOL_FAMILIES = ["langages", "calcul", "donnees", "visualisation", "partage"] as const;
+
 export const toolSchema = z.object({
   id: z.string(),
   name: z.string(),
   role: z.string(),
+  family: z.enum(TOOL_FAMILIES),
   /** files in which the tool is actually imported or used */
   evidence: z.array(z.string()).min(1),
   versionNote: z.string().optional(),
 });
 export type Tool = z.infer<typeof toolSchema>;
+
+/** A tool the user states Marine works with, but which is absent from her public code. */
+export const declaredToolSchema = toolSchema.pick({ id: true, name: true, role: true, family: true });
+export type DeclaredTool = z.infer<typeof declaredToolSchema>;
 
 export const capabilitySchema = z.object({
   id: z.string(),

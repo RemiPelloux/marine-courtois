@@ -3,7 +3,9 @@ import { MethodsChapter, SequenceRail } from "@/components/editorial/Chapters";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { CapabilitySection } from "@/components/scientific/Sections";
 import { SourceNote } from "@/components/scientific/SourceNote";
+import { Toolkit } from "@/components/interactions/Toolkit";
 import { TOOLS } from "@/data/skills";
+import { groupToolkit } from "@/data/toolkit";
 import { pageMetadata } from "@/lib/content/metadata";
 
 export const metadata = pageMetadata({
@@ -36,10 +38,20 @@ export default function MethodsPage() {
         <CapabilitySection />
       </section>
       <MethodsChapter />
-      <section aria-labelledby="outils" className="site-gutter mx-auto max-w-site py-20 md:py-28">
+      <section aria-labelledby="langages" className="site-gutter mx-auto max-w-site py-20 md:py-28">
+        <SectionHeading
+          kicker="Langages et outils"
+          title={<span id="langages">De Python à Power BI.</span>}
+          intro="Point plein : importé dans les dépôts publics. Cercle : utilisé hors de ces dépôts, sans preuve publique dans le code."
+          size="title"
+          className="mb-12"
+        />
+        <Toolkit families={groupToolkit()} />
+      </section>
+      <section id="outils" aria-labelledby="outils-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-20 md:py-28">
         <SectionHeading
           kicker="Environnement logiciel vérifié"
-          title={<span id="outils">Les outils présents dans le code publié.</span>}
+          title={<span id="outils-titre">Les outils présents dans le code publié.</span>}
           intro="Cette liste est établie à partir des imports effectivement présents dans les dépôts publics. Elle ne prétend pas être exhaustive."
           size="title"
         />
