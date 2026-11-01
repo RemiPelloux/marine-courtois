@@ -7,7 +7,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { copy } from "@/i18n/config";
 import { useA11y, useLang } from "@/i18n/client";
 import { ToolIcon } from "@/components/interactions/tool-icons";
-import { CELL, FAMILY_FILL, FLIGHT, delayFor } from "@/components/puzzle/constants";
+import { CELL, FAMILY_FILL, FLIGHT, delayFor, sweepFor } from "@/components/puzzle/constants";
 import type { PuzzleSlot } from "@/components/puzzle/board";
 
 type PieceProps = { slot: PuzzleSlot; tools: number; dim: boolean; onHover: (id: string | null) => void };
@@ -31,7 +31,10 @@ const PROJECT = copy({ fr: ["Votre", "projet"], en: ["Your", "project"] });
 const ICON = { x: 34, y: 25, size: 32 };
 const LABEL_Y = 77;
 
-/** Positions a piece on the board and carries its fly-in (see puzzle.css). */
+/**
+ * One piece in its own grid cell, so a lifted piece can rise above its neighbours (z-index);
+ * carries the fly-in and the light wave that follows it (see puzzle.css).
+ */
 function Placed({ slot, tools, dim, children }: { slot: PuzzleSlot; tools: number; dim: boolean; children: ReactNode }) {
   const style = {
     "--dx": `${slot.scatter.dx}px`,
@@ -39,15 +42,17 @@ function Placed({ slot, tools, dim, children }: { slot: PuzzleSlot; tools: numbe
     "--rot": `${slot.scatter.rot}deg`,
     "--delay": `${delayFor(slot.order, tools)}s`,
     "--flight": `${FLIGHT}s`,
+    "--sweep": `${sweepFor(slot.r, slot.c, tools)}s`,
   } as CSSProperties;
   return (
-    <g transform={`translate(${slot.c * CELL} ${slot.r * CELL})`}>
+    <svg viewBox={`0 0 ${CELL} ${CELL}`} className="pz-cell" style={{ gridArea: `${slot.r + 1} / ${slot.c + 1}` }}>
       <g className="pz-in" style={style}>
         <g className="pz-face" data-dim={dim || undefined} data-kind={slot.kind}>
           {children}
+          {slot.kind !== "project" && <path d={slot.path} className="pz-glint" aria-hidden />}
         </g>
       </g>
-    </g>
+    </svg>
   );
 }
 
