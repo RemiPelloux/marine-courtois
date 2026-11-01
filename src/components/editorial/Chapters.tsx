@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { Reveal } from "@/components/editorial/Reveal";
+import { ScrubText } from "@/components/editorial/ScrubText";
 import { ButtonLink } from "@/components/ui/Links";
 import { Kicker } from "@/components/ui/Kicker";
 import { AgentSimulator } from "@/components/visualizations/AgentSimulator";
@@ -10,6 +11,8 @@ import { BifurcationVisual, ScenarioComparisonVisual } from "@/components/visual
 import { ModelExplorerSection } from "@/components/scientific/ModelExplorerSection";
 import { ThesisSection, CodeSection } from "@/components/scientific/Sections";
 import { PublicationIndex } from "@/components/interactions/PublicationIndex";
+import { HoverPreview } from "@/components/interactions/HoverPreview";
+import { publicationPreviews } from "@/data/research-rail";
 import { METHOD_PANELS } from "@/data/skills";
 import { PUBLICATIONS, COMMUNICATIONS } from "@/data/publications";
 import { HIGHLIGHTS } from "@/data/home";
@@ -45,11 +48,10 @@ export function PhilosophySection() {
           </h2>
         </Reveal>
         <Reveal className="space-y-6 text-[1.08rem] leading-relaxed lg:col-span-6 lg:col-start-7" delay={0.1}>
-          <p className="font-serif text-[1.6rem] leading-snug md:text-[1.85rem]">
-            Je suis Marine Courtois, docteure en biologie mathématique. Mes recherches se situent à l&apos;interface des mathématiques et de
-            l&apos;écologie, avec un intérêt particulier pour la dynamique des populations, les interactions biologiques et les stratégies de
-            lutte contre les ravageurs agricoles.
-          </p>
+          <ScrubText
+            className="font-serif text-[1.6rem] leading-snug md:text-[1.85rem]"
+            text="Je suis Marine Courtois, docteure en biologie mathématique. Mes recherches se situent à l'interface des mathématiques et de l'écologie, avec un intérêt particulier pour la dynamique des populations, les interactions biologiques et les stratégies de lutte contre les ravageurs agricoles."
+          />
           <p className="text-ink/80">
             Les systèmes biologiques sont complexes : les individus interagissent, les comportements varient et de nombreux mécanismes
             agissent simultanément. La modélisation permet d&apos;isoler certains de ces mécanismes, d&apos;en explorer les conséquences et de
@@ -184,7 +186,9 @@ export function PublicationsChapter() {
         intro="Mes travaux explorent différents aspects des interactions biologiques, de la dynamique des populations et de l'écologie, en mobilisant des approches mathématiques et computationnelles."
       />
       <div className="mt-14">
-        <PublicationIndex publications={PUBLICATIONS} showFilters={false} />
+        <HoverPreview previews={publicationPreviews(PUBLICATIONS)}>
+          <PublicationIndex publications={PUBLICATIONS} showFilters={false} />
+        </HoverPreview>
       </div>
       <div className="mt-12 grid gap-8 md:grid-cols-12">
         <div className="md:col-span-4">

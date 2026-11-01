@@ -42,3 +42,16 @@ annotations réduites à leurs points, contrôles en pleine largeur.
 Motion pour les révélations de titres, les transitions d'onglets et l'indicateur de navigation. Le Living System et le
 simulateur individu-centré utilisent `requestAnimationFrame` / `setInterval`, mis en pause hors écran via
 IntersectionObserver. `prefers-reduced-motion` affiche immédiatement l'état final.
+
+Couche « éditoriale cinématique » (anime.js, `useAnimeScope` qui ne s'exécute jamais en mouvement réduit) :
+
+| Effet | Composant | Où |
+| --- | --- | --- |
+| Titres découpés en lignes qui montent hors d'un masque | `KineticTitle` (via `PageHeader`, `SectionHeading`) | toutes les pages |
+| Phrase éclairée mot à mot au défilement | `ScrubText` | accueil (introduction), À propos |
+| Défilement horizontal épinglé des six axes | `ResearchRail` (CSS `.rail*` dans `globals.css`) | accueil, Recherche ; liste verticale sur mobile |
+| Figure de thèse qui suit le curseur | `HoverPreview` | listes de publications, pointeur fin uniquement |
+| Bandes colorées qui s'ouvrent au défilement | `SectionFlow` | accueil |
+| Transitions de page et titre qui se transforme de la liste à la fiche | `<ViewTransition>` de React (layout, `PageHeader morphName`) | navigation interne |
+
+Sans JavaScript, les titres réapparaissent après 2,5 s (`kinetic-failsafe`) et le rail reste une liste verticale.

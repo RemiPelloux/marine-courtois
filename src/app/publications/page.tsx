@@ -1,4 +1,6 @@
 import { a11y } from "@/i18n";
+import { HoverPreview } from "@/components/interactions/HoverPreview";
+import { publicationPreviews } from "@/data/research-rail";
 import { PageHeader } from "@/components/editorial/PageHeader";
 import { PublicationIndex } from "@/components/interactions/PublicationIndex";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
@@ -39,7 +41,9 @@ export default function PublicationsPage() {
         }
       />
       <section aria-label={a11y.indexDesPublications} className="site-gutter mx-auto max-w-site py-16 md:py-20">
-        <PublicationIndex publications={PUBLICATIONS} />
+        <HoverPreview previews={publicationPreviews(PUBLICATIONS)}>
+          <PublicationIndex publications={PUBLICATIONS} />
+        </HoverPreview>
         <SourceNote className="mt-8" ids={["orcid", "pubRF", "pubPolyandry", "pubInvasion", "thesesFr"]} label="Métadonnées vérifiées" />
       </section>
       <section aria-labelledby="comms" className="border-t border-ink bg-stone">

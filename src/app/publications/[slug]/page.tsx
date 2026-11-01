@@ -59,6 +59,7 @@ export default async function PublicationPage({ params }: PageProps<"/publicatio
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
         chapter={String(p.year)}
+        morphName={`pub-${p.slug}`}
         kicker={`${PUBLICATION_TYPE_LABEL[p.publicationType]} · ${p.journal ?? ""}`}
         title={p.publicationType === "these" ? <span className="text-[0.72em] leading-[1.05]">{p.title}</span> : p.editorialTitle}
         intro={p.publicationType !== "these" ? <p className="font-serif text-2xl italic" lang="en">{p.title}</p> : undefined}

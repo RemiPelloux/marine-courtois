@@ -35,3 +35,6 @@ class ResizeObserverStub {
 if (!("ResizeObserver" in window)) {
   Object.defineProperty(window, "ResizeObserver", { writable: true, value: ResizeObserverStub });
 }
+if (!("fonts" in document)) {
+  Object.defineProperty(document, "fonts", { value: { ready: Promise.resolve(), status: "loaded" } });
+}

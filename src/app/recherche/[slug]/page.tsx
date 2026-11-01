@@ -40,6 +40,7 @@ export default async function ResearchStory({ params }: PageProps<"/recherche/[s
     <>
       <PageHeader
         chapter={`Axe ${t.index}`}
+        morphName={`research-${t.slug}`}
         kicker="Recherche"
         title={t.title}
         intro={t.lede}

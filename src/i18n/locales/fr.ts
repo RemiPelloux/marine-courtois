@@ -6,6 +6,7 @@ export const a11y = {
   indexDesPublications: "Index des publications",
   axesDeRecherche: "Axes de recherche",
   axesVoisins: "Axes voisins",
+  sourcesDesAxes: "Sources des axes de recherche",
   biographie: "Biographie",
   monogram: "MC",
   competencesScientifiques: "Compétences scientifiques",

@@ -2,6 +2,8 @@ import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { Toolkit } from "@/components/interactions/Toolkit";
 import { CareerFilmEmbed } from "@/components/timeline/CareerFilmEmbed";
 import { ButtonLink } from "@/components/ui/Links";
+import { ResearchRail } from "@/components/interactions/ResearchRail";
+import { researchRailItems } from "@/data/research-rail";
 import { groupToolkit } from "@/data/toolkit";
 
 /** Every language and tool, grouped by what it is used for. */
@@ -40,6 +42,23 @@ export function ParcoursSection() {
           Tous les jalons, avec leurs sources
         </ButtonLink>
       </div>
+    </section>
+  );
+}
+
+/** The six research themes, read sideways while the viewport stays pinned. */
+export function ResearchRailSection() {
+  return (
+    <section aria-labelledby="axes" className="scroll-mt-20 pb-24 md:pb-32">
+      <div className="site-gutter mx-auto max-w-site">
+        <SectionHeading
+          kicker="Recherche"
+          title={<span id="axes">Six axes de recherche.</span>}
+          intro="Un fil conducteur : comprendre comment des mécanismes biologiques et des contraintes pratiques façonnent la dynamique des populations."
+          className="mb-12"
+        />
+      </div>
+      <ResearchRail items={researchRailItems()} />
     </section>
   );
 }

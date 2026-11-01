@@ -1,4 +1,5 @@
 import { Kicker } from "@/components/ui/Kicker";
+import { KineticTitle } from "@/components/editorial/KineticTitle";
 import { cn } from "@/lib/utils/cn";
 import type { ReactNode } from "react";
 
@@ -24,7 +25,8 @@ export function SectionHeading({
       <Kicker accent={chapter} className="md:col-span-12">
         {kicker}
       </Kicker>
-      <H
+      <KineticTitle
+        as={H}
         className={cn(
           "font-serif md:col-span-9",
           size === "display" && "text-display",
@@ -33,7 +35,7 @@ export function SectionHeading({
         )}
       >
         {title}
-      </H>
+      </KineticTitle>
       {intro && <div className="max-w-2xl text-[1.05rem] leading-relaxed text-ink/85 on-dark:text-paper/80 md:col-span-7">{intro}</div>}
     </header>
   );

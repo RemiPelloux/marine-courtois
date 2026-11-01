@@ -1,5 +1,6 @@
 import { a11y } from "@/i18n";
 import { PageHeader } from "@/components/editorial/PageHeader";
+import { ScrubText } from "@/components/editorial/ScrubText";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
 import { SourceNote } from "@/components/scientific/SourceNote";
 import { ButtonLink } from "@/components/ui/Links";
@@ -39,7 +40,7 @@ export default function AboutPage() {
       <section aria-label={a11y.biographie} className="site-gutter mx-auto max-w-site py-20">
         <div className="grid gap-14 lg:grid-cols-12">
           <div className="space-y-6 lg:col-span-7">
-            <p className="font-serif text-[1.9rem] leading-snug">{BIO[0]}</p>
+            <ScrubText className="font-serif text-[1.9rem] leading-snug" text={BIO[0]} />
             {BIO.slice(1).map((p) => (
               <p key={p.slice(0, 20)} className="text-lg leading-relaxed text-ink/85">
                 {p}

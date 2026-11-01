@@ -29,7 +29,7 @@ export function SiteHeader() {
   const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ink/80 bg-paper">
+    <header className="sticky top-0 z-50 border-b border-ink/80 bg-paper [view-transition-name:site-header]">
       <div className="site-gutter mx-auto flex h-[4.5rem] max-w-site items-center gap-6 md:h-20">
         <Link
           href="/"

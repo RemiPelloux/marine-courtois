@@ -8,7 +8,7 @@ import {
   CodeChapter,
   ContactChapter,
 } from "@/components/editorial/Chapters";
-import { ParcoursSection, ToolkitSection } from "@/components/editorial/PortfolioSections";
+import { ParcoursSection, ResearchRailSection, ToolkitSection } from "@/components/editorial/PortfolioSections";
 import { SectionFlow } from "@/components/editorial/SectionFlow";
 import { RESEARCHER } from "@/data/researcher";
 
@@ -35,6 +35,7 @@ export default function Home() {
       <SectionFlow>
         <Hero />
         <PhilosophySection />
+        <ResearchRailSection />
         <MethodsChapter />
         <ToolkitSection />
         <PublicationsChapter />

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ViewTransition } from "react";
 import { Instrument_Serif, Montserrat, IBM_Plex_Mono } from "next/font/google";
 import "katex/dist/katex.min.css";
 import "./globals.css";
@@ -53,7 +54,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="fr" data-scroll-behavior="smooth" className={`${instrument.variable} ${montserrat.variable} ${plexMono.variable} antialiased`}>
+    <html lang="fr" data-scroll-behavior="smooth" suppressHydrationWarning className={`${instrument.variable} ${montserrat.variable} ${plexMono.variable} antialiased`}>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.dataset.js=''" }} />
+      </head>
       <body className="flex min-h-dvh flex-col">
         <a
           href="#contenu"
@@ -63,7 +67,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <SiteHeader />
         <main id="contenu" className="flex-1">
-          {children}
+          <ViewTransition default="page">
+            <div>{children}</div>
+          </ViewTransition>
         </main>
         <SiteFooter />
       </body>

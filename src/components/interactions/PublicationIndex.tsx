@@ -2,7 +2,7 @@
 
 import { a11y } from "@/i18n";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, ViewTransition } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Plus, Minus } from "lucide-react";
 import type { Publication } from "@/types/content";
@@ -130,9 +130,11 @@ export function PublicationIndex({ publications, showFilters = true }: { publica
               {featured.year} · {featured.journal}
             </p>
             <h3 id={`pub-${featured.id}`} className="font-serif text-title">
-              <Link href={`/publications/${featured.slug}`} className="hover:text-vermilion-deep">
-                {featured.editorialTitle}
-              </Link>
+              <ViewTransition name={`pub-${featured.slug}`} share="morph" default="none">
+                <Link href={`/publications/${featured.slug}`} className="hover:text-vermilion-deep">
+                  {featured.editorialTitle}
+                </Link>
+              </ViewTransition>
             </h3>
             <p className="mt-4 font-serif text-xl text-ink/70 italic" lang="en">
               {featured.title}
@@ -173,9 +175,11 @@ export function PublicationIndex({ publications, showFilters = true }: { publica
                 <div className="md:col-span-8">
                   <p className="mono-meta mb-2 text-muted">{p.journal}</p>
                   <h3 id={`pub-${p.id}`} className="font-serif text-[1.65rem] leading-tight md:text-[1.9rem]">
-                    <Link href={`/publications/${p.slug}`} className="hover:text-vermilion-deep">
-                      {p.publicationType === "these" ? p.title : p.editorialTitle ?? p.title}
-                    </Link>
+                    <ViewTransition name={`pub-${p.slug}`} share="morph" default="none">
+                      <Link href={`/publications/${p.slug}`} className="hover:text-vermilion-deep">
+                        {p.publicationType === "these" ? p.title : p.editorialTitle ?? p.title}
+                      </Link>
+                    </ViewTransition>
                   </h3>
                   {p.publicationType !== "these" && (
                     <p className="mt-2 text-[0.95rem] text-ink/70 italic" lang="en">
