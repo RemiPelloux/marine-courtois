@@ -15,7 +15,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "readme:banner": "npx -y tsx scripts/readme/make-banner.ts",
+    "readme:screens": "node scripts/readme/screenshots.mjs",
+    "readme:tour": "node scripts/readme/record-tour.mjs && bash scripts/readme/encode-tour.sh"
   },
   "dependencies": {
     "clsx": "^2.1.1",

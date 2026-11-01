@@ -93,7 +93,7 @@ export function PanelLayout({
                         {l.external ? "↗" : "→"}
                       </span>
                     </span>
-                    <span className="text-xs break-all text-paper/65">{l.detail}</span>
+                    <span className="text-xs text-paper/65 [overflow-wrap:anywhere]">{l.detail}</span>
                     {l.external && <span className="sr-only">(nouvel onglet)</span>}
                   </a>
                 </li>
