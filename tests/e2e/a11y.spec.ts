@@ -8,6 +8,8 @@ const ROUTES = [
   "/methodes",
   "/publications",
   "/publications/polyandrie-technique-insecte-sterile",
+  "/communication",
+  "/enseignement",
   "/these",
   "/laboratoire",
   "/a-propos",

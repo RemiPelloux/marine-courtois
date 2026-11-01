@@ -12,6 +12,10 @@ const RAW_DECLARED: z.input<typeof declaredToolSchema>[] = [
   { id: "r-shiny", name: "R Shiny", role: "Applications web interactives écrites en R", family: "visualisation" },
   { id: "mysql", name: "MySQL", role: "Bases de données relationnelles, requêtes SQL", family: "donnees" },
   { id: "power-bi", name: "Power BI", role: "Tableaux de bord et rapports de données", family: "visualisation" },
+  { id: "scikit-learn", name: "scikit-learn", role: "Apprentissage automatique : régression, classification, clustering", family: "ml" },
+  { id: "pytorch", name: "PyTorch", role: "Réseaux de neurones et apprentissage profond", family: "ml" },
+  { id: "tensorflow", name: "TensorFlow / Keras", role: "Réseaux de neurones et apprentissage profond", family: "ml" },
+  { id: "boosting", name: "XGBoost / LightGBM", role: "Gradient boosting sur données tabulaires", family: "ml" },
 ];
 
 export const DECLARED_TOOLS: DeclaredTool[] = RAW_DECLARED.map((t) => declaredToolSchema.parse(t));
@@ -19,6 +23,7 @@ export const DECLARED_TOOLS: DeclaredTool[] = RAW_DECLARED.map((t) => declaredTo
 export const FAMILY_LABELS: Record<(typeof TOOL_FAMILIES)[number], string> = {
   langages: "Langages",
   calcul: "Calcul et modélisation",
+  ml: "Machine learning",
   donnees: "Données",
   visualisation: "Visualisation et restitution",
   partage: "Environnement et partage",

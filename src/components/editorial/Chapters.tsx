@@ -2,18 +2,14 @@ import { a11y } from "@/i18n";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { SectionHeading } from "@/components/editorial/SectionHeading";
-import { Reveal } from "@/components/editorial/Reveal";
-import { ScrubText } from "@/components/editorial/ScrubText";
 import { ButtonLink } from "@/components/ui/Links";
 import { Kicker } from "@/components/ui/Kicker";
 import { ThesisSection, CodeSection } from "@/components/scientific/Sections";
-import { ThesisCompact, FigureWall } from "@/components/editorial/HomeTeasers";
 import { ProtectedEmail } from "@/components/interactions/ProtectedEmail";
 import { PublicationIndex } from "@/components/interactions/PublicationIndex";
 import { HoverPreview } from "@/components/interactions/HoverPreview";
 import { publicationPreviews } from "@/data/research-rail";
 import { PUBLICATIONS, COMMUNICATIONS } from "@/data/publications";
-import { HIGHLIGHTS } from "@/data/home";
 import { THESIS } from "@/data/thesis";
 import { RESEARCHER, RESEARCH_SEQUENCE } from "@/data/researcher";
 import { formatDateFr } from "@/lib/utils/format";
@@ -33,67 +29,6 @@ export function SequenceRail({ active = 2, dark = false }: { active?: number; da
   );
 }
 
-/* ---------------- Philosophy ---------------- */
-
-export function PhilosophySection() {
-  return (
-    <section aria-labelledby="philosophie" className="site-gutter mx-auto max-w-site py-24 md:py-32">
-      <div className="grid gap-12 lg:grid-cols-12">
-        <Reveal className="lg:col-span-5">
-          <Kicker accent="00">Introduction</Kicker>
-          <h2 id="philosophie" className="mt-6 font-serif text-headline">
-            À l&apos;interface des mathématiques et du vivant.
-          </h2>
-        </Reveal>
-        <PhilosophyText />
-      </div>
-      <Reveal className="mt-20">
-        <SequenceRail />
-      </Reveal>
-      <HighlightGrid />
-    </section>
-  );
-}
-
-function PhilosophyText() {
-  return (
-    <Reveal className="space-y-6 text-[1.08rem] leading-relaxed lg:col-span-6 lg:col-start-7" delay={0.1}>
-      <ScrubText
-        className="font-serif text-[1.6rem] leading-snug md:text-[1.85rem]"
-        text="Je suis Marine Courtois, docteure en biologie mathématique. Mes recherches se situent à l'interface des mathématiques et de l'écologie, avec un intérêt particulier pour la dynamique des populations, les interactions biologiques et les stratégies de lutte contre les ravageurs agricoles."
-      />
-      <p className="text-ink/80">
-        Les systèmes biologiques sont complexes : les individus interagissent, les comportements varient et de nombreux mécanismes
-        agissent simultanément. La modélisation permet d&apos;isoler certains de ces mécanismes, d&apos;en explorer les conséquences et de
-        mieux comprendre la dynamique globale des populations.
-      </p>
-    </Reveal>
-  );
-}
-
-/** Rules between highlight cells: stacked on mobile, 2×2 on small screens, one row on large screens. */
-function highlightBorders(i: number) {
-  return [
-    "border-rule py-8 sm:px-6",
-    i > 0 ? "border-t sm:border-t-0" : "",
-    i % 2 === 1 ? "sm:border-l" : "",
-    i >= 2 ? "sm:border-t lg:border-t-0" : "",
-    i > 0 ? "lg:border-l" : "",
-  ].join(" ");
-}
-
-function HighlightGrid() {
-  return (
-    <div className="mt-16 grid border-y border-ink sm:grid-cols-2 lg:grid-cols-4">
-      {HIGHLIGHTS.map((h, i) => (
-        <Reveal key={h.title} delay={i * 0.06} className={highlightBorders(i)}>
-          <h3 className="font-serif text-[2.2rem] leading-none">{h.title}</h3>
-          <p className="mt-4 text-[0.95rem] leading-relaxed text-ink/75">{h.text}</p>
-        </Reveal>
-      ))}
-    </div>
-  );
-}
 
 /* ---------------- Chapter 03 — publications ---------------- */
 
@@ -101,7 +36,6 @@ export function PublicationsChapter() {
   return (
     <section id="publications" aria-labelledby="publications-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
       <SectionHeading
-        chapter="Chapitre 03"
         kicker="Contributions scientifiques"
         title={
           <span id="publications-titre">
@@ -158,13 +92,12 @@ function CommunicationsSummary() {
 
 /* ---------------- Thesis transition ---------------- */
 
-export function ThesisChapter({ headingLevel = "h2", compact = false }: { headingLevel?: "h1" | "h2"; compact?: boolean }) {
-  if (compact) return <ThesisCompact />;
+export function ThesisChapter({ headingLevel = "h2" }: { headingLevel?: "h1" | "h2" }) {
   const H = headingLevel;
   return (
     <section id="these" aria-labelledby="these-titre" className="on-dark scroll-mt-20 bg-antibes text-paper">
       <div className="site-gutter mx-auto max-w-site py-24 md:py-36">
-        <Kicker accent="Chapitre 04">Doctorat</Kicker>
+        <Kicker>Doctorat</Kicker>
         <H id="these-titre" className="mt-8 max-w-5xl font-serif text-headline">
           Trois années pour comprendre les limites d&apos;une stratégie de lutte biologique.
         </H>
@@ -216,11 +149,10 @@ function ThesisResources() {
 
 /* ---------------- Code & reproducibility ---------------- */
 
-export function CodeChapter({ compact = false }: { compact?: boolean }) {
+export function CodeChapter() {
   return (
     <section id="code" aria-labelledby="code-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-24 md:py-32">
       <SectionHeading
-        chapter="Chapitre 05"
         kicker="Code & reproductibilité"
         title={
           <span id="code-titre">
@@ -229,7 +161,7 @@ export function CodeChapter({ compact = false }: { compact?: boolean }) {
         }
         intro="Les scripts et notebooks associés à ma thèse permettent de retrouver les analyses numériques et les visualisations utilisées dans le manuscrit. Ils constituent une partie essentielle de la documentation et de la reproductibilité du travail."
       />
-      <div className="mt-14">{compact ? <FigureWall /> : <CodeSection />}</div>
+      <div className="mt-14"><CodeSection /></div>
     </section>
   );
 }
@@ -241,7 +173,7 @@ export function ContactChapter({ headingLevel = "h2" }: { headingLevel?: "h1" | 
   return (
     <section aria-labelledby="contact-titre" className="border-t border-ink bg-stone">
       <div className="site-gutter mx-auto max-w-site py-24 md:py-32">
-        <Kicker accent="Chapitre 06">Échanger</Kicker>
+        <Kicker>Échanger</Kicker>
         <div className="mt-8 grid gap-12 lg:grid-cols-12">
           <H id="contact-titre" className="font-serif text-headline lg:col-span-7">
             La recherche avance aussi par les échanges.

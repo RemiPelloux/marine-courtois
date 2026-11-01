@@ -6,7 +6,7 @@
 2. **Science** : modèles portés depuis les notebooks publics (`src/lib/scientific`) et vérifiés contre leurs figures.
 3. **Système visuel** : tokens, Instrument Serif + Montserrat, en-tête et pied de page, contrôles accessibles.
 4. **Pages** : 10 routes, 26 pages statiques générées (6 axes de recherche, 4 fiches de publication).
-5. **Interactions** : Living System, Model Explorer (Observer → Explorer → Comprendre), séquence TIS, lâchers
+5. **Interactions** : puzzle des outils (hero), Model Explorer (Observer → Explorer → Comprendre), séquence TIS, lâchers
    impulsionnels, démonstrateur individu-centré, explorateurs de compétences, de thèse et de code.
 6. **Qualité** : tests, passe anti-slop (taste-skill), chaînes d'interface dans `src/i18n`, hooks qualité.
 
@@ -15,8 +15,8 @@
 | --- | --- |
 | `pnpm lint` | 0 erreur, 0 avertissement |
 | `pnpm typecheck` | OK |
-| `pnpm test` (Vitest) | 49/49 (dont l'adresse jamais stockée en clair) : modèles reproduisant les figures des notebooks, intégrité des données, géométrie de la frise (aucun chevauchement), filtres de la pile d'outils et des publications |
-| `pnpm test:e2e` (Playwright) | 58/58 (dont le courriel masqué avant clic), dont 20 audits axe WCAG 2.2 AA sans violation (10 routes × desktop/mobile) ; sur desktop 1440 px et mobile 390 px : 10 routes en HTTP 200 avec un seul h1, sans débordement horizontal ni erreur console, avec métadonnées et lien canonique ; liens internes valides ; navigation ; filtres ; DOI et dépôts ; contrôles et réinitialisation du Model Explorer ; pause et comparaison du hero ; mouvement réduit ; sitemap et robots |
+| `pnpm test` (Vitest) | 58/58 (dont l'adresse jamais stockée en clair et la géométrie du puzzle : pièces complémentaires, centre réservé) : modèles reproduisant les figures des notebooks, intégrité des données, géométrie de la frise (aucun chevauchement), filtres de la pile d'outils et des publications |
+| `pnpm test:e2e` (Playwright) | 66/66 (dont le courriel masqué avant clic), dont 24 audits axe WCAG 2.2 AA sans violation (12 routes × desktop/mobile) ; sur desktop 1440 px et mobile 390 px : 12 routes en HTTP 200 avec un seul h1, sans débordement horizontal ni erreur console, avec métadonnées et lien canonique ; liens internes valides ; navigation ; filtres ; DOI et dépôts ; contrôles et réinitialisation du Model Explorer ; puzzle du hero (famille mise en évidence, pièce « Votre projet » vers le contact) ; mouvement réduit ; sitemap et robots |
 | `pnpm build` | OK, 26 pages statiques |
 | Hook `check-quality.sh` | OK (avertissements restants : longueur de certains composants de visualisation) |
 | Inspection visuelle | captures à 1440 et 390 px de toutes les routes |

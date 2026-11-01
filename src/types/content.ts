@@ -80,7 +80,7 @@ export const researchThemeSchema = z.object({
 });
 export type ResearchTheme = z.infer<typeof researchThemeSchema>;
 
-export const TOOL_FAMILIES = ["langages", "calcul", "donnees", "visualisation", "partage"] as const;
+export const TOOL_FAMILIES = ["langages", "calcul", "ml", "donnees", "visualisation", "partage"] as const;
 
 export const toolSchema = z.object({
   id: z.string(),

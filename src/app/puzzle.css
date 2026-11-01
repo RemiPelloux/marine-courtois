@@ -1,0 +1,139 @@
+/* ------------------------------------------------------------------
+   Hero puzzle (components/puzzle). Pieces fly in from outside the board
+   and lock in place, family after family; the four axes close the cross;
+   the centre slot is drawn last and breathes twice. Reduced motion and
+   no-JS show the assembled board.
+   ------------------------------------------------------------------ */
+.pz-in,
+.pz-face {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.pz-shape {
+  stroke: rgb(245 242 235 / 0.55);
+  stroke-width: 1.2;
+}
+.pz-face[data-kind="axis"] .pz-shape {
+  stroke: rgb(11 45 79 / 0.35);
+}
+.pz-face {
+  transition:
+    transform 0.35s var(--ease-editorial),
+    opacity 0.3s ease,
+    filter 0.35s ease;
+}
+.pz-face:hover {
+  transform: translateY(-5px);
+  filter: drop-shadow(0 10px 14px rgb(11 45 79 / 0.28));
+}
+.pz-face[data-dim] {
+  opacity: 0.16;
+}
+.pz-label {
+  font: 500 12px var(--font-sans);
+  fill: var(--color-paper);
+}
+.pz-axis {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  fill: var(--color-ink);
+}
+.pz-link {
+  outline: none;
+  cursor: pointer;
+}
+.pz-link:focus-visible .pz-shape,
+.pz-link:focus-visible .pz-slot {
+  stroke: var(--color-accent);
+  stroke-width: 3;
+}
+.pz-slot {
+  fill: rgb(36 104 179 / 0.06);
+  stroke: var(--color-accent);
+  stroke-width: 1.6;
+  stroke-dasharray: 6 5;
+}
+.pz-project-text {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-style: italic;
+  fill: var(--color-accent-deep);
+}
+.pz-project:hover .pz-slot {
+  fill: rgb(36 104 179 / 0.16);
+}
+@media (max-width: 639px) {
+  .pz-label {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* held off-board until the puzzle scrolls into view (data-play, usePlayOnce) */
+  [data-js] .pz:not([data-play]) .pz-in {
+    opacity: 0;
+  }
+  .pz[data-play] .pz-in {
+    animation: pz-fly var(--flight) cubic-bezier(0.16, 1, 0.3, 1) var(--delay) both;
+  }
+  /* the seam flashes as the piece locks */
+  .pz[data-play] .pz-shape {
+    animation: pz-lock 0.6s ease-out calc(var(--delay) + var(--flight) * 0.7);
+  }
+  .pz[data-play] .pz-slot {
+    animation:
+      pz-draw 1s var(--ease-editorial) var(--delay) both,
+      pz-breathe 1.6s ease-in-out calc(var(--delay) + 0.9s) 2;
+  }
+  .pz[data-play] .pz-project-text {
+    animation: pz-show 0.8s ease-out calc(var(--delay) + 0.35s) both;
+  }
+  .pz[data-play] .pz-in:has(.pz-slot) {
+    animation: none;
+  }
+}
+@keyframes pz-fly {
+  from {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.9);
+  }
+  45% {
+    opacity: 1;
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pz-lock {
+  from {
+    stroke-width: 1.2;
+  }
+  30% {
+    stroke: var(--color-azur);
+    stroke-width: 3;
+  }
+  to {
+    stroke-width: 1.2;
+  }
+}
+@keyframes pz-draw {
+  from {
+    opacity: 0;
+    stroke-dashoffset: 120;
+  }
+  to {
+    opacity: 1;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes pz-show {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes pz-breathe {
+  50% {
+    fill: rgb(36 104 179 / 0.2);
+  }
+}

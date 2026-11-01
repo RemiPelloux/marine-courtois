@@ -1,4 +1,4 @@
-import { siGitlab, siJupyter, siMysql, siNumpy, siPandas, siPython, siR, siScipy, siSympy } from "simple-icons";
+import { siGitlab, siJupyter, siMysql, siNumpy, siPandas, siPython, siPytorch, siR, siScikitlearn, siScipy, siSympy, siTensorflow } from "simple-icons";
 import type { ReactNode } from "react";
 
 /** Brand marks from Simple Icons (CC0) for the tools that publish one. */
@@ -12,6 +12,9 @@ const BRANDS: Record<string, { path: string; hex: string }> = {
   gitlab: siGitlab,
   r: siR,
   mysql: siMysql,
+  "scikit-learn": siScikitlearn,
+  pytorch: siPytorch,
+  tensorflow: siTensorflow,
 };
 
 /**
@@ -57,6 +60,12 @@ const GLYPHS: Record<string, ReactNode> = {
     </>
   ),
   "power-bi": <path d="M5 20V12M10 20V7M15 20V10M20 20V4" strokeWidth="2.6" />,
+  boosting: (
+    <>
+      <path d="M12 3v5M12 8 6 13M12 8l6 5M6 13l-3 5M6 13l3 5M18 13v5" />
+      <circle cx="12" cy="3.5" r="1.4" fill="currentColor" />
+    </>
+  ),
 };
 
 export function hasBrand(id: string) {

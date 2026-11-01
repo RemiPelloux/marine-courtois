@@ -6,10 +6,10 @@ export const RESEARCHER = {
   name: "Marine A. Courtois",
   displayName: "Marine Courtois",
   monogram: "MC",
-  title: "Docteure — Biologie mathématique & modélisation écologique",
-  discipline: "Biologie mathématique",
-  tagline: "Comprendre le vivant. Par le modèle.",
-  taglineEn: "Understanding life through mathematical models.",
+  title: "Docteure en biologie mathématique — modélisation, data science et écologie",
+  discipline: "Modélisation & data science",
+  tagline: "Mathématiques, code et données : tout s'assemble.",
+  taglineEn: "Mathematics, code and data, fitted together.",
   doctorate: {
     institution: "Université Côte d'Azur",
     defenseDate: "2025-11-27",
@@ -53,9 +53,16 @@ export const RESEARCH_SEQUENCE = [
 
 export const NAV_ITEMS = [
   { href: "/recherche", label: "Recherche" },
-  { href: "/methodes", label: "Méthodes" },
+  { href: "/communication", label: "Communication" },
+  { href: "/enseignement", label: "Enseignement" },
   { href: "/publications", label: "Publications" },
+  { href: "/methodes", label: "Méthodes" },
+  { href: "/a-propos", label: "À propos" },
+] as const;
+
+/** Pages kept out of the main navigation, listed in the footer. */
+export const SECONDARY_NAV = [
   { href: "/these", label: "Thèse" },
   { href: "/laboratoire", label: "Laboratoire" },
-  { href: "/a-propos", label: "À propos" },
+  { href: "/contact", label: "Contact" },
 ] as const;

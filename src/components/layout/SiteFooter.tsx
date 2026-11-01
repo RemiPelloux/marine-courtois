@@ -1,6 +1,6 @@
 import { a11y } from "@/i18n";
 import Link from "next/link";
-import { NAV_ITEMS, RESEARCHER, RESEARCH_SEQUENCE } from "@/data/researcher";
+import { NAV_ITEMS, RESEARCHER, RESEARCH_SEQUENCE, SECONDARY_NAV } from "@/data/researcher";
 import { Monogram } from "@/components/ui/Monogram";
 import { SeaRibbon } from "@/components/layout/SeaRibbon";
 import { ProtectedEmail } from "@/components/interactions/ProtectedEmail";
@@ -23,9 +23,9 @@ function FooterSignature() {
     <div className="md:col-span-5">
       <Monogram inverted className="h-12 w-auto" />
       <p className="mt-6 font-serif text-4xl leading-tight md:text-5xl">
-        Comprendre le vivant.
+        Mathématiques, code et données :
         <br />
-        <em className="text-accent-light">Par le modèle.</em>
+        <em className="text-accent-light">tout s&apos;assemble.</em>
       </p>
     </div>
   );
@@ -36,18 +36,13 @@ function FooterNav() {
     <nav aria-label={a11y.piedDePage} className="md:col-span-3 md:col-start-7">
       <p className="label mb-4 text-mist">Atlas</p>
       <ul className="space-y-2 font-serif text-xl">
-        {NAV_ITEMS.map((n) => (
+        {[...NAV_ITEMS, ...SECONDARY_NAV].map((n) => (
           <li key={n.href}>
             <Link href={n.href} className="link-underline inline-block py-1">
               {n.label}
             </Link>
           </li>
         ))}
-        <li>
-          <Link href="/contact" className="link-underline inline-block py-1">
-            Contact
-          </Link>
-        </li>
       </ul>
     </nav>
   );

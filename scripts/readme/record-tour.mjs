@@ -49,18 +49,21 @@ const stage = () =>
   });
 
 await page.goto(BASE + "/", { waitUntil: "networkidle" });
-// 1 — hero: the living system builds itself
-await pause(6400);
-const hero = page.locator("figure").filter({ has: page.locator("#living-system-title") });
-const release = hero.getByRole("slider");
-await press(release, "ArrowRight", 6, 220);
-await pause(700);
-await hero.getByRole("radio", { name: "Comparer" }).click();
+// 1 — hero: the tool puzzle assembles, then one family is picked
+await pause(4600);
+const puzzle = page.locator("figure.pz");
+await puzzle.getByRole("button", { name: /Machine learning/ }).click();
 await pause(1600);
-await press(release, "ArrowLeft", 8, 180);
-await pause(1200);
+await puzzle.getByRole("button", { name: /Machine learning/ }).click();
+await puzzle.locator('.pz-face[data-kind="tool"]').nth(0).hover();
+await pause(1300);
+await puzzle.getByRole("link", { name: /Votre projet/ }).hover();
+await pause(1400);
 
-// 2 — Model Explorer
+// 2 — three research axes, then the Model Explorer
+await glide(await top("#recherche"), 1600);
+await pause(2000);
+
 await glide(await top("#model-explorer"), 1800);
 await pause(1100);
 await glide(await stage(), 1200);
@@ -83,20 +86,13 @@ await glide(await stage(), 900);
 await press(panel.getByRole("slider", { name: /Population initiale/ }), "ArrowRight", 10, 160);
 await pause(1600);
 
-// 3 — toolkit stack builds from the foundation up
-await glide(await top(".tk-stack"), 1600);
-await pause(2200);
-await page.locator('[data-testid="tool-python"]').hover();
-await pause(1100);
-await page.locator('[data-testid="tool-numpy"]').hover();
-await pause(900);
-await page.mouse.move(40, 400);
-
-// 4 — career timeline sweeps 2022 → 2026
+// 3 — communication: the timeline sweeps 2022 → 2026, then teaching
 await glide(await top(".ctl"), 1800);
 await pause(4600);
+await glide(await top("#enseignement"), 1400);
+await pause(1800);
 
-// 5 — publications
+// 4 — publications
 await glide(await top("#publications"), 1600);
 await pause(1200);
 await page.getByRole("button", { name: /Résumé/ }).first().click();

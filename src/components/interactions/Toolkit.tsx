@@ -16,7 +16,7 @@ const FOCUS_OPTIONS: { id: Focus; label: string; match: (t: ToolkitEntry) => boo
 ];
 
 /** Layer shades, from the foundation (deepest bleu Antibes) to the top of the stack. */
-const SHADES = ["#0b2d4f", "#113861", "#174373", "#1d4e84", "#235994"];
+const SHADES = ["#0b2d4f", "#10355d", "#153e6b", "#1a4779", "#1f5087", "#235994"];
 
 /**
  * The toolkit as a stack: one slab per family, the languages at the base.

@@ -65,7 +65,7 @@ function HomeLink({ onNavigate }: { onNavigate: () => void }) {
       <span className="hidden h-9 w-px bg-rule sm:block" aria-hidden />
       <span className="hidden flex-col sm:flex">
         <span className="font-serif text-[1.45rem] leading-none">{RESEARCHER.displayName}</span>
-        <span className="label mt-1.5 text-xs text-ink/80">Biologie mathématique</span>
+        <span className="label mt-1.5 text-xs text-ink/80">{RESEARCHER.discipline}</span>
       </span>
     </Link>
   );

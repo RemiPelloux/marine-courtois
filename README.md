@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/banner.svg" alt="Marine Courtois — Comprendre le vivant. Par le modèle. Bannière animée : le modèle de fertilité résiduelle trace le déclin d'une population sauvage pendant les lâchers de mâles stériles." width="100%">
+<img src="docs/assets/banner.svg" alt="Marine Courtois — Mathématiques, code et données : tout s'assemble. Bannière animée : le modèle de fertilité résiduelle trace le déclin d'une population sauvage pendant les lâchers de mâles stériles." width="100%">
 
 <h3>A Living Research Atlas</h3>
 
@@ -10,7 +10,7 @@
 <img alt="Next.js 16" src="https://img.shields.io/badge/Next.js-16-171B18?style=flat-square&logo=nextdotjs&logoColor=F5F2EB">
 <img alt="TypeScript strict" src="https://img.shields.io/badge/TypeScript-strict-171B18?style=flat-square&logo=typescript&logoColor=F5F2EB">
 <img alt="Tailwind CSS 4" src="https://img.shields.io/badge/Tailwind-4-171B18?style=flat-square&logo=tailwindcss&logoColor=F5F2EB">
-<img alt="Tests" src="https://img.shields.io/badge/tests-107%20passing-2468B3?style=flat-square">
+<img alt="Tests" src="https://img.shields.io/badge/tests-124%20passing-2468B3?style=flat-square">
 <img alt="WCAG 2.2 AA" src="https://img.shields.io/badge/WCAG-2.2%20AA-0B2D4F?style=flat-square">
 </p>
 
@@ -36,7 +36,7 @@
 ## ◐ En mouvement
 
 <div align="center">
-<img src="docs/assets/tour.gif" alt="Visite animée du site : le Living System se construit, le curseur des lâchers modifie les trajectoires, le mode Comparer ajoute la fertilité résiduelle, puis le Model Explorer et l'index des publications." width="100%">
+<img src="docs/assets/tour.gif" alt="Visite animée du site : le puzzle des 20 outils s'assemble autour des quatre axes, la famille machine learning est mise en évidence, puis les trois axes de recherche, le Model Explorer, la frise des communications, l'enseignement et l'index des publications." width="100%">
 <br>
 <sub>Visite enregistrée dans le navigateur (41 s) — <a href="docs/assets/tour.mp4">version MP4 haute définition</a></sub>
 </div>
@@ -97,7 +97,7 @@ Détails : [`docs/SCIENTIFIC_VISUALIZATIONS.md`](docs/SCIENTIFIC_VISUALIZATIONS.
 
 <table>
 <tr>
-<td colspan="2"><img src="docs/assets/screens/hero.webp" alt="Accueil : titre « Comprendre le vivant. Par le modèle. » et le Living System, avec deux populations simulées."></td>
+<td colspan="2"><img src="docs/assets/screens/hero.webp" alt="Accueil : titre « Mathématiques, code et données : tout s'assemble. » et le puzzle des 20 outils autour des quatre axes et de la pièce « Votre projet »."></td>
 </tr>
 <tr>
 <td colspan="2"><img src="docs/assets/screens/model-explorer.webp" alt="Model Explorer : onglet Fertilité résiduelle avec les étapes Observer, Explorer et Comprendre."></td>
@@ -107,11 +107,11 @@ Détails : [`docs/SCIENTIFIC_VISUALIZATIONS.md`](docs/SCIENTIFIC_VISUALIZATIONS.
 <td width="50%"><img src="docs/assets/screens/code.webp" alt="Explorateur de code : extraits verbatim des notebooks, métadonnées et figure produite."></td>
 </tr>
 <tr>
-<td width="50%"><img src="docs/assets/screens/toolkit.webp" alt="Pile d'outils : cinq couches en bleu Antibes, des langages au partage, avec les logos des outils."></td>
+<td width="50%"><img src="docs/assets/screens/toolkit.webp" alt="Pile d'outils de /methodes : six couches en bleu Antibes, des langages au partage, machine learning compris, avec les logos des outils."></td>
 <td width="50%"><img src="docs/assets/screens/timeline.webp" alt="Frise animée 2022–2026 : communications, posters, articles et soutenance placés à leur date exacte."></td>
 </tr>
 <tr>
-<td width="50%"><img src="docs/assets/screens/thesis.webp" alt="Chapitre Doctorat de l'accueil : faits clés, actions et sommaire cliquable des six chapitres."></td>
+<td width="50%"><img src="docs/assets/screens/axes.webp" alt="Trois axes de recherche : lutte biologique et insecte stérile, simulation et stratégies de déploiement, écologie des invasions."></td>
 <td width="50%"><img src="docs/assets/screens/publications.webp" alt="Index des publications avec filtres par année, type et thème."></td>
 </tr>
 </table>
@@ -123,8 +123,9 @@ Détails : [`docs/SCIENTIFIC_VISUALIZATIONS.md`](docs/SCIENTIFIC_VISUALIZATIONS.
 
 | Route | Contenu |
 | :-- | :-- |
-| `/` | Living System, six axes en défilement horizontal, Model Explorer, pile d'outils, publications, thèse, mur de figures, frise animée du parcours, contact |
-| `/recherche` · `/recherche/[slug]` | 6 axes : TIS, fertilité résiduelle, accouplements multiples, individu-centré, stratégies de lâchers, écologie des invasions |
+| `/` | Puzzle animé des 20 outils (langages, calcul, machine learning, données, visualisation, partage) autour des quatre axes et de la pièce « Votre projet », profil, trois axes de recherche, Model Explorer, communication (frise animée), enseignement, publications, contact |
+| `/communication` · `/enseignement` | Frise et liste des 8 communications et posters (HAL) ; supports d'enseignement en accès libre |
+| `/recherche` · `/recherche/[slug]` | 3 axes, 6 thèmes : TIS, fertilité résiduelle, accouplements multiples, individu-centré, stratégies de lâchers, écologie des invasions |
 | `/methodes` | Boîte à outils : chaque compétence reliée à une publication et aux imports réels du code |
 | `/publications` · `/publications/[slug]` | 3 articles, la thèse, 8 communications (HAL), filtres, données structurées |
 | `/these` | Explorateur des 6 chapitres, manuscrit PDF, diapositives de soutenance |
@@ -138,7 +139,8 @@ Détails : [`docs/SCIENTIFIC_VISUALIZATIONS.md`](docs/SCIENTIFIC_VISUALIZATIONS.
 ```
   Faits vérifiés        Crossref · ORCID · HAL · theses.fr · DataCite · GitLab
   Explications          reformulées sans dépasser les sources
-  Illustratif           nuage de points du hero, schéma TIS, démonstrateur ABM — signalés à l'écran
+  Déclaré               outils hors code publié (R, SQL, Power BI, machine learning) — affichés à part
+  Illustratif           schéma TIS, démonstrateur ABM — signalés à l'écran
   Absent, à dessein     poste actuel, prix, financements, citations, équations décoratives, jauges de compétences
 ```
 
@@ -158,8 +160,8 @@ pnpm dev                 # http://localhost:3000
 | :-- | :-- |
 | `pnpm build` · `pnpm start` | build et serveur de production |
 | `pnpm lint` · `pnpm typecheck` | ESLint · TypeScript strict |
-| `pnpm test` | 49 tests Vitest (modèles, données, frise, adresse protégée, composants) |
-| `pnpm test:e2e` | 58 tests Playwright, desktop 1440 px et mobile 390 px, dont 20 audits d'accessibilité axe WCAG 2.2 AA (après `pnpm build`) |
+| `pnpm test` | 58 tests Vitest (modèles, données, puzzle, frise, adresse protégée, composants) |
+| `pnpm test:e2e` | 66 tests Playwright, desktop 1440 px et mobile 390 px, dont 24 audits d'accessibilité axe WCAG 2.2 AA (après `pnpm build`) |
 | `pnpm readme:banner` | régénère la bannière animée à partir du modèle |
 | `pnpm readme:screens` · `pnpm readme:tour` | captures et visite vidéo (serveur de production sur `:3300`) |
 
@@ -191,14 +193,17 @@ flowchart LR
 
 ```
 src/
-├── app/                  10 routes · sitemap · robots · image Open Graph générée à partir du modèle
+├── app/                  12 routes · sitemap · robots · image Open Graph (le puzzle)
 ├── components/
 │   ├── editorial/        hero, chapitres, en-têtes
-│   ├── visualizations/   Living System · Model Explorer (explorer/) · ABM · graphiques
+│   ├── puzzle/           puzzle animé des outils (plateau serveur, pièces client)
+│   ├── home/             profil, axes de recherche, communication, enseignement
+│   ├── visualizations/   Model Explorer (explorer/) · ABM · graphiques
 │   ├── interactions/     publications · compétences · thèse · code · contrôles
 │   └── scientific/       KaTeX serveur · sources · sections
 ├── data/                 contenus typés et sourcés
 ├── i18n/                 libellés d'interface (prêts pour l'anglais)
+├── lib/puzzle/           géométrie des pièces (tenons complémentaires) et plateau 5 × 5
 └── lib/scientific/       modèles portés depuis les notebooks
 ```
 

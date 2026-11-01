@@ -27,7 +27,6 @@ export function MethodsChapter({ withExplorer = true }: { withExplorer?: boolean
     <section id="methodes" aria-labelledby="methodes-titre" className="on-dark scroll-mt-20 bg-antibes text-paper">
       <div className="site-gutter mx-auto max-w-site py-24 md:py-32">
         <SectionHeading
-          chapter="Chapitre 02"
           kicker="De la question au modèle"
           title={
             <span id="methodes-titre">

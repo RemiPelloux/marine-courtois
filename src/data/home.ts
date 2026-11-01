@@ -1,23 +1,26 @@
-/** Homepage editorial copy (validated). */
-export const HIGHLIGHTS = [
+/**
+ * Homepage profile: four ways of working. Tools listed here are either in the
+ * public code (skills.ts) or declared by the site owner (toolkit.ts).
+ */
+export const PROFILE_DOMAINS = [
   {
-    verb: "01 — Modéliser",
     title: "Modéliser",
-    text: "Développer des représentations mathématiques de systèmes biologiques afin d'étudier les mécanismes qui gouvernent leur fonctionnement.",
+    text: "Équations différentielles, modèles discrets et individu-centrés : traduire un mécanisme en un système que l'on peut étudier.",
+    tools: ["SymPy", "SciPy", "Mesa", "python-control"],
   },
   {
-    verb: "02 — Explorer",
-    title: "Explorer",
-    text: "Utiliser la simulation numérique pour comparer des scénarios et examiner le rôle des comportements individuels et des paramètres du modèle.",
+    title: "Programmer",
+    text: "Python au quotidien, R et SQL selon le terrain : des scripts reproductibles aux applications interactives.",
+    tools: ["Python", "R", "MySQL", "Jupyter", "GitLab"],
   },
   {
-    verb: "03 — Comprendre",
-    title: "Comprendre",
-    text: "Interpréter les résultats pour identifier les conditions dans lesquelles un mécanisme biologique ou une stratégie de contrôle peut être efficace.",
+    title: "Analyser et apprendre",
+    text: "Statistiques, analyse de sensibilité et machine learning pour faire parler des données expérimentales ou simulées.",
+    tools: ["pandas", "statsmodels", "scikit-learn", "PyTorch", "TensorFlow / Keras", "XGBoost / LightGBM"],
   },
   {
-    verb: "04 — Partager",
-    title: "Partager",
-    text: "Documenter les méthodes, les analyses, les publications et le code pour rendre les travaux accessibles et reproductibles.",
+    title: "Restituer et transmettre",
+    text: "Figures, tableaux de bord, articles, congrès et enseignement : rendre un résultat lisible pour chaque public.",
+    tools: ["Matplotlib", "seaborn", "R Shiny", "Power BI"],
   },
 ] as const;

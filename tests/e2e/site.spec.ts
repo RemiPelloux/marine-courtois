@@ -7,6 +7,8 @@ const ROUTES = [
   "/methodes",
   "/publications",
   "/publications/polyandrie-technique-insecte-sterile",
+  "/communication",
+  "/enseignement",
   "/these",
   "/laboratoire",
   "/a-propos",
@@ -92,13 +94,16 @@ test("model explorer controls and reset", async ({ page }) => {
   await expect(explorer.getByRole("tab", { name: "Accouplements multiples" })).toHaveAttribute("aria-selected", "true");
 });
 
-test("hero living system can be paused and switched to comparison", async ({ page }) => {
+test("hero puzzle highlights a family and leads to contact", async ({ page }) => {
   await page.goto("/");
-  const hero = page.locator("figure").filter({ has: page.locator("#living-system-title") });
-  await hero.getByRole("button", { name: "Pause" }).click();
-  await expect(hero.getByRole("button", { name: "Lecture" })).toBeVisible();
-  await hero.getByRole("radio", { name: "Comparer" }).click();
-  await expect(hero).toContainText("Avec 1 % de mâles fertiles");
+  const puzzle = page.locator("figure.pz");
+  const ml = puzzle.getByRole("button", { name: /Machine learning/ });
+  await ml.click();
+  await expect(ml).toHaveAttribute("aria-pressed", "true");
+  await expect(puzzle.locator("figcaption")).toContainText("scikit-learn");
+  await expect(puzzle.locator('.pz-face[data-kind="tool"]:not([data-dim])')).toHaveCount(4);
+  await puzzle.getByRole("link", { name: /Votre projet/ }).click();
+  await expect(page).toHaveURL(/\/contact$/);
 });
 
 test.describe("reduced motion", () => {
@@ -106,7 +111,9 @@ test.describe("reduced motion", () => {
   test("hero renders its final state immediately", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("#hero-title")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Lecture" }).first()).toBeVisible();
+    const piece = page.locator(".pz-in").first();
+    await expect(piece).toHaveCSS("opacity", "1");
+    await expect(piece).toHaveCSS("animation-name", "none");
   });
 });
 

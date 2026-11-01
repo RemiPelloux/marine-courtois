@@ -4,9 +4,9 @@ import { a11y } from "@/i18n";
 import { motion, useReducedMotion } from "motion/react";
 
 const LINES = [
-  { text: "Comprendre", italic: false },
-  { text: "le vivant.", italic: false },
-  { text: "Par le modèle", italic: true },
+  { text: "Mathématiques,", italic: false },
+  { text: "code et données :", italic: false },
+  { text: "tout s'assemble", italic: true },
 ];
 
 /** Staggered line-by-line reveal of the hero title. Static when reduced motion is requested. */

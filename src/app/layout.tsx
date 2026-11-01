@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, Montserrat, IBM_Plex_Mono } from "next/font/google";
 import "katex/dist/katex.min.css";
 import "./globals.css";
+import "./puzzle.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PageTransition } from "@/components/layout/PageTransition";
@@ -33,7 +34,7 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(RESEARCHER.siteUrl),
   title: {
-    default: `${RESEARCHER.displayName} — Biologie mathématique`,
+    default: `${RESEARCHER.displayName} — ${RESEARCHER.discipline}`,
     template: `%s — ${RESEARCHER.displayName}`,
   },
   description:

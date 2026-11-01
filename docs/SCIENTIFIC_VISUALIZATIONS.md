@@ -16,7 +16,7 @@ dM = −μM·M + rρ·(M+εηS)/(k+M+ηS)·1/(1+βF)·F + δσ
 μF=0,050 · μM=0,036 · μS=0,057 · ρ=0,5 · β=0,24 · r=23,7 · k=1 · η=0,2 · état initial [0, 983, 983].
 **Vérification** : à t = 300 j, σ=500 → F≈18 (sans fertilité résiduelle), ≈175 (δ=1 %), ≈47 (ε=1 %) ; σ=5000 → ≈74 (δ=1 %),
 ≈6 (ε=1 %). Ces valeurs correspondent à la figure des dynamiques temporelles du notebook.
-Usage : hero (Living System), Model Explorer (onglet 1), Module 2 étape 5, figure « F(300) selon σ et δ ».
+Usage : Model Explorer (onglet 1), Module 2 étape 5, figure « F(300) selon σ et δ ».
 
 ## 2. Ré-accouplement — `remating.ts`
 Source : `thesisData/Chapter 4 - Multiple Mating/Compartmental_model_output_vAvril.ipynb` (cellule 10).

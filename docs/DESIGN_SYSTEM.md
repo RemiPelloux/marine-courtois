@@ -46,7 +46,10 @@ alternance de chapitres clairs et sombres. Mobile reconstruit : hero empilé, l�
 annotations réduites à leurs points, contrôles en pleine largeur.
 
 ## Mouvement
-Motion pour les révélations de titres, les transitions d'onglets et l'indicateur de navigation. Le Living System et le
+Motion pour les révélations de titres, les transitions d'onglets et l'indicateur de navigation. Le puzzle du hero
+(`src/app/puzzle.css`) est en CSS pur : les pièces arrivent famille par famille depuis l'extérieur du plateau
+(sortie exponentielle), la jointure s'éclaire à l'emboîtement, les quatre axes ferment la croix, puis la pièce
+« Votre projet » se dessine. Il démarre à l'entrée dans l'écran (usePlayOnce). Le
 simulateur individu-centré utilisent `requestAnimationFrame` / `setInterval`, mis en pause hors écran via
 IntersectionObserver. `prefers-reduced-motion` affiche immédiatement l'état final.
 

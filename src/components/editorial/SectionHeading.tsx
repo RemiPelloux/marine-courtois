@@ -13,7 +13,7 @@ export function SectionHeading({
   size = "headline",
 }: {
   chapter?: string;
-  kicker: string;
+  kicker?: string;
   title: ReactNode;
   intro?: ReactNode;
   className?: string;
@@ -22,9 +22,11 @@ export function SectionHeading({
 }) {
   return (
     <header className={cn("grid gap-6 md:grid-cols-12", className)}>
-      <Kicker accent={chapter} className="md:col-span-12">
-        {kicker}
-      </Kicker>
+      {kicker && (
+        <Kicker accent={chapter} className="md:col-span-12">
+          {kicker}
+        </Kicker>
+      )}
       <KineticTitle
         as={H}
         className={cn(
