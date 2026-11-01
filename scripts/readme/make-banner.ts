@@ -83,7 +83,7 @@ function ribbon() {
 }
 
 const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-labelledby="t d">
-<title id="t">Marine Courtois — Mathématiques, code et données : tout s'assemble.</title>
+<title id="t">Marine Courtois — Modéliser le vivant, simuler, analyser : tout s'assemble.</title>
 <desc id="d">Animated banner: the residual-fertility model of the sterile insect technique draws the decline of a wild population (black) as sterile males are released (accent).</desc>
 <style>
 @font-face{font-family:IS;src:url(data:font/woff2;base64,${font("instrument-serif-regular.woff2")}) format("woff2");}
@@ -115,16 +115,16 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${H}" wid
 <!-- masthead -->
 <g class="rise" style="animation-delay:.05s">
   <text x="80" y="92" class="serif" font-size="44" fill="${C.ink}">MC<tspan fill="${C.ver}">.</tspan></text>
-  <text x="168" y="86" class="sans" font-size="20" font-weight="600" fill="${C.ink}">Marine A. Courtois<tspan font-weight="500" fill="${C.muted}">  —  Modélisation, data science et écologie</tspan></text>
+  <text x="168" y="86" class="sans" font-size="20" font-weight="600" fill="${C.ink}">Marine A. Courtois<tspan font-weight="500" fill="${C.muted}">  —  Docteure en biologie mathématique</tspan></text>
 </g>
 
 <!-- title -->
 <g class="serif" fill="${C.ink}">
-  <text x="74" y="300" font-size="116" letter-spacing="-3" class="rise" style="animation-delay:.15s">Mathématiques,</text>
-  <text x="74" y="420" font-size="116" letter-spacing="-3" class="rise" style="animation-delay:.3s">code et données :</text>
+  <text x="74" y="300" font-size="116" letter-spacing="-3" class="rise" style="animation-delay:.15s">Modéliser le vivant,</text>
+  <text x="74" y="420" font-size="116" letter-spacing="-3" class="rise" style="animation-delay:.3s">simuler, analyser :</text>
   <text x="74" y="540" font-size="116" letter-spacing="-3" font-style="italic" fill="${C.ver}" class="rise" style="animation-delay:.45s">tout s’assemble<tspan fill="${C.ink}" font-style="normal">.</tspan></text>
 </g>
-<text x="80" y="612" class="sans rise" font-size="22" font-weight="500" fill="${C.ink}" style="animation-delay:.65s">Python · R · SQL · machine learning · modèles mécanistes</text>
+<text x="80" y="612" class="sans rise" font-size="22" font-weight="500" fill="${C.ink}" style="animation-delay:.65s">Biocontrôle · comportements reproducteurs · invasions biologiques</text>
 
 <!-- journey -->
 <g class="sans" font-size="21" font-weight="600">

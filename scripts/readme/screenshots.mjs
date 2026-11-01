@@ -40,8 +40,11 @@ await shot("model-explorer", {
 });
 await shot("agents", { path: "/laboratoire", selector: "#module-3", scrollTo: "#module-3", wait: 9000 });
 await shot("code", { path: "/laboratoire", selector: "#code", scrollTo: "#code" });
-await shot("toolkit", { path: "/methodes", selector: ".tk-stack", scrollTo: ".tk-stack", wait: 3000 });
-await shot("timeline", { path: "/", selector: ".ctl", scrollTo: ".ctl", wait: 5500 });
+await shot("toolkit", { path: "/outils", selector: ".tk-stack", scrollTo: ".tk-stack", wait: 3000 });
+await shot("timeline", { path: "/communications", selector: ".ctl", scrollTo: ".ctl", wait: 5500 });
+await shot("fish", { path: "/", selector: "#poissons", scrollTo: "#poissons", wait: 3500 });
+await shot("leaf", { path: "/parcours", selector: "section[aria-labelledby=feuille]", scrollTo: "section[aria-labelledby=feuille]", wait: 4500 });
+await shot("depth", { path: "/publications/reponse-fonctionnelle-invasivite", selector: "#approfondir", scrollTo: "#approfondir", wait: 1500 });
 await shot("publications", { path: "/publications", wait: 1500 });
 await shot("axes", { path: "/", selector: "#recherche", scrollTo: "#recherche", wait: 1500 });
 await shot("mobile-hero", { path: "/", width: 390, height: 844, wait: 2000 });
