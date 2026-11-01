@@ -34,7 +34,7 @@ const COPY = copy({
 });
 
 /**
- * Signature experience of axis C. Three schools of fish hunt the same prey;
+ * Signature experience of axis B. Three schools of fish hunt the same prey;
  * after each capture a fish pauses to handle its prey. Raise the prey density:
  * captures climb, then level off — the shape of a functional response.
  * Illustrative: behaviours are scripted, not fitted to the data.

@@ -4,8 +4,36 @@ import { useEffect, useRef, useState } from "react";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { makeTank, step, captureRates, setPrey, rng, type Group, type Tank } from "@/lib/fish/sim";
 import { drawTank } from "@/components/fish/draw";
+import { makeWater, type Water } from "@/components/fish/scene";
 
 const ZERO: Record<Group, number> = { NIS: 0, ISNR: 0, ISIR: 0 };
+
+/** A tank that has already swum for two seconds: schools have formed, even on a still frame. */
+function warmTank(w: number, h: number, rand: () => number) {
+  const tank = makeTank(w, h, 30, 5, rand);
+  for (let i = 0; i < 60; i++) step(tank, 1 / 30, rand);
+  for (const f of tank.fish) f.eaten = [];
+  tank.captures = [];
+  tank.t = 0;
+  return tank;
+}
+
+/** The pointer position in tank coordinates, for the fish to keep their distance from. */
+function trackPointer(canvas: HTMLCanvasElement, tankRef: { current: Tank | null }) {
+  const move = (e: PointerEvent) => {
+    const r = canvas.getBoundingClientRect();
+    if (tankRef.current) tankRef.current.pointer = { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+  const leave = () => {
+    if (tankRef.current) tankRef.current.pointer = null;
+  };
+  canvas.addEventListener("pointermove", move);
+  canvas.addEventListener("pointerleave", leave);
+  return () => {
+    canvas.removeEventListener("pointermove", move);
+    canvas.removeEventListener("pointerleave", leave);
+  };
+}
 
 /**
  * Runs the aquarium on a canvas: one requestAnimationFrame loop, paused when
@@ -16,6 +44,7 @@ export function useAquarium(preyCount: number) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tankRef = useRef<Tank | null>(null);
   const randRef = useRef(rng(11));
+  const waterRef = useRef<Water | null>(null);
   const reduce = usePrefersReducedMotion();
   const [playing, setPlaying] = useState<boolean | null>(null);
   const [rates, setRates] = useState(ZERO);
@@ -33,17 +62,20 @@ export function useAquarium(preyCount: number) {
       canvas.height = height * dpr;
       const t = tankRef.current;
       if (t) [t.w, t.h] = [width, height];
-      else tankRef.current = makeTank(width, height, 30, 5, randRef.current);
-      drawTank(canvas.getContext("2d")!, tankRef.current!, dpr);
+      else tankRef.current = warmTank(width, height, randRef.current);
+      waterRef.current ??= makeWater();
+      drawTank(canvas.getContext("2d")!, tankRef.current!, dpr, waterRef.current);
     };
     fit();
     const ro = new ResizeObserver(fit);
     ro.observe(canvas);
+    const stopPointer = trackPointer(canvas, tankRef);
     const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { threshold: 0.1 });
     io.observe(canvas);
     return () => {
       ro.disconnect();
       io.disconnect();
+      stopPointer();
     };
   }, []);
 
@@ -64,7 +96,7 @@ export function useAquarium(preyCount: number) {
       last = now;
       const tank = tankRef.current!;
       step(tank, dt, randRef.current);
-      drawTank(ctx, tank, dpr);
+      drawTank(ctx, tank, dpr, waterRef.current!);
       if (now - lastReport > 600) {
         lastReport = now;
         setRates(captureRates(tank));
