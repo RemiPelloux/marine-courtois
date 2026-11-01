@@ -10,6 +10,11 @@ pnpm test         # vérifie notamment qu'aucun identifiant ne pointe dans le vi
 pnpm build
 ```
 
+Le site est bilingue (français à `/`, anglais à `/en`). Toute entrée ajoutée en français reçoit sa traduction dans
+le fichier de même nom sous `src/data/en/`, avec le même `id` et seulement les champs de texte : les dates, DOI, liens
+et chiffres ne sont jamais recopiés. Sans traduction, la page anglaise affiche le français et
+`tests/unit/i18n-content.test.ts` échoue. Détails : `docs/I18N.md`.
+
 Règle commune : **une information = une source**. Chaque entrée porte un champ `sources` qui renvoie à un identifiant de
 `src/data/sources.ts`. Ce qui n'a pas de preuve publique utilise la source `owner` (« informations fournies par Marine
 Courtois ») et s'affiche comme tel.
@@ -77,8 +82,10 @@ Elle apparaît sur `/recherche#questions-emergentes`, jamais présentée comme u
 - Utilisé dans un code public : `src/data/skills.ts`, avec `evidence` (fichiers où il est importé).
 - Utilisé hors du code public : `src/data/toolkit.ts` (`RAW_DECLARED`), affiché en pointillés.
 
-Le puzzle de l'accueil compte exactement 20 outils : en ajouter un demande d'en retirer un de la liste affichée, ou
-d'agrandir la grille (`GRID` dans `src/lib/puzzle/layout.ts`).
+Le puzzle de l'accueil compte exactement 20 outils et 9 thèmes (`src/data/domains.ts`, chacun en français et en
+anglais) : Maths, Stats, Biologie et Écologie en croix autour de « Votre projet », puis Populations, Biocontrôle,
+Modèles, Data & ML et Calcul sur la rangée du bas. Ajouter un outil ou un thème demande d'en retirer un, ou d'agrandir la
+grille (`COLS` dans `src/lib/puzzle/layout.ts`).
 
 ## Les données des poissons
 
