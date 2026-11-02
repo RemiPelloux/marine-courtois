@@ -101,7 +101,7 @@ function List({ title, items }: { title: string; items: string[] }) {
   return (
     <div>
       <h3 className="border-t-2 border-antibes pt-3 font-serif text-2xl">{title}</h3>
-      <ul className="mt-4 space-y-3 text-[0.98rem] leading-relaxed text-ink/85">
+      <ul className="mt-4 space-y-3 text-note leading-relaxed text-ink/85">
         {items.map((it) => (
           <li key={it.slice(0, 30)}>
             <SpeciesText text={it} />

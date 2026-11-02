@@ -60,7 +60,7 @@ function PrimaryList({ onNavigate }: Close) {
               onClick={onNavigate}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "flex items-center justify-between py-2.5 font-serif text-[2.1rem] leading-tight transition-colors md:text-[2.4rem]",
+                "flex items-center justify-between py-2.5 font-serif text-4xl leading-tight transition-colors",
                 active ? "text-accent-light italic" : "text-paper active:text-mist",
               )}
             >

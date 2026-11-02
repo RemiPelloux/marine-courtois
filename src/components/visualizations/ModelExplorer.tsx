@@ -82,7 +82,7 @@ function TabButton({ t, i, active, reduce, onSelect, onKey, setRef }: TabButtonP
         active ? "text-paper" : "text-paper/60 hover:text-paper",
       )}
     >
-      <span className="font-serif text-2xl md:text-[1.7rem]">{t.label[lang]}</span>
+      <span className="font-serif text-2xl md:text-card">{t.label[lang]}</span>
       {active && <TabUnderline reduce={reduce} />}
     </button>
   );

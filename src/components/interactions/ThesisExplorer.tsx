@@ -138,7 +138,7 @@ function ChapterSummary({ chapter: ch, headingLevel }: { chapter: ThesisChapter;
         </p>
         {headingLevel === "h2" ? <h2 className="font-serif text-title">{ch.question}</h2> : <h3 className="font-serif text-title">{ch.question}</h3>}
       </div>
-      <dl className="space-y-5 text-[0.95rem] leading-relaxed">
+      <dl className="space-y-5 text-note leading-relaxed">
         <div>
           <dt className="label mb-1 text-mist">{t.approach}</dt>
           <dd className="text-paper/85">

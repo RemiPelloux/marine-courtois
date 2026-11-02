@@ -42,14 +42,14 @@ function HeroIntro({ lang }: { lang: Lang }) {
         </span>
       </p>
       <HeroTitle />
-      <p className="mt-7 max-w-[34rem] text-[1.06rem] leading-relaxed text-ink/85 md:text-lg">{t.intro}</p>
+      <p className="mt-7 max-w-[34rem] text-body leading-relaxed text-ink/85 md:text-lg">{t.intro}</p>
+      <p className="mt-4 max-w-[34rem] text-sm leading-relaxed text-muted">{t.questions}</p>
       <div className="mt-8 flex flex-wrap gap-3">
         <ButtonLink href="/recherche">{t.research}</ButtonLink>
         <ButtonLink href="/publications" variant="secondary" icon={false}>
           Publications
         </ButtonLink>
       </div>
-      <p className="mt-8 max-w-[34rem] text-sm leading-relaxed text-muted">{t.questions}</p>
       <a href={LINKEDIN.url} target="_blank" rel="noopener noreferrer" className="link-underline mt-5 inline-flex items-center gap-1.5 py-1 text-sm">
         LinkedIn <ArrowUpRight className="size-3.5" aria-hidden />
       </a>
@@ -76,7 +76,7 @@ function AxesIndex({ lang }: { lang: Lang }) {
           <li key={axis.id} className={indexItemClass(i)}>
             <Link href={axis.href} className="group flex h-full flex-col gap-2 px-1 py-6 sm:px-6 lg:py-7">
               <span className="flex items-center justify-between gap-4">
-                <span className="font-serif text-[1.9rem] leading-tight">{axis.label}</span>
+                <span className="font-serif text-subhead leading-tight">{axis.label}</span>
                 <ArrowRight className="size-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
               </span>
               <span className="text-sm leading-snug text-muted">{axis.summary}</span>

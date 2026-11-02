@@ -29,7 +29,7 @@ Antibes (la Méditerranée, et les oscillations des modèles) et les coordonnée
 - **Instrument Serif** : titres, navigation, grands chiffres. L'italique bleu est réservé à « Par le modèle. » (hero).
 - **Montserrat** : texte, interface, légendes et métadonnées (chiffres tabulaires).
 - **IBM Plex Mono** : uniquement les blocs de code de l'explorateur de code.
-- Échelle : `text-display` (hero), `text-headline` (titres de chapitre), `text-title`, texte de 16 à 18 px.
+- Échelle : `text-display` (hero), `text-headline` (titres de chapitre), `text-title`, puis `text-subhead` (32), `text-card` (28), `text-2xl` (24) pour les titres serif ; `text-body` (17), `text-base` (16), `text-note` (15), `text-sm` (14), `text-meta` (13), `text-xs` (12) pour le texte. Pas de taille arbitraire en rem dans les composants (les px des figures SVG sont des unités de viewBox).
 
 ## Règles « anti-slop » appliquées (taste-skill)
 - Pas de micro-libellés en capitales espacées : les libellés sont en casse de phrase, à taille lisible.

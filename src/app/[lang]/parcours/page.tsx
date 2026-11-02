@@ -99,7 +99,7 @@ async function Biography({ t }: { t: (typeof COPY)["fr"] }) {
     <section aria-label={a11y.biographie} className="site-gutter mx-auto max-w-site py-20">
       <div className="grid gap-14 lg:grid-cols-12">
         <div className="space-y-6 lg:col-span-7">
-          <ScrubText className="font-serif text-[1.9rem] leading-snug" text={t.bio[0]} />
+          <ScrubText className="font-serif text-subhead leading-snug" text={t.bio[0]} />
           {t.bio.slice(1).map((p) => (
             <p key={p.slice(0, 24)} className="text-lg leading-relaxed text-ink/85">
               {p}

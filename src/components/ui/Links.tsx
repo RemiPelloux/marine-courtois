@@ -28,7 +28,7 @@ interface ButtonLinkProps {
 export function ButtonLink({ href, children, variant = "primary", className, icon = true }: ButtonLinkProps) {
   const external = isExternal(href) && !href.startsWith("mailto:");
   const cls = cn(
-    "btn group inline-flex min-h-12 items-center justify-center gap-3 px-5 py-3 font-serif text-[1.15rem] leading-none",
+    "btn group inline-flex min-h-12 items-center justify-center gap-3 px-5 py-3 font-serif text-lg leading-none",
     VARIANTS[variant],
     className,
   );

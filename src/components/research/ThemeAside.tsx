@@ -79,7 +79,7 @@ function CodeFiles({ ids, lang }: { ids: string[]; lang: Lang }) {
       <ul className="space-y-2">
         {files.map((f) => (
           <li key={f.id}>
-            <a href={fileUrl(f.repository, f.path)} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-2 tabular-nums text-[0.8rem] hover:text-accent-deep">
+            <a href={fileUrl(f.repository, f.path)} target="_blank" rel="noopener noreferrer" className="group flex items-start gap-2 tabular-nums text-meta hover:text-accent-deep">
               <ArrowUpRight className="mt-0.5 size-3.5 shrink-0" aria-hidden />
               <span>
                 {f.repository}/{f.path.split("/").at(-1)}

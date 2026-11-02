@@ -27,9 +27,9 @@ export function TeachingActivities({ activities, lang }: Props) {
       <ul aria-label={t.featured} className="grid gap-10 md:grid-cols-2">
         {featured.map((a) => (
           <li key={a.id} className="border-t-2 border-antibes pt-5">
-            <h3 className="font-serif text-[2rem] leading-tight">{a.institution}</h3>
+            <h3 className="font-serif text-subhead leading-tight">{a.institution}</h3>
             <p className="mt-2 text-sm text-accent-deep">{a.programme}</p>
-            <p className="mt-4 max-w-xl text-[1.08rem] leading-relaxed text-ink/90">{a.subjects}</p>
+            <p className="mt-4 max-w-xl text-body leading-relaxed text-ink/90">{a.subjects}</p>
           </li>
         ))}
       </ul>
@@ -48,10 +48,10 @@ function TeachingRow({ heading, meta, text }: { heading: string; meta?: string; 
   return (
     <li className="grid gap-2 border-t border-ink/15 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-8">
       <div>
-        <h3 className="font-serif text-[1.45rem] leading-tight">{heading}</h3>
+        <h3 className="font-serif text-2xl leading-tight">{heading}</h3>
         {meta && <p className="mt-1 text-sm text-muted">{meta}</p>}
       </div>
-      <p className="text-[1.02rem] leading-relaxed text-ink/85">{text}</p>
+      <p className="text-base leading-relaxed text-ink/85">{text}</p>
     </li>
   );
 }
@@ -60,8 +60,8 @@ function TeachingRow({ heading, meta, text }: { heading: string; meta?: string; 
 function SummaryRow({ items }: { items: TeachingActivity[] }) {
   return (
     <li className="grid gap-2 border-t border-ink/15 py-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] md:gap-8">
-      <h3 className="font-serif text-[1.45rem] leading-tight">{items[0].institution}</h3>
-      <dl className="space-y-2 text-[1.02rem] leading-relaxed text-ink/85">
+      <h3 className="font-serif text-2xl leading-tight">{items[0].institution}</h3>
+      <dl className="space-y-2 text-base leading-relaxed text-ink/85">
         {items.map((a) => (
           <div key={a.id}>
             <dt className="text-sm text-accent-deep">{a.programme}</dt>

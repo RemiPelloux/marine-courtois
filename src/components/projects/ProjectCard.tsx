@@ -28,7 +28,7 @@ export async function ProjectCard({ project, large = false }: { project: Project
         </div>
       )}
       <MaturityBadge status={project.status} />
-      <h3 className={large ? "mt-4 font-serif text-[2.2rem] leading-[1.05]" : "mt-4 font-serif text-[1.65rem] leading-tight"}>
+      <h3 className={large ? "mt-4 font-serif text-4xl leading-[1.05]" : "mt-4 font-serif text-card leading-tight"}>
         <Link href={`/projets/${project.slug}`} className="after:absolute after:inset-0 hover:text-accent-deep">
           <ViewTransition name={`project-${project.slug}`} share="morph" default="none">
             <span className="inline-block">
@@ -37,7 +37,7 @@ export async function ProjectCard({ project, large = false }: { project: Project
           </ViewTransition>
         </Link>
       </h3>
-      <p className="mt-3 text-[1rem] leading-relaxed text-ink/80">
+      <p className="mt-3 text-base leading-relaxed text-ink/80">
         <SpeciesText text={project.tagline} />
       </p>
       <ul className="mt-auto flex flex-wrap items-center gap-3 pt-6" aria-label={`${a11y.technologies} ${tools.map((t) => t.name).join(", ")}`}>

@@ -118,7 +118,7 @@ function SweepItem({ m }: { m: PlacedMilestone }) {
           up ? "bottom-[var(--h)] pb-2" : "top-[var(--h)] pt-2",
         )}
       >
-        <MilestoneCaption m={m} titleClassName="mt-0.5 block font-serif text-[1.05rem] leading-tight" />
+        <MilestoneCaption m={m} titleClassName="mt-0.5 block font-serif text-body leading-tight" />
       </a>
     </li>
   );

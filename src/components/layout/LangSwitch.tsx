@@ -34,7 +34,7 @@ export function LangSwitch({ className }: { className?: string }) {
                 aria-current={current ? "true" : undefined}
                 title={NAME[l]}
                 className={cn(
-                  "inline-flex min-w-11 items-center justify-center px-2.5 font-serif text-[1.05rem] leading-none tracking-[0.04em] transition-colors duration-200",
+                  "inline-flex min-w-11 items-center justify-center px-2.5 font-serif text-body leading-none tracking-[0.04em] transition-colors duration-200",
                   current ? "bg-antibes-3 text-paper" : "text-mist hover:bg-antibes-2 hover:text-paper",
                 )}
               >

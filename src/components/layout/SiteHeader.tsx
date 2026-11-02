@@ -67,7 +67,7 @@ function HomeLink({ onNavigate }: { onNavigate: () => void }) {
       <Monogram inverted className="h-10 w-auto shrink-0 md:h-11" />
       <span className="bg-paper/20 hidden h-9 w-px sm:block" aria-hidden />
       <span className="hidden min-w-0 flex-col whitespace-nowrap sm:flex">
-        <span className="font-serif text-[1.45rem] leading-none">{RESEARCHER.displayName}</span>
+        <span className="font-serif text-2xl leading-none">{RESEARCHER.displayName}</span>
         <span className="label text-mist mt-1.5 truncate xl:hidden">{RESEARCHER.discipline[lang]}</span>
       </span>
     </Link>
@@ -96,7 +96,7 @@ function DesktopNavItem({ item, active }: { item: NavItem; active: boolean }) {
         href={item.href}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "hover:text-paper block py-2 font-serif text-[1.12rem] transition-colors duration-200",
+          "hover:text-paper block py-2 font-serif text-lg transition-colors duration-200",
           active ? "text-accent-light italic" : "text-mist",
         )}
       >
@@ -118,7 +118,7 @@ function ContactLink() {
   return (
     <Link
       href="/contact"
-      className="btn btn--paper group hidden items-center gap-2 px-4 py-2.5 font-serif text-[1.05rem] sm:inline-flex"
+      className="btn btn--paper group hidden items-center gap-2 px-4 py-2.5 font-serif text-body sm:inline-flex"
     >
       Contact
       <ArrowUpRight

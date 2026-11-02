@@ -69,8 +69,8 @@ function ResearchAxisCard({ axis, lang }: { axis: ResearchAxis; lang: Lang }) {
         <span className="font-serif text-3xl text-accent-deep italic">{axis.letter}</span>
         <MaturityBadge status={axis.status} />
       </p>
-      <h3 className="mt-2 font-serif text-[2rem] leading-[1.05]">{axis.title}</h3>
-      <p className="mt-5 text-[1rem] leading-relaxed text-ink/85">
+      <h3 className="mt-2 font-serif text-subhead leading-[1.05]">{axis.title}</h3>
+      <p className="mt-5 text-base leading-relaxed text-ink/85">
         <SpeciesText text={axis.lede} />
       </p>
       {axis.methods.length > 0 && <p className="mt-5 text-sm text-accent-deep">{axis.methods.join(" · ")}</p>}

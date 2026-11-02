@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils/cn";
 import type { ReactNode } from "react";
 
-/** Small uppercase label: "CHAPITRE 02 / DE LA QUESTION AU MODÈLE" */
+/** Sentence-case label above a heading, with an optional accent part: "02 · De la question au modèle" */
 export function Kicker({
   children,
   accent,

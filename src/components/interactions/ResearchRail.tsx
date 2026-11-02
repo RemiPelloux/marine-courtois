@@ -124,7 +124,7 @@ function RailPanel({ t, H }: { t: RailItem; H: "h2" | "h3" }) {
     <li className="rail-panel">
       <div className="flex min-w-0 flex-col">
         <p className="flex items-baseline gap-4">
-          <span className="font-serif text-[3.4rem] leading-none text-accent-deep italic" aria-hidden>
+          <span className="font-serif text-5xl leading-none text-accent-deep italic" aria-hidden>
             {t.axis}
           </span>
           <span className="sr-only">{c.axis(t.axis)}</span>
