@@ -184,7 +184,7 @@ export function CoastScene() {
         <Sea />
       </svg>
       <span className="site-gutter absolute inset-x-0 top-3 mx-auto hidden max-w-site text-xs tracking-wide text-mist/80 tabular-nums sm:flex">
-        Antibes · 43°34′ N · 7°07′ E
+        43°34′ N · 7°07′ E
       </span>
     </div>
   );
