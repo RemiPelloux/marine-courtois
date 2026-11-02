@@ -58,7 +58,7 @@ export default async function VulgarisationPage() {
           <ol className="mt-3 space-y-1">
             {modules.map((m, i) => (
               <li key={m.id}>
-                <a href={`#${m.id}`} className="flex min-h-9 items-baseline gap-3 py-1 text-[0.95rem] hover:text-accent-deep">
+                <a href={`#${m.id}`} className="flex min-h-9 items-baseline gap-3 py-1 text-note hover:text-accent-deep">
                   <span className="font-serif text-accent-deep italic tabular-nums">{i + 1}</span>
                   {m.title}
                 </a>
@@ -73,8 +73,8 @@ export default async function VulgarisationPage() {
               <h2 id={`${m.id}-titre`} className="mt-1 font-serif text-title">
                 {m.title}
               </h2>
-              <p className="mt-4 max-w-3xl font-serif text-[1.45rem] leading-snug text-ink/90">{m.lede}</p>
-              <div className="mt-5 max-w-3xl space-y-4 text-[1.05rem] leading-relaxed text-ink/85">
+              <p className="mt-4 max-w-3xl font-serif text-2xl leading-snug text-ink/90">{m.lede}</p>
+              <div className="mt-5 max-w-3xl space-y-4 text-body leading-relaxed text-ink/85">
                 {m.paragraphs.map((p) => (
                   <p key={p.slice(0, 24)}>{p}</p>
                 ))}

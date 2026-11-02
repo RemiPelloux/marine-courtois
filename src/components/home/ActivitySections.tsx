@@ -66,14 +66,14 @@ export async function TeachingSection({ headingLevel = "h2", showCourses = true 
 function CourseList({ lang }: { lang: Lang }) {
   return (
     <div className="mb-14">
-      <h3 className="font-serif text-[1.65rem] leading-tight">{COPY[lang].courses}</h3>
+      <h3 className="font-serif text-card leading-tight">{COPY[lang].courses}</h3>
       <ul className="mt-5 border-t border-paper/25">
         {teachingIn(lang).map((a) => (
           <li key={a.id} className="grid gap-1 border-b border-paper/15 py-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] md:gap-8">
-            <span className={a.emphasis === "featured" ? "font-semibold" : undefined}>
+            <span>
               {a.institution ? `${a.institution} · ${a.programme}` : a.programme}
             </span>
-            <span className="text-[0.95rem] leading-relaxed text-paper/80">{a.subjects}</span>
+            <span className="text-note leading-relaxed text-paper/80">{a.subjects}</span>
           </li>
         ))}
       </ul>
@@ -86,10 +86,10 @@ function ResourceLink({ r, newTab }: { r: TeachingResource; newTab: string }) {
   const body = (
     <>
       <span className="flex items-start justify-between gap-4">
-        <span className="font-serif text-[1.65rem] leading-tight">{r.title}</span>
+        <span className="font-serif text-card leading-tight">{r.title}</span>
         {r.external ? <ArrowUpRight className="mt-1 size-5 shrink-0" aria-hidden /> : <ArrowRight className="mt-1 size-5 shrink-0 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />}
       </span>
-      <span className="mt-4 block text-[0.95rem] leading-relaxed text-paper/80">{r.text}</span>
+      <span className="mt-4 block text-note leading-relaxed text-paper/80">{r.text}</span>
     </>
   );
   const cls = "group block h-full py-8 transition-colors duration-300 hover:bg-paper/[0.05] lg:px-7";

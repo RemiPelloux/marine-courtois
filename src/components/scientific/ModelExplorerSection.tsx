@@ -70,7 +70,7 @@ const content = (lang: Lang): Record<ExplorerTab, ExplorerContent> => {
     },
     accouplements: {
       equations: (
-        <div className="space-y-1 text-[0.86rem]">
+        <div className="space-y-1 text-meta">
           <Equation display tex={String.raw`\dot L = \omega\left(1-\tfrac{L}{K}\right)F_F - (\mu_L+\nu)L`} />
           <Equation display tex={String.raw`\dot M = \nu p L - \mu_M M,\qquad \dot S = \sigma - \mu_S S`} />
           <Equation display tex={String.raw`\dot F_F = \nu(1-p)\,\pi_M L + \tau_I \pi_M F_I - (\mu_F + \tau_F \pi_S)F_F`} />

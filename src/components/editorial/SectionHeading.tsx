@@ -38,7 +38,7 @@ export function SectionHeading({
       >
         {title}
       </KineticTitle>
-      {intro && <div className="max-w-2xl text-[1.05rem] leading-relaxed text-ink/85 on-dark:text-paper/80 md:col-span-7">{intro}</div>}
+      {intro && <div className="max-w-2xl text-body leading-relaxed text-ink/85 on-dark:text-paper/80 md:col-span-7">{intro}</div>}
     </header>
   );
 }

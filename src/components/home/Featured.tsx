@@ -41,12 +41,12 @@ export async function FeaturedSection() {
           <p className="text-sm text-accent-deep">
             {t.selected} · {pub.journal} {pub.year}
           </p>
-          <h3 className="mt-3 font-serif text-[2.3rem] leading-[1.05]">
+          <h3 className="mt-3 font-serif text-4xl leading-[1.05]">
             <Link href={`/publications/${pub.slug}`} className="after:absolute after:inset-0 hover:text-accent-deep">
               <SpeciesText text={pub.editorialTitle ?? pub.title} />
             </Link>
           </h3>
-          <p className="mt-4 text-[1.02rem] leading-relaxed text-ink/80">
+          <p className="mt-4 text-base leading-relaxed text-ink/80">
             <SpeciesText text={pub.question} />
           </p>
           <p className="mt-6 inline-flex items-center gap-2 font-serif text-lg">
@@ -60,7 +60,7 @@ export async function FeaturedSection() {
           <div className="mt-4">
             <MaturityBadge status={abm.status} />
           </div>
-          <h3 className="mt-3 font-serif text-[1.7rem] leading-tight">
+          <h3 className="mt-3 font-serif text-card leading-tight">
             <Link href={`/projets/${abm.slug}`} className="after:absolute after:inset-0 hover:text-accent-deep">
               {abm.title}
             </Link>
@@ -68,12 +68,12 @@ export async function FeaturedSection() {
         </article>
         <article className="group relative border-t-2 border-antibes pt-5 lg:col-span-3">
           <MaturityBadge status={explorer.status} />
-          <h3 className="mt-3 font-serif text-[1.7rem] leading-tight">
+          <h3 className="mt-3 font-serif text-card leading-tight">
             <Link href="/laboratoire#model-explorer" className="after:absolute after:inset-0 hover:text-accent-deep">
               {explorer.title}
             </Link>
           </h3>
-          <p className="mt-3 text-[0.98rem] leading-relaxed text-ink/80">
+          <p className="mt-3 text-note leading-relaxed text-ink/80">
             <SpeciesText text={explorer.tagline} />
           </p>
         </article>

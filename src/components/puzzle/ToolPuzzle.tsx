@@ -54,7 +54,7 @@ export function ToolPuzzle({ board }: { board: Board }) {
           />
         ))}
       </div>
-      <figcaption id="pz-caption" className="mt-5 min-h-[3.25rem] text-[0.95rem] leading-snug" aria-live="polite">
+      <figcaption id="pz-caption" className="mt-5 min-h-[3.25rem] text-note leading-snug" aria-live="polite">
         <Caption hover={hover} family={family} tools={tools} domains={domains} />
       </figcaption>
       <FamilyLegend families={families} active={family} onPick={setFamily} />
@@ -111,7 +111,7 @@ function FamilyLegend({ families, active, onPick }: { families: Family[]; active
           aria-pressed={active === f.id}
           onClick={() => onPick(active === f.id ? null : f.id)}
           className={cn(
-            "flex min-h-9 items-center gap-2 border px-2.5 py-1 text-[0.8rem] transition-colors duration-200",
+            "flex min-h-9 items-center gap-2 border px-2.5 py-1 text-meta transition-colors duration-200",
             active === f.id ? "border-antibes bg-antibes text-paper" : "border-ink/20 hover:border-antibes",
           )}
         >

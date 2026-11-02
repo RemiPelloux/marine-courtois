@@ -133,7 +133,7 @@ function StepPanel({ step, traj, t }: { step: number; traj: ReturnType<typeof re
         exit={reduce ? { opacity: 0 } : { opacity: 0 }}
         transition={{ duration: 0.25 }}
       >
-        <p className="mb-5 max-w-2xl text-[1.02rem] leading-relaxed" aria-live="polite">
+        <p className="mb-5 max-w-2xl text-base leading-relaxed" aria-live="polite">
           <span className="tabular-nums text-xs text-accent-deep">{t.step(step + 1)}</span>
           {t.steps[step].text}
         </p>

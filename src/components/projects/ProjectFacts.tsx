@@ -55,7 +55,7 @@ export async function ProjectFacts({ project }: { project: Project }) {
       <div className="space-y-10 lg:col-span-7">
         {project.objective && (
           <Block title={t.objective}>
-            <p className="font-serif text-[1.55rem] leading-snug">
+            <p className="font-serif text-2xl leading-snug">
               <SpeciesText text={project.objective} />
             </p>
           </Block>
@@ -124,7 +124,7 @@ function CodeFiles({ files, newTab }: { files: CodeFile[]; newTab: string }) {
       {files.map((f) => (
         <li key={f.id}>
           <a href={fileUrl(f.repository, f.path)} target="_blank" rel="noopener noreferrer" className="group block py-2.5 hover:text-accent-deep">
-            <span className="flex items-center gap-1.5 font-mono text-[0.8rem] [overflow-wrap:anywhere]">
+            <span className="flex items-center gap-1.5 font-mono text-meta [overflow-wrap:anywhere]">
               {f.repository} / {f.path.split("/").at(-1)}
               <ArrowUpRight className="size-3.5 shrink-0" aria-hidden />
             </span>
@@ -156,7 +156,7 @@ function Block({ title, children }: { title: string; children: ReactNode }) {
 
 function Bullets({ items }: { items: string[] }) {
   return (
-    <ul className="space-y-2.5 text-[1rem] leading-relaxed text-ink/85">
+    <ul className="space-y-2.5 text-base leading-relaxed text-ink/85">
       {items.map((it) => (
         <li key={it.slice(0, 30)} className="relative pl-5 before:absolute before:top-[0.7em] before:left-0 before:h-px before:w-2.5 before:bg-antibes">
           <SpeciesText text={it} />

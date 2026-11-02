@@ -28,7 +28,7 @@ export async function ProfileSection() {
         </KineticTitle>
         <Reveal className="lg:col-span-6 lg:col-start-7" delay={0.1}>
           <ScrubText
-            className="font-serif text-[1.6rem] leading-snug md:text-[1.85rem]"
+            className="font-serif text-card leading-snug md:text-subhead"
             text={t.text}
           />
         </Reveal>
@@ -36,8 +36,8 @@ export async function ProfileSection() {
       <ul className="mt-20 grid border-y border-ink sm:grid-cols-2 lg:grid-cols-4">
         {profileDomainsIn(lang).map((d, i) => (
           <Reveal as="li" key={d.title} delay={i * 0.06} className={domainBorders(i)}>
-            <h3 className="font-serif text-[2rem] leading-none">{d.title}</h3>
-            <p className="mt-4 text-[0.95rem] leading-relaxed text-ink/80">{d.text}</p>
+            <h3 className="font-serif text-subhead leading-none">{d.title}</h3>
+            <p className="mt-4 text-note leading-relaxed text-ink/80">{d.text}</p>
             <p className="mt-5 text-sm text-accent-deep">{d.tools.join(" · ")}</p>
           </Reveal>
         ))}

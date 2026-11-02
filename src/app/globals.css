@@ -33,9 +33,12 @@
   --text-headline--letter-spacing: -0.02em;
   --text-title: clamp(1.75rem, 3vw, 2.6rem);
   --text-title--line-height: 1.05;
-  --text-label: 0.6875rem;
-  --text-label--line-height: 1.3;
-  --text-label--letter-spacing: 0.18em;
+  /* interface steps between Tailwind's defaults: meta 13 · note 15 · body 17 · card 28 · subhead 32 px */
+  --text-meta: 0.8125rem;
+  --text-note: 0.9375rem;
+  --text-body: 1.0625rem;
+  --text-card: 1.75rem;
+  --text-subhead: 2rem;
 
   --breakpoint-xs: 26rem;
   --container-site: 85rem;
@@ -135,14 +138,14 @@
   /* sentence-case label at a readable size (no tiny tracked caps) */
   .label {
     font-family: var(--font-sans);
-    font-size: 0.8125rem;
+    font-size: var(--text-meta);
     line-height: 1.35;
     font-weight: 600;
   }
   /* metadata in the text face with tabular figures (no monospace outside code) */
   .mono-meta {
     font-family: var(--font-sans);
-    font-size: 0.8125rem;
+    font-size: var(--text-meta);
     font-variant-numeric: tabular-nums;
   }
   .rule {

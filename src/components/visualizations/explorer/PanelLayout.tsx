@@ -47,7 +47,7 @@ export const C = { ink: "#f5f2eb", ver: "#6fb3f2", mist: "#a8bfd6", azur: "#8fc1
 function Stage({ title, sub, children, className }: { title: string; sub: string; children: ReactNode; className?: string }) {
   return (
     <section className={cn("min-w-0", className)} aria-label={`${title} ${sub}`}>
-      <h3 className="mb-6 flex items-baseline gap-3 font-serif text-[2rem] leading-none">
+      <h3 className="mb-6 flex items-baseline gap-3 font-serif text-subhead leading-none">
         {title}
         <span className="font-sans text-sm text-paper/60">{sub}</span>
       </h3>
@@ -139,8 +139,8 @@ export function PanelLayout({ intro, content, controls, chart, legend, reading, 
   return (
     <div className="grid gap-x-12 gap-y-16 lg:grid-cols-12">
       <Stage title={t.observe[0]} sub={t.observe[1]} className="lg:col-span-4">
-        <div className="space-y-3 text-[0.98rem] leading-relaxed text-paper/90">{intro}</div>
-        <div className="mt-6 overflow-x-auto bg-paper/[0.05] px-4 py-3 text-[0.92rem]">{content.equations}</div>
+        <div className="space-y-3 text-note leading-relaxed text-paper/90">{intro}</div>
+        <div className="mt-6 overflow-x-auto bg-paper/[0.05] px-4 py-3 text-note">{content.equations}</div>
       </Stage>
 
       <Stage title={t.explore[0]} sub={t.explore[1]} className="lg:col-span-8">
@@ -151,7 +151,7 @@ export function PanelLayout({ intro, content, controls, chart, legend, reading, 
 
       <Stage title={t.understand[0]} sub={t.understand[1]} className="lg:col-span-12">
         <div className="grid gap-10 lg:grid-cols-12">
-          <div className="text-[0.98rem] leading-relaxed text-paper/90 lg:col-span-5">{reading}</div>
+          <div className="text-note leading-relaxed text-paper/90 lg:col-span-5">{reading}</div>
           <Sources content={content} verification={verification} />
         </div>
       </Stage>

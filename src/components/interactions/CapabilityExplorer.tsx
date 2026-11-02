@@ -86,7 +86,7 @@ function CapabilityList({ capabilities, active, onSelect }: { capabilities: Capa
               className={cn("group flex w-full items-baseline gap-4 py-4 text-left transition-colors", on ? "text-ink" : "text-ink/65 hover:text-ink")}
             >
               <span className="flex-1">
-                <span className={cn("block font-serif text-[1.45rem] leading-tight", on && "italic")}>{c.title}</span>
+                <span className="block font-serif text-2xl leading-tight">{c.title}</span>
                 <span className="mt-1 block text-xs text-muted">{t.stage[c.stage]}</span>
               </span>
               <span className={cn("size-2 self-center rounded-full transition-colors", on ? "bg-accent" : "bg-transparent")} aria-hidden />
@@ -159,7 +159,7 @@ function LinkedProjects({ projects, t }: { projects: CapabilityProject[]; t: Tex
       <ul className="space-y-1.5">
         {projects.map((p) => (
           <li key={p.id}>
-            <Link href={`/projets/${p.slug}`} className="link-underline inline-flex items-center gap-1.5 py-0.5 text-[0.95rem]">
+            <Link href={`/projets/${p.slug}`} className="link-underline inline-flex items-center gap-1.5 py-0.5 text-note">
               <SpeciesText text={p.title} />
             </Link>
           </li>
@@ -210,7 +210,7 @@ function CapabilityTools({ tools, t }: { tools: Tool[]; t: Text }) {
       <dl className="divide-y divide-rule border-y border-rule text-sm">
         {tools.map((tool) => (
           <div key={tool.id} className="grid grid-cols-[7.5rem_1fr] gap-3 py-2">
-            <dt className="tabular-nums text-[0.8rem]">{tool.name}</dt>
+            <dt className="tabular-nums text-meta">{tool.name}</dt>
             <dd className="text-muted">
               {tool.role}
               <span className="mono-meta mt-0.5 block text-xs">{tool.evidence[0]}</span>

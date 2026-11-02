@@ -35,11 +35,11 @@ export function DomainPanel({ domain, className, compact = false }: PanelProps) 
       <p className="sr-only" aria-live="polite">
         {t.selected(domain.title, domain.pieces.length)}
       </p>
-      <h3 className="flex items-baseline gap-3 font-serif text-[2rem] leading-[1.08]">
+      <h3 className="flex items-baseline gap-3 font-serif text-subhead leading-[1.08]">
         <span className="size-3.5 shrink-0 self-center border border-ink/25" style={{ background: DOMAIN_FILL[domain.id].fill }} aria-hidden />
         {domain.title}
       </h3>
-      <p className="mt-1 text-[1.02rem] text-muted">{domain.subtitle}</p>
+      <p className="mt-1 text-base text-muted">{domain.subtitle}</p>
       <ul className="mt-6 divide-y divide-rule border-y border-ink">
         {domain.pieces.map((p) => (compact ? <CompetenceName key={p.id} piece={p} t={t} /> : <CompetenceItem key={p.id} piece={p} t={t} />))}
       </ul>
@@ -55,7 +55,7 @@ function CompetenceItem({ piece: p, t }: { piece: CompetencePiece; t: T }) {
         {p.title}
         {p.ongoing && <span className="ml-2 inline-block border border-ink/30 px-1.5 align-middle font-sans text-xs text-muted">{t.ongoing}</span>}
       </p>
-      <p className="mt-1 text-[0.95rem] leading-relaxed text-ink/80">
+      <p className="mt-1 text-note leading-relaxed text-ink/80">
         <SpeciesText text={p.detail} />
       </p>
       {p.uses.length > 0 ? (

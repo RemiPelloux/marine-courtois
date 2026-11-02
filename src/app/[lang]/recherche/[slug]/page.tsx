@@ -96,7 +96,7 @@ function ThemeBody({ t, lang }: { t: ResearchTheme; lang: Lang }) {
     <div className="space-y-12 lg:col-span-6">
       <section aria-labelledby="q">
         <h2 id="q" className="label mb-3 text-accent-deep">{c.question}</h2>
-        <p className="font-serif text-[2rem] leading-tight">
+        <p className="font-serif text-subhead leading-tight">
           <SpeciesText text={t.question} />
         </p>
       </section>

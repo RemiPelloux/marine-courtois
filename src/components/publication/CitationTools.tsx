@@ -62,7 +62,7 @@ export function CitationTools({ reference, bibtex, fileName, workLang }: Props) 
       </p>
       <details className="text-xs">
         <summary className="cursor-pointer py-1 text-muted hover:text-ink">{t.show}</summary>
-        <pre lang={workLang} className="mt-2 overflow-x-auto bg-stone p-3 font-mono text-[0.72rem] leading-relaxed">{bibtex}</pre>
+        <pre lang={workLang} className="mt-2 overflow-x-auto bg-stone p-3 font-mono text-xs leading-relaxed">{bibtex}</pre>
       </details>
     </div>
   );

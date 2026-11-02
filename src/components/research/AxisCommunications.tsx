@@ -38,7 +38,7 @@ export async function AxisCommunications({ communications }: { communications: C
               <span className="mono-meta text-muted">
                 {c.event.split(" — ")[0]} · {c.type === "poster" ? t.poster : t.talk}
               </span>
-              <span lang={titleLang(c.title)} className="text-[0.95rem] leading-snug">
+              <span lang={titleLang(c.title)} className="text-note leading-snug">
                 <SpeciesText text={c.title} />
               </span>
               <ArrowUpRight className="hidden size-3.5 shrink-0 self-center sm:block" aria-hidden />

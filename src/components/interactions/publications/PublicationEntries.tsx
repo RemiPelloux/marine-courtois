@@ -79,7 +79,7 @@ function Links({ p }: { p: Publication }) {
     <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
       {links.map((l) => (
         <li key={l.url}>
-          <a href={l.url} target="_blank" rel="noopener noreferrer" className="link-underline inline-flex min-h-6 items-center gap-1 py-1 tabular-nums text-[0.8rem]">
+          <a href={l.url} target="_blank" rel="noopener noreferrer" className="link-underline inline-flex min-h-6 items-center gap-1 py-1 tabular-nums text-meta">
             {l.label}
             <ArrowUpRight className="size-3.5" aria-hidden />
             <span className="sr-only">{t.newTab}</span>
@@ -121,7 +121,7 @@ export function FeaturedPublication({ p, H }: { p: Publication; H: Heading }) {
     <article className="mb-14 grid gap-8 border-b border-ink pb-14 lg:grid-cols-12" aria-labelledby={`pub-${p.id}`}>
       <FeaturedLead p={p} H={H} />
       <div className="space-y-5 lg:col-span-6 lg:col-start-7">
-        <p className="text-[1.05rem] leading-relaxed">
+        <p className="text-body leading-relaxed">
           <SpeciesText text={p.summary} />
         </p>
         <p className="text-sm text-muted">
@@ -180,11 +180,11 @@ function RowBody({ p, H, expanded }: Omit<RowProps, "onToggle">) {
   return (
     <div className="md:col-span-8">
       <p className="mono-meta mb-2 text-muted">{p.journal}</p>
-      <PublicationTitle p={p} H={H} className="font-serif text-[1.65rem] leading-tight md:text-[1.9rem]">
+      <PublicationTitle p={p} H={H} className="font-serif text-card leading-tight md:text-subhead">
         {p.editorialTitle ?? <OriginalTitle p={p} />}
       </PublicationTitle>
       {p.editorialTitle && (
-        <p className="mt-2 text-[0.95rem] text-ink/70 italic [&_i]:not-italic">
+        <p className="mt-2 text-note text-ink/70 italic [&_i]:not-italic">
           <OriginalTitle p={p} />
         </p>
       )}

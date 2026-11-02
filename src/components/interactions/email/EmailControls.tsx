@@ -56,7 +56,7 @@ interface RevealedEmailProps extends Look {
 export function RevealedEmail({ email, done, copied, onCopy, linkRef, textRef, copyRef, large, dark }: RevealedEmailProps) {
   return (
     <div className={cn("flex flex-wrap items-center gap-x-4 gap-y-2", large ? "min-h-24" : "min-h-11")} aria-live="polite">
-      <a ref={linkRef} href={`mailto:${email}`} className={cn("font-serif", large ? "text-[1.6rem] sm:text-3xl" : "text-base", dark ? "text-paper" : "text-ink")}>
+      <a ref={linkRef} href={`mailto:${email}`} className={cn("font-serif", large ? "text-card sm:text-3xl" : "text-base", dark ? "text-paper" : "text-ink")}>
         <span ref={textRef} className="link-underline break-all" style={done ? undefined : { opacity: 0 }}>
           {email}
         </span>

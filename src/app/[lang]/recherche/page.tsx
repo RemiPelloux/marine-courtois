@@ -65,7 +65,7 @@ export default async function ResearchPage() {
         <ol className="grid border-y border-ink md:grid-cols-3">
           {t.triptych.map((step, i) => (
             <li key={step.title} className={i > 0 ? "border-t border-ink/25 py-8 md:border-t-0 md:border-l md:pl-8" : "py-8 md:pr-8"}>
-              <h2 className="font-serif text-[2rem] leading-tight">{step.title}</h2>
+              <h2 className="font-serif text-subhead leading-tight">{step.title}</h2>
               <p className="mt-3 text-ink/80">{step.text}</p>
             </li>
           ))}

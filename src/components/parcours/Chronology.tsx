@@ -31,7 +31,7 @@ export async function Chronology() {
                   {EXPERIENCE_KIND_LABEL[e.kind][lang]} · {formatDate(e.date!, lang)}
                   {e.place ? ` · ${e.place}` : ""}
                 </p>
-                <p className="mt-1 max-w-2xl text-[0.95rem] leading-relaxed text-ink/80">
+                <p className="mt-1 max-w-2xl text-note leading-relaxed text-ink/80">
                   <SpeciesText text={e.detail} />
                 </p>
               </li>

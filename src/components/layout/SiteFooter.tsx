@@ -67,7 +67,7 @@ function FooterLead({ t }: { t: T }) {
     <div className="grid gap-10 border-b border-paper/15 pb-14 lg:grid-cols-12 lg:items-end">
       <div className="lg:col-span-7">
         <Monogram inverted className="h-11 w-auto" />
-        <p className="mt-6 font-serif text-[2.6rem] leading-[1.05] md:text-[3.4rem]">
+        <p className="mt-6 font-serif text-4xl leading-[1.05] md:text-5xl">
           {t.line1}
           <br />
           {t.line2} <em className="text-accent-light">{t.line3}</em>
@@ -91,7 +91,7 @@ function FooterGroup({ group }: { group: Group }) {
       <ul className="space-y-1.5">
         {group.entries.map((e) => (
           <li key={e.href}>
-            <Link href={e.href} className="link-underline inline-block py-1 font-serif text-[1.2rem]">
+            <Link href={e.href} className="link-underline inline-block py-1 font-serif text-xl">
               {e.label}
             </Link>
           </li>
