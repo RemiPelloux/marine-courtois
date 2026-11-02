@@ -9,6 +9,7 @@ import { PAD, FAMILY_FILL } from "@/components/puzzle/constants";
 import type { Board, PuzzleTool } from "@/components/puzzle/board";
 import { PuzzlePiece } from "@/components/puzzle/PuzzlePiece";
 import type { Domain } from "@/data/domains";
+import { COLS } from "@/lib/puzzle/layout";
 
 const COPY = copy({
   fr: {
@@ -42,7 +43,7 @@ export function ToolPuzzle({ board }: { board: Board }) {
 
   return (
     <figure ref={ref} data-play={play || undefined} className="pz" aria-labelledby="pz-caption">
-      <svg viewBox={`${-PAD} ${-PAD} ${view.width} ${view.height}`} className="pz-board block h-auto w-full overflow-visible">
+      <div className="pz-board grid" style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)`, padding: `${(PAD / view.width) * 100}%` }}>
         {slots.map((s) => (
           <PuzzlePiece
             key={`${s.r}-${s.c}`}
@@ -52,7 +53,7 @@ export function ToolPuzzle({ board }: { board: Board }) {
             onHover={setHover}
           />
         ))}
-      </svg>
+      </div>
       <figcaption id="pz-caption" className="mt-5 min-h-[3.25rem] text-[0.95rem] leading-snug" aria-live="polite">
         <Caption hover={hover} family={family} tools={tools} domains={domains} />
       </figcaption>

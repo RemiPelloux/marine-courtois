@@ -6,11 +6,12 @@ import type { ComponentProps, ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "ghost-dark" | "primary-dark";
 
+/** Minimal buttons: face, hairline and hover lift per variant live in globals.css (.btn). */
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-accent text-paper hover:bg-ink",
-  secondary: "border border-ink/80 text-ink hover:bg-ink hover:text-paper",
-  "ghost-dark": "border border-paper/50 text-paper hover:bg-paper hover:text-antibes",
-  "primary-dark": "bg-accent-light text-ink hover:bg-paper",
+  primary: "btn--primary",
+  secondary: "btn--secondary",
+  "ghost-dark": "btn--ghost-dark",
+  "primary-dark": "btn--primary-dark",
 };
 
 const isExternal = (href: string) => /^(https?:|mailto:)/.test(href);
@@ -27,7 +28,7 @@ interface ButtonLinkProps {
 export function ButtonLink({ href, children, variant = "primary", className, icon = true }: ButtonLinkProps) {
   const external = isExternal(href) && !href.startsWith("mailto:");
   const cls = cn(
-    "group inline-flex min-h-12 items-center justify-center gap-3 rounded-[3px] px-5 py-3 font-serif text-[1.15rem] leading-none transition-[background-color,color,transform] duration-300 active:scale-[0.98]",
+    "btn group inline-flex min-h-12 items-center justify-center gap-3 px-5 py-3 font-serif text-[1.15rem] leading-none",
     VARIANTS[variant],
     className,
   );

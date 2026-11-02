@@ -63,6 +63,34 @@ function Pine({ x, y, s }: { x: number; y: number; s: number }) {
   );
 }
 
+/**
+ * A Siberian cat sitting on the headland, seen against the night: thick ruff,
+ * tufted ears, a big plume of a tail that sways; its eyes catch the lighthouse.
+ * Drawn facing left; `flip` turns it to face right.
+ */
+function SiberianCat({ x, y, s, flip = false, delay = 0 }: { x: number; y: number; s: number; flip?: boolean; delay?: number }) {
+  const fur = "#04121f";
+  return (
+    <g transform={`translate(${x} ${y}) scale(${flip ? -s : s} ${s})`}>
+      <g className="coast-cat-tail" style={{ animationDelay: `${delay}s` }}>
+        <path d="M6 -2 C14 -1 19 -6 18 -13 C17.5 -17 15 -19 13 -19" fill="none" stroke={fur} strokeWidth="5.5" strokeLinecap="round" />
+      </g>
+      <ellipse cx="2" cy="-7.5" rx="8.5" ry="8" fill={fur} />
+      <ellipse cx="5" cy="-5" rx="6.5" ry="5.5" fill={fur} />
+      <path d="M-9 -14 C-11 -10 -9 -6 -5 -5 C-1 -6 1 -10 -1 -14 Z" fill={fur} />
+      <circle cx="-4.5" cy="-18.5" r="5.2" fill={fur} />
+      <path d="M-9.4 -20 L-9 -27.5 L-5.6 -22.6 Z M-3.4 -22.8 L-0.6 -27.6 L0.2 -20.4 Z" fill={fur} />
+      <path d="M-9 -27.5 L-9.3 -29.5 M-0.6 -27.6 L-0.2 -29.6" stroke={fur} strokeWidth="0.6" />
+      <path d="M-7 -1 L-6.5 0 M-3 -1 L-2.5 0" stroke={fur} strokeWidth="2" strokeLinecap="round" />
+      <path d="M-11 -9 Q-12.5 -11 -11.2 -13 M1 -12 Q2.6 -14 1.6 -16" stroke="#1d4e80" strokeWidth="0.7" fill="none" opacity="0.8" />
+      <g className="coast-cat-eyes" style={{ animationDelay: `${delay + 1.3}s` }}>
+        <circle cx="-6.6" cy="-19" r="0.95" fill="#d8e67a" />
+        <circle cx="-3" cy="-19" r="0.95" fill="#d8e67a" />
+      </g>
+    </g>
+  );
+}
+
 function Headland() {
   return (
     <g>
@@ -75,6 +103,8 @@ function Headland() {
       <Pine x={1236} y={108} s={1} />
       <Pine x={1290} y={118} s={1.2} />
       <Pine x={1340} y={132} s={0.8} />
+      <SiberianCat x={1210} y={103} s={1.15} />
+      <SiberianCat x={1266} y={112} s={1.05} flip delay={1.7} />
     </g>
   );
 }

@@ -118,7 +118,7 @@ function ContactLink() {
   return (
     <Link
       href="/contact"
-      className="group bg-paper text-antibes hover:bg-accent-light hidden items-center gap-2 rounded-[3px] px-4 py-2.5 font-serif text-[1.05rem] transition-colors duration-200 active:scale-[0.98] sm:inline-flex"
+      className="btn btn--paper group hidden items-center gap-2 px-4 py-2.5 font-serif text-[1.05rem] sm:inline-flex"
     >
       Contact
       <ArrowUpRight

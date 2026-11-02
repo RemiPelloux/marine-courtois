@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils/cn";
 import { RotateCcw } from "lucide-react";
 import { IconButton } from "@/components/interactions/Controls";
 import { copy } from "@/i18n/config";
@@ -45,7 +46,7 @@ export const C = { ink: "#f5f2eb", ver: "#6fb3f2", mist: "#a8bfd6", azur: "#8fc1
 
 function Stage({ title, sub, children, className }: { title: string; sub: string; children: ReactNode; className?: string }) {
   return (
-    <section className={className} aria-label={`${title} ${sub}`}>
+    <section className={cn("min-w-0", className)} aria-label={`${title} ${sub}`}>
       <h3 className="mb-6 flex items-baseline gap-3 font-serif text-[2rem] leading-none">
         {title}
         <span className="font-sans text-sm text-paper/60">{sub}</span>

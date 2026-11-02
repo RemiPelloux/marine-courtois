@@ -4,6 +4,7 @@ import {
   Repeat, Scale, Shapes, Sigma, SlidersHorizontal, Split, Sprout, Table, TrendingUp, Users, Waves, type LucideIcon,
 } from "lucide-react";
 import { CAREER_CELL, type CompetencePiece as Piece } from "@/components/parcours/board";
+import { DROP_TIME, dropDelay } from "@/components/parcours/assembly";
 import type { DomainId } from "@/data/competences";
 
 const ICON: Record<string, LucideIcon> = {
@@ -21,8 +22,11 @@ export const DOMAIN_FILL: Record<DomainId, { fill: string; light: boolean }> = {
   ecologie: { fill: "#e4eaef", light: true },
 };
 
-/** One competence: a jigsaw piece with its icon and a one-line label in the lower clear band. */
-export function CompetencePiece({ piece: p }: { piece: Piece }) {
+/**
+ * One competence: a jigsaw piece with its icon and a one-line label in the lower clear band.
+ * `step` set: the piece reassembles (its rank in the block), instead of the first-load fly-in.
+ */
+export function CompetencePiece({ piece: p, step }: { piece: Piece; step?: number }) {
   const Icon = ICON[p.id] ?? Shapes;
   const { fill, light } = DOMAIN_FILL[p.domain];
   const style = {
@@ -31,10 +35,11 @@ export function CompetencePiece({ piece: p }: { piece: Piece }) {
     "--rot": `${p.scatter.rot}deg`,
     "--delay": `${0.15 + p.order * 0.06}s`,
     "--flight": "0.8s",
+    ...(step !== undefined && { "--drop": `${dropDelay(step)}s`, "--drop-time": `${DROP_TIME}s` }),
   } as CSSProperties;
   return (
     <g transform={`translate(${p.c * CAREER_CELL} ${p.r * CAREER_CELL})`}>
-      <g className="pz-in" style={style}>
+      <g className="pz-in" style={style} data-drop={step !== undefined || undefined}>
         <g className={light ? "pz-face text-ink" : "pz-face text-paper"} data-piece={p.id}>
           <path d={p.path} fill={fill} className="pz-shape" style={light ? { stroke: "rgb(11 45 79 / 0.35)" } : undefined} />
           <Icon x={39} y={34} width={22} height={22} strokeWidth={1.5} aria-hidden />

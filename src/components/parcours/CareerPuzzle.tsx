@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useReducer, type KeyboardEvent } from "react";
 import { copy } from "@/i18n/config";
 import { useLang } from "@/i18n/client";
 import { cn } from "@/lib/utils/cn";
@@ -8,6 +8,7 @@ import { usePlayOnce } from "@/hooks/usePlayOnce";
 import { BLOCK_COLS, CAREER_CELL as S, type CompetenceBoard, type DomainBlock } from "@/components/parcours/board";
 import { CompetencePiece, DOMAIN_FILL } from "@/components/parcours/CompetencePiece";
 import { DomainPanel } from "@/components/parcours/DomainPanel";
+import { selectDomain } from "@/components/parcours/assembly";
 import type { DomainId } from "@/data/competences";
 
 const COPY = copy({
@@ -21,12 +22,13 @@ const STEP: Record<string, number> = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -
  * The career as four interlocking domains: mathematics, statistics, biology,
  * ecology. Each block is made of its competence pieces, which fly in and lock
  * together. One domain is selected at a time; the panel lists its competences
- * and where each one is used. Arrows, Home and End move between domains.
+ * and where each one is used, and a newly picked block reassembles piece by
+ * piece. Arrows, Home and End move between domains.
  */
 type CareerPuzzleProps = { board: CompetenceBoard; initial?: DomainId; compact?: boolean };
 
 export function CareerPuzzle({ board, initial = "mathematiques", compact = false }: CareerPuzzleProps) {
-  const [selected, setSelected] = useState<DomainId>(initial);
+  const [{ selected, drops }, select] = useReducer(selectDomain, { selected: initial, drops: {} });
   const { ref, play } = usePlayOnce<HTMLDivElement>(0.2);
   const t = COPY[useLang()];
   const { domains } = board;
@@ -38,7 +40,7 @@ export function CareerPuzzle({ board, initial = "mathematiques", compact = false
     if (to === null) return;
     e.preventDefault();
     const next = domains[(to + domains.length) % domains.length];
-    setSelected(next.id);
+    select(next.id);
     e.currentTarget.querySelector<HTMLButtonElement>(`[data-domain="${next.id}"]`)?.focus();
   };
 
@@ -46,7 +48,7 @@ export function CareerPuzzle({ board, initial = "mathematiques", compact = false
     <div ref={ref} data-play={play || undefined} className="pz grid items-start gap-12 lg:grid-cols-12 lg:gap-14">
       <div role="group" aria-label={t.group} onKeyDown={onKey} className="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:sticky lg:top-28 lg:col-span-7">
         {domains.map((d) => (
-          <DomainButton key={d.id} domain={d} selected={d.id === current.id} onSelect={() => setSelected(d.id)} />
+          <DomainButton key={d.id} domain={d} drop={drops[d.id] ?? 0} selected={d.id === current.id} onSelect={() => select(d.id)} />
         ))}
       </div>
       <DomainPanel domain={current} compact={compact} className="lg:col-span-5" />
@@ -54,10 +56,10 @@ export function CareerPuzzle({ board, initial = "mathematiques", compact = false
   );
 }
 
-type DomainButtonProps = { domain: DomainBlock; selected: boolean; onSelect: () => void };
+type DomainButtonProps = { domain: DomainBlock; drop: number; selected: boolean; onSelect: () => void };
 
-/** A domain block: its name above, its competence pieces below; the whole block is the button. */
-function DomainButton({ domain: d, selected, onSelect }: DomainButtonProps) {
+/** A domain block: its name above, its competence pieces below; the whole block is the button. `drop` > 0: reassemble on pick. */
+function DomainButton({ domain: d, drop, selected, onSelect }: DomainButtonProps) {
   return (
     <button
       type="button"
@@ -79,8 +81,8 @@ function DomainButton({ domain: d, selected, onSelect }: DomainButtonProps) {
         className={cn("block h-auto w-full overflow-visible transition-[translate,filter] duration-300", selected && "-translate-y-1 drop-shadow-[0_10px_14px_rgb(11_45_79_/_0.25)]")}
         aria-hidden
       >
-        {d.pieces.map((p) => (
-          <CompetencePiece key={p.id} piece={p} />
+        {d.pieces.map((p, i) => (
+          <CompetencePiece key={`${p.id}-${drop}`} piece={p} step={drop > 0 ? i : undefined} />
         ))}
       </svg>
     </button>

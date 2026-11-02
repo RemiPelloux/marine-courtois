@@ -119,7 +119,7 @@ function CapabilityPanel({ capability: cap, publications, research, tools, proje
     >
       <CapabilityOverview capability={cap} linked={linked} t={t} />
       <div className="space-y-6">
-        <div className="rounded-[3px] border border-rule bg-stone/40 p-4 text-ink">{visuals[cap.visual]}</div>
+        <div className="min-w-0 overflow-x-auto rounded-[3px] border border-rule bg-stone/40 p-4 text-ink">{visuals[cap.visual]}</div>
         <CapabilityTools tools={capTools} t={t} />
         <CapabilityLinks links={cap.links} t={t} />
       </div>

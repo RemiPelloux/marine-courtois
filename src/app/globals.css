@@ -68,13 +68,51 @@
     background: var(--color-accent);
     color: var(--color-paper);
   }
+  .on-dark ::selection {
+    background: var(--color-azur);
+    color: var(--color-antibes);
+  }
+  /* focus: a crisp Antibes ring with a soft halo, readable on paper and on blue */
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 2px;
+    box-shadow: 0 0 0 6px rgb(36 104 179 / 0.18);
   }
   .on-dark :focus-visible {
-    outline-color: #ff7a60;
+    outline-color: var(--color-accent-light);
+    box-shadow: 0 0 0 6px rgb(111 179 242 / 0.22);
+  }
+  /* hidden tooltips and long formulas must never widen the page (it would also cancel view transitions) */
+  body {
+    overflow-x: clip;
+  }
+  html {
+    scrollbar-color: var(--color-antibes-3) var(--color-paper);
+    scrollbar-width: thin;
+    caret-color: var(--color-accent);
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-paper);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-antibes-3);
+    border: 3px solid var(--color-paper);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-antibes);
+  }
+  .on-dark {
+    scrollbar-color: var(--color-azur) var(--color-antibes);
+  }
+  ::placeholder {
+    color: var(--color-muted);
+    opacity: 1;
   }
   a {
     text-underline-offset: 0.2em;
@@ -308,7 +346,7 @@
 }
 /* a title carried from a list into its own page */
 ::view-transition-group(.morph) {
-  animation-duration: 560ms;
+  animation-duration: 420ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 ::view-transition-image-pair(.morph) {
@@ -505,6 +543,84 @@
 }
 
 /* ------------------------------------------------------------------
+   Buttons (ButtonLink, header Contact). Flat face, one hairline, square
+   corners. Hover lifts by 2px with a soft Antibes-tinted shadow; press
+   settles it back. Colours come from the variant classes.
+   ------------------------------------------------------------------ */
+.btn {
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: var(--face);
+  color: var(--ink);
+  transition:
+    transform 0.25s var(--ease-editorial),
+    box-shadow 0.25s var(--ease-editorial),
+    background-color 0.2s,
+    color 0.2s;
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -10px rgb(11 45 79 / 0.55);
+}
+.btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px -4px rgb(11 45 79 / 0.5);
+}
+.btn--primary {
+  --face: var(--color-accent);
+  --ink: var(--color-paper);
+  --line: var(--color-accent);
+}
+.btn--primary:hover {
+  --face: var(--color-accent-deep);
+  --line: var(--color-accent-deep);
+}
+.btn--secondary {
+  --face: transparent;
+  --ink: var(--color-ink);
+  --line: rgb(15 29 46 / 0.75);
+}
+.btn--secondary:hover {
+  --face: var(--color-ink);
+  --ink: var(--color-paper);
+}
+.btn--ghost-dark {
+  --face: transparent;
+  --ink: var(--color-paper);
+  --line: rgb(245 242 235 / 0.5);
+}
+.btn--ghost-dark:hover {
+  --face: var(--color-paper);
+  --ink: var(--color-antibes);
+}
+.btn--primary-dark {
+  --face: var(--color-accent-light);
+  --ink: var(--color-ink);
+  --line: var(--color-accent-light);
+}
+.btn--primary-dark:hover,
+.btn--paper:hover {
+  --face: #ffffff;
+  --line: #ffffff;
+}
+.btn--paper {
+  --face: var(--color-paper);
+  --ink: var(--color-antibes);
+  --line: var(--color-paper);
+}
+.on-dark .btn:hover {
+  box-shadow: 0 8px 18px -10px rgb(0 0 0 / 0.6);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn:hover,
+  .btn:active {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------
    Coast scene (CoastScene.tsx) — Garoupe lighthouse and the sea, footer.
    The beam turns with the lens: it shortens as it faces the viewer (the
    lantern flashes), then reaches out the other way. Still when motion is reduced.
@@ -546,6 +662,16 @@
   .coast-boat {
     animation: coast-sail 140s linear -55s infinite;
   }
+  .coast-cat-tail {
+    transform-box: fill-box;
+    transform-origin: 0% 90%;
+    animation: coast-tail 3.6s ease-in-out infinite;
+  }
+  .coast-cat-eyes {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: coast-blink 7s ease-in-out infinite;
+  }
   .coast-boat-rock {
     transform-box: fill-box;
     transform-origin: 50% 100%;
@@ -561,6 +687,26 @@
   }
   to {
     transform: translateX(1500px);
+  }
+}
+@keyframes coast-tail {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-14deg);
+  }
+}
+/* a slow blink, as cats do when they are at ease */
+@keyframes coast-blink {
+  0%,
+  90%,
+  100% {
+    transform: scaleY(1);
+  }
+  94% {
+    transform: scaleY(0.1);
   }
 }
 @keyframes coast-rock {

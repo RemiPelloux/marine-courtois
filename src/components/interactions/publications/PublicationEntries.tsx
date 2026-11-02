@@ -102,14 +102,15 @@ function ThemeTags({ themes }: { themes: string[] }) {
   );
 }
 
+/** The title carries the shared-element name to the detail page; an inline-block box, because a title broken over lines is not captured. */
 function PublicationTitle({ p, H, className, children }: { p: Publication; H: Heading; className: string; children: ReactNode }) {
   return (
     <H id={`pub-${p.id}`} className={className}>
-      <ViewTransition name={`pub-${p.slug}`} share="morph" default="none">
-        <Link href={`/publications/${p.slug}`} className="hover:text-accent-deep">
-          {children}
-        </Link>
-      </ViewTransition>
+      <Link href={`/publications/${p.slug}`} className="hover:text-accent-deep">
+        <ViewTransition name={`pub-${p.slug}`} share="morph" default="none">
+          <span className="inline-block">{children}</span>
+        </ViewTransition>
+      </Link>
     </H>
   );
 }
