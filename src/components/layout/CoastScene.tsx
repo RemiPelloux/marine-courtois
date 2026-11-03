@@ -17,13 +17,20 @@ const r2 = (n: number) => Math.round(n * 100) / 100;
 /** A wave band: two identical periods side by side, so a -50% drift loops seamlessly. */
 function wave(amp: number, period: number, y: number, bottom = H) {
   let d = `M0 ${y}`;
-  for (let x = 0; x <= W * 2; x += 12) d += ` L${x} ${r2(y + amp * Math.sin((x / period) * Math.PI * 2) + amp * 0.35 * Math.sin((x / period) * Math.PI * 6))}`;
+  for (let x = 0; x <= W * 2; x += 12)
+    d += ` L${x} ${r2(y + amp * Math.sin((x / period) * Math.PI * 2) + amp * 0.35 * Math.sin((x / period) * Math.PI * 6))}`;
   return { fill: `${d} L${W * 2} ${bottom} L0 ${bottom} Z`, crest: d };
 }
 
 const rand = rng(43);
 /** Stars, kept clear of the coordinates label in the top-left corner. */
-const STARS = Array.from({ length: 52 }, (_, i) => ({ x: r2(rand() * W), y: r2(rand() * (HORIZON - 40)), r: r2(0.5 + rand() * 1.1), d: r2(rand() * 6), i })).filter((s) => !(s.x < 420 && s.y < 46));
+const STARS = Array.from({ length: 52 }, (_, i) => ({
+  x: r2(rand() * W),
+  y: r2(rand() * (HORIZON - 40)),
+  r: r2(0.5 + rand() * 1.1),
+  d: r2(rand() * 6),
+  i,
+})).filter((s) => !(s.x < 420 && s.y < 46));
 
 function Sky() {
   return (
@@ -94,7 +101,10 @@ function SiberianCat({ x, y, s, flip = false, delay = 0 }: { x: number; y: numbe
 function Headland() {
   return (
     <g>
-      <path d="M930 160 C1010 150 1060 118 1110 108 C1150 100 1210 100 1250 108 C1310 118 1370 140 1440 150 L1440 170 L930 170 Z" fill="#071d33" />
+      <path
+        d="M930 160 C1010 150 1060 118 1110 108 C1150 100 1210 100 1250 108 C1310 118 1370 140 1440 150 L1440 170 L930 170 Z"
+        fill="#071d33"
+      />
       <rect x="1124" y="88" width="34" height="20" fill="#0a2238" />
       <path d="M1120 90 L1141 79 L1162 90 Z" fill="#0a2238" />
       <rect x="1134" y="94" width="4" height="5" fill="#ffd98a" opacity="0.7" />
@@ -159,7 +169,17 @@ function Sea() {
       <path className="coast-wave coast-wave--back" d={BACK.fill} fill="#1d4e80" />
       <g className="coast-glints">
         {[0, 1, 2, 3, 4, 5].map((i) => (
-          <rect key={i} className="coast-glint" x={LAMP.x - 14 + ((i * 7) % 20)} y={HORIZON + 8 + i * 9} width={18 - i * 2} height="1.6" rx="0.8" fill="#ffe7a6" style={{ animationDelay: `${i * 0.35}s` }} />
+          <rect
+            key={i}
+            className="coast-glint"
+            x={LAMP.x - 14 + ((i * 7) % 20)}
+            y={HORIZON + 8 + i * 9}
+            width={18 - i * 2}
+            height="1.6"
+            rx="0.8"
+            fill="#ffe7a6"
+            style={{ animationDelay: `${i * 0.35}s` }}
+          />
         ))}
       </g>
       <g transform={`translate(0 ${HORIZON + 20})`}>
@@ -183,7 +203,7 @@ export function CoastScene() {
         <Lighthouse />
         <Sea />
       </svg>
-      <span className="site-gutter absolute inset-x-0 top-3 mx-auto hidden max-w-site text-xs tracking-wide text-mist/80 tabular-nums sm:flex">
+      <span className="site-gutter max-w-site text-mist/80 absolute inset-x-0 top-3 mx-auto hidden text-xs tracking-wide tabular-nums sm:flex">
         43°34′ N · 7°07′ E
       </span>
     </div>
