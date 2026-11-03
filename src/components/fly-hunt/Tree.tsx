@@ -4,6 +4,7 @@ import type { Blob, Fruit, Scene } from "@/components/fly-hunt/scene";
 const MASS = ["#2f6a2b", "#3a7a31", "#47883a"];
 const LEAF = ["#5c9c3e", "#6fae47", "#3f8031"];
 const FRONT = ["#7ab84c", "#5f9f3f"];
+const GRASS = ["#5f9a36", "#4d8a2c"];
 /** red and white flowers too, so a patch of red is not enough to spot the wild male */
 const FLOWER = ["#fbf6ee", "#f2d43a", "#e58fb0", "#d9302a"];
 
@@ -14,8 +15,11 @@ export function Ground({ scene }: { scene: Scene }) {
   return (
     <g pointerEvents="none">
       <rect width="800" height="500" fill="#dbe8ee" />
-      <path d="M0 390C140 352 250 372 400 360S660 338 800 376V500H0Z" fill="#b8d398" />
-      <rect y="425" width="800" height="75" fill="#8dbb4c" />
+      {scene.hedge.map((h, i) => (
+        <circle key={i} cx={h.x} cy={h.y} r={h.r} fill={MASS[h.tone]} />
+      ))}
+      <rect y="395" width="800" height="105" fill="#8dbb4c" />
+      <Leaves leaves={scene.grass} colors={GRASS} />
       <path d={TRUNK} fill="#7b4a2b" stroke="#4e2e1a" strokeWidth="2" />
       {scene.masses.map((m, i) => (
         <circle key={i} cx={m.x} cy={m.y} r={m.r} fill={MASS[m.tone]} />
