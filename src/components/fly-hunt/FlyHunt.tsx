@@ -79,6 +79,11 @@ const noSubscription = () => () => {};
 /** False in the server HTML, true once React runs: the release only hides the flies when it can also bring them in. */
 const useHydrated = () => useSyncExternalStore(noSubscription, () => true, () => false);
 
+let visit: number | undefined;
+/** One random tree per visit, drawn once in the browser; the server HTML always shows tree 1. */
+const visitSeed = () => (visit ??= 1 + Math.floor(Math.random() * 1e6));
+const useVisitSeed = () => useSyncExternalStore(noSubscription, visitSeed, () => 1);
+
 /** On phones the tree keeps a playable size and pans sideways. */
 function HuntBoard({ hunt, className }: { hunt: Hunt; className?: string }) {
   const t = HUNT_COPY[useLang()];
@@ -131,7 +136,8 @@ function HuntGame({ level, seed, onRestart }: { level: Level; seed: number; onRe
 export function FlyHunt() {
   const t = HUNT_COPY[useLang()];
   const [levelIndex, setLevelIndex] = useState(0);
-  const [seed, setSeed] = useState(1);
+  const [newTrees, setNewTrees] = useState(0);
+  const seed = useVisitSeed() + newTrees;
   const level = LEVELS[levelIndex];
   return (
     <div className="space-y-4">
@@ -140,7 +146,7 @@ export function FlyHunt() {
         <p className="text-note mt-1 max-w-2xl leading-relaxed">{t.task(level.sterile)}</p>
       </div>
       <HuntLevels current={levelIndex} onPick={setLevelIndex} />
-      <HuntGame key={`${levelIndex}-${seed}`} level={level} seed={seed} onRestart={() => setSeed((s) => s + 1)} />
+      <HuntGame key={`${levelIndex}-${seed}`} level={level} seed={seed} onRestart={() => setNewTrees((n) => n + 1)} />
     </div>
   );
 }
