@@ -75,6 +75,18 @@ describe("FlyHunt", () => {
     expect(screen.getByRole("img", { name: /Le mâle sauvage à trouver/ })).toHaveAttribute("src", expect.stringContaining("wild.webp"));
   });
 
+  it("stamps the corner card once he is found, not when the answer is shown", () => {
+    const { container, unmount } = render(<FlyHunt />);
+    expect(screen.queryByText("Trouvé")).not.toBeInTheDocument();
+    fireEvent.click(flyEl(container, target.id));
+    expect(screen.getByText("Trouvé")).toBeInTheDocument();
+    expect(container.querySelector(".fh-board")).toHaveClass("fh-won", "fh-over");
+    unmount();
+    render(<FlyHunt />);
+    fireEvent.click(screen.getByRole("button", { name: "Montrer la réponse" }));
+    expect(screen.queryByText("Trouvé")).not.toBeInTheDocument();
+  });
+
   it("can show the answer without finding him", () => {
     const { container } = render(<FlyHunt />);
     fireEvent.click(screen.getByRole("button", { name: "Montrer la réponse" }));
