@@ -1,42 +1,101 @@
 /* ------------------------------------------------------------------
-   Fly hunt (components/fly-hunt). The flies jiggle once when the tree
-   enters the screen and again under the pointer, hop when a wrong one
-   is picked, and the found sterile male gets a ring drawn around him.
-   Reduced motion keeps every fly still and the rings drawn.
+   Fly hunt (components/fly-hunt). Every motion tells a step of the
+   story and plays once:
+   - the release: the sterile males drop into the tree from above, the
+     highest first, and settle with a small rebound;
+   - a wrong pick: the sterile male hops, a pink ripple spreads;
+   - the find: the ring draws itself, the sterile males step back, the
+     wild male jumps for joy, hearts rise, a stamp lands on the card.
+   Only the wiggle under the pointer repeats, for as long as it hovers.
+   Reduced motion: everything is in place at once, nothing moves.
    ------------------------------------------------------------------ */
 .fh-board .fh-fly {
   cursor: pointer;
+  transition: opacity 0.8s ease;
 }
 .fh-board.fh-over .fh-fly {
   cursor: default;
 }
+/* once the game is over the sterile males step back, and the wild male stands out */
+.fh-board.fh-over .fh-fly:not(.fh-target) {
+  opacity: 0.3;
+}
+
+.fh-land,
+.fh-body,
 .fh-sprite,
-.fh-body {
+.fh-ripple,
+.fh-heart {
   transform-box: fill-box;
+}
+.fh-land,
+.fh-body {
+  transform-origin: 50% 100%;
 }
 /* the fly rocks on its feet */
 .fh-sprite {
   transform-origin: 60% 100%;
 }
-.fh-body {
-  transform-origin: 50% 100%;
+.fh-ripple,
+.fh-heart {
+  transform-origin: center;
+  opacity: 0;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .fh-buzz .fh-sprite {
-    animation: fh-jiggle 0.09s linear 10 alternate;
+  /* armed once React runs, so without JavaScript the flies simply stay in place */
+  .fh-armed .fh-land {
+    animation: fh-land 0.9s cubic-bezier(0.22, 1, 0.36, 1) both paused;
+  }
+  .fh-armed.fh-live .fh-land {
+    animation-play-state: running;
   }
   .fh-board:not(.fh-over) .fh-fly:hover .fh-sprite {
     animation: fh-jiggle 0.09s linear infinite alternate;
+    filter: drop-shadow(0 3px 2px rgb(15 29 46 / 0.3));
   }
   .fh-hop {
     animation: fh-hop 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
+  .fh-ripple {
+    animation: fh-ripple 0.6s ease-out;
+  }
   .fh-ring {
-    animation: fh-draw 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: fh-draw 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .fh-won .fh-target .fh-body {
+    animation: fh-joy 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.15s 2;
+  }
+  .fh-heart {
+    animation: fh-float 1.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .fh-card {
+    animation: fh-pin 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .fh-stamp {
+    animation: fh-stamp 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  }
+  .fh-done {
+    animation: fh-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
   }
 }
 
+@keyframes fh-land {
+  0% {
+    transform: translateY(-340px) rotate(-14deg);
+    opacity: 0;
+  }
+  45% {
+    opacity: 1;
+  }
+  75% {
+    transform: translateY(5px) rotate(4deg);
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
 @keyframes fh-jiggle {
   from {
     transform: rotate(-4deg);
@@ -53,8 +112,63 @@
     transform: translateY(0) rotate(6deg);
   }
 }
+@keyframes fh-ripple {
+  from {
+    transform: scale(0.5);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
 @keyframes fh-draw {
   from {
     stroke-dashoffset: 1;
+  }
+}
+@keyframes fh-joy {
+  40% {
+    transform: translateY(-14px) scale(1.08);
+  }
+}
+@keyframes fh-float {
+  0% {
+    transform: translateY(6px) scale(0.3);
+    opacity: 0;
+  }
+  25% {
+    transform: translateY(-4px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-36px) scale(0.85);
+    opacity: 0;
+  }
+}
+@keyframes fh-pin {
+  from {
+    transform: translateY(-10px) scale(0.94);
+    opacity: 0;
+  }
+}
+@keyframes fh-stamp {
+  0% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(0.94);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@keyframes fh-rise {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
   }
 }

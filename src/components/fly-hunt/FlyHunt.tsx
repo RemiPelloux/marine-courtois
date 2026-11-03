@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type MouseEvent } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore, type MouseEvent } from "react";
 import { usePlayOnce } from "@/hooks/usePlayOnce";
 import { Fly } from "@/components/fly-hunt/Fly";
 import { FruitShape, Ground, Leaves } from "@/components/fly-hunt/Tree";
@@ -49,15 +49,35 @@ function Foliage({ scene, hops }: { scene: Scene; hops: Record<number, number> }
   );
 }
 
+const HEART = "M0 4C-5-.5-6.5-4.5-3.2-6.3-1.5-7.2 0-5.8 0-4.6 0-5.8 1.5-7.2 3.2-6.3 6.5-4.5 5-.5 0 4Z";
+
+/** The female found her mate: three small hearts rise from him, one after the other. */
+function Hearts({ top }: { top: number }) {
+  return (
+    <g fill="#e0607e" stroke="#fbf7f2" strokeWidth="0.8">
+      {[-13, 0, 13].map((x, i) => (
+        <g key={x} transform={`translate(${x} ${top - (i === 1 ? 8 : 0)}) scale(1.5)`}>
+          <path d={HEART} className="fh-heart" style={{ animationDelay: `${0.45 + i * 0.2}s` }} />
+        </g>
+      ))}
+    </g>
+  );
+}
+
 function Ring({ fly, missed }: { fly: FlyPos; missed: boolean }) {
   const r = 40 * fly.s;
   return (
     <g transform={`translate(${fly.x} ${fly.y - 6 * fly.s})`} pointerEvents="none" fill="none">
       <circle r={r} stroke="#fbf7f2" strokeWidth="7" />
       <circle r={r} pathLength={1} className="fh-ring" stroke={missed ? "#0f1d2e" : "#1e7a34"} strokeWidth="4" strokeDasharray={missed ? "0.04 0.03" : "1"} />
+      {!missed && <Hearts top={-r - 6} />}
     </g>
   );
 }
+
+const noSubscription = () => () => {};
+/** False in the server HTML, true once React runs: the release only hides the flies when it can also bring them in. */
+const useHydrated = () => useSyncExternalStore(noSubscription, () => true, () => false);
 
 /** On phones the tree keeps a playable size and pans sideways. */
 function HuntBoard({ hunt, className }: { hunt: Hunt; className?: string }) {
@@ -66,7 +86,7 @@ function HuntBoard({ hunt, className }: { hunt: Hunt; className?: string }) {
   const ringed = scene.flies.filter((f) => f.kind === "wild" && (revealed || found.includes(f.id)));
   return (
     <div className="relative">
-      <WantedCard />
+      <WantedCard found={found.length > 0} />
       <div className="border-ink/15 overflow-x-auto rounded-[3px] border">
         <svg
           viewBox={`0 0 ${VIEW.w} ${VIEW.h}`}
@@ -92,11 +112,13 @@ function HuntGame({ level, seed, onRestart }: { level: Level; seed: number; onRe
   const t = HUNT_COPY[useLang()];
   const { ref, play } = usePlayOnce<HTMLDivElement>(0.4);
   const hunt = useHunt(level, seed);
+  const armed = useHydrated();
+  const stage = cn(armed && "fh-armed", play && "fh-live", hunt.over && "fh-over", hunt.found.length > 0 && "fh-won");
   return (
     <div ref={ref} className="space-y-4">
-      <HuntBoard hunt={hunt} className={cn(play && "fh-buzz", hunt.over && "fh-over")} />
+      <HuntBoard hunt={hunt} className={stage} />
       <HuntStatus hunt={hunt} actions={{ reveal: hunt.reveal, restart: onRestart }} />
-      {hunt.over && <p className="text-note max-w-2xl leading-relaxed">{t.done}</p>}
+      {hunt.over && <p className="fh-done text-note max-w-2xl leading-relaxed">{t.done}</p>}
     </div>
   );
 }

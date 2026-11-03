@@ -16,6 +16,7 @@ export const HUNT_COPY = copy({
     scene: "Un oranger rempli de mâles stériles en pull rose ; un mâle sauvage en pull rayé rouge et blanc, coiffé d'un bonnet, s'y cache.",
     levels: "Taille du lâcher",
     wanted: "À trouver",
+    stamp: "Trouvé",
     wantedAlt: "Le mâle sauvage à trouver\u00a0: pull rayé rouge et blanc, bonnet rouge et blanc à pompon.",
     level: (i: number) => ["Petit lâcher", "Lâcher moyen", "Grand lâcher"][i],
     ratio: (n: number) => `1 sauvage pour ${n} stériles`,
@@ -32,6 +33,7 @@ export const HUNT_COPY = copy({
     scene: "An orange tree filled with sterile males in pink jumpers; one wild male in red and white stripes and a bobble hat is hiding among them.",
     levels: "Release size",
     wanted: "Find him",
+    stamp: "Found",
     wantedAlt: "The wild male to find: red and white striped jumper, red and white bobble hat.",
     level: (i: number) => ["Small release", "Medium release", "Large release"][i],
     ratio: (n: number) => `1 wild for ${n} sterile`,
@@ -45,13 +47,21 @@ export const HUNT_COPY = copy({
 
 const BUTTON = "inline-flex min-h-10 items-center rounded-[3px] border px-3 text-sm transition-colors";
 
-/** The fly to find, pinned in the corner of the tree like a wanted poster; it does not scroll with the tree on phones. */
-export function WantedCard() {
+/**
+ * The fly to find, pinned in the corner of the tree like a wanted poster; it does
+ * not scroll with the tree on phones. Once he is found, a "found" stamp lands on it.
+ */
+export function WantedCard({ found }: { found: boolean }) {
   const t = HUNT_COPY[useLang()];
   return (
-    <figure className="border-ink/20 bg-paper pointer-events-none absolute top-2 left-2 z-10 w-18 rounded-[3px] border px-1.5 pt-1.5 pb-1 text-center shadow-[0_6px_16px_-8px_rgba(15,29,46,0.4)] sm:w-20">
+    <figure className="fh-card border-ink/20 bg-paper pointer-events-none absolute top-2 left-2 z-10 w-18 -rotate-2 rounded-[3px] border px-1.5 pt-1.5 pb-1 text-center shadow-[0_6px_16px_-8px_rgba(15,29,46,0.4)] sm:w-20">
       <Image src="/figures/fly/wild.webp" alt={t.wantedAlt} width={183} height={240} className="mx-auto h-auto w-full" />
       <figcaption className="mt-0.5 text-xs leading-tight whitespace-nowrap">{t.wanted}</figcaption>
+      {found && (
+        <span className="fh-stamp bg-paper/90 absolute inset-x-0 top-[38%] mx-auto w-fit -rotate-12 rounded-[3px] border-2 border-[#1e7a34] px-1.5 text-xs font-semibold text-[#1e7a34]">
+          {t.stamp}
+        </span>
+      )}
     </figure>
   );
 }
