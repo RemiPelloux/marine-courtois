@@ -33,7 +33,7 @@ function useHunt(level: Level, seed: number) {
     const id = Number((e.target as Element).closest("[data-fly]")?.getAttribute("data-fly"));
     const fly = scene.flies[id];
     if (over || !fly || found.includes(id)) return;
-    if (fly.kind === "sterile") setFound((f) => [...f, id]);
+    if (fly.kind === "wild") setFound((f) => [...f, id]);
     else setHops((h) => ({ ...h, [id]: (h[id] ?? 0) + 1 }));
   };
   return { scene, found, hops, revealed, over, misses, seconds, pick, reveal: () => setRevealed(true) };
@@ -63,7 +63,7 @@ function Ring({ fly, missed }: { fly: FlyPos; missed: boolean }) {
 function HuntBoard({ hunt, className }: { hunt: Hunt; className?: string }) {
   const t = HUNT_COPY[useLang()];
   const { scene, found, hops, revealed, pick } = hunt;
-  const ringed = scene.flies.filter((f) => f.kind === "sterile" && (revealed || found.includes(f.id)));
+  const ringed = scene.flies.filter((f) => f.kind === "wild" && (revealed || found.includes(f.id)));
   return (
     <div className="relative">
       <WantedCard />
@@ -102,9 +102,9 @@ function HuntGame({ level, seed, onRestart }: { level: Level; seed: number; onRe
 }
 
 /**
- * Find the released sterile males in an orange tree full of wild flies, after
- * the drawings of the thesis defence. Three levels: fewer sterile males, more
- * wild flies, more look-alikes.
+ * Play the female: find the one wild male in an orange tree flooded with
+ * released sterile males, after the drawings of the thesis defence. Three
+ * levels: more sterile males, more look-alikes, smaller flies.
  */
 export function FlyHunt() {
   const t = HUNT_COPY[useLang()];

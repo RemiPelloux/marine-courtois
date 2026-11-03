@@ -2,9 +2,10 @@ import type { FlyPos } from "@/components/fly-hunt/scene";
 
 /**
  * Every fly is Marine's drawing from the thesis defence (public/figures/fly).
- * The sterile male is the original: red and white stripes, red and white
+ * The wild male to find is the original: red and white stripes, red and white
  * bobble hat. The other looks are the same drawing recoloured, or with the hat
- * taken off: wild flies in purple, and decoys that get one of the two marks wrong.
+ * taken off: the released sterile males in purple, and look-alikes that get
+ * one of his two marks wrong.
  *
  * The sprite is placed so the jumper is centred 8 units below the fly's origin
  * and the whole fly stands 74 units tall before scaling.
