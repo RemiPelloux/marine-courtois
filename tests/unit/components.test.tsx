@@ -10,19 +10,22 @@ vi.mock("next/link", () => ({
   ),
 }));
 
+/** The filter count; the aquarium under one row has its own status output (the prey slider). */
+const resultCount = () => screen.getAllByRole("status").find((el) => /résultat/.test(el.textContent ?? ""));
+
 describe("PublicationIndex", () => {
   it("filters by year and resets", () => {
     render(<PublicationIndex publications={PUBLICATIONS} />);
-    expect(screen.getByRole("status")).toHaveTextContent("4 résultats");
+    expect(resultCount()).toHaveTextContent("4 résultats");
     fireEvent.change(screen.getByLabelText("Année"), { target: { value: "2025" } });
-    expect(screen.getByRole("status")).toHaveTextContent("2 résultats");
+    expect(resultCount()).toHaveTextContent("2 résultats");
     fireEvent.click(screen.getByRole("button", { name: "Effacer les filtres" }));
-    expect(screen.getByRole("status")).toHaveTextContent("4 résultats");
+    expect(resultCount()).toHaveTextContent("4 résultats");
   });
   it("filters by theme", () => {
     render(<PublicationIndex publications={PUBLICATIONS} />);
     fireEvent.change(screen.getByLabelText("Thème"), { target: { value: "Écologie des invasions" } });
-    expect(screen.getByRole("status")).toHaveTextContent("1 résultat");
+    expect(resultCount()).toHaveTextContent("1 résultat");
   });
   it("expands a publication row", () => {
     render(<PublicationIndex publications={PUBLICATIONS} showFilters={false} />);

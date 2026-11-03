@@ -5,7 +5,6 @@ import { ProfileSection } from "@/components/home/ProfileSection";
 import { ResearchAxesSection } from "@/components/home/ResearchAxes";
 import { TeachingSection } from "@/components/home/ActivitySections";
 import { FeaturedSection } from "@/components/home/Featured";
-import { FishSection } from "@/components/home/FishSection";
 import { ParcoursSection } from "@/components/home/ParcoursSection";
 import { SectionFlow } from "@/components/editorial/SectionFlow";
 import { RESEARCHER } from "@/data/researcher";
@@ -53,7 +52,7 @@ async function PersonJsonLd() {
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }} />;
 }
 
-/** Home: hero, profile, featured work, fish, research axes, career, teaching, publications, contact. */
+/** Home: hero, profile, featured work, research axes, career, teaching, publications, contact. */
 export default function Home() {
   return (
     <>
@@ -62,7 +61,6 @@ export default function Home() {
         <Hero />
         <ProfileSection />
         <FeaturedSection />
-        <FishSection />
         <ResearchAxesSection />
         <ParcoursSection />
         <TeachingSection />

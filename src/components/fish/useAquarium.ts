@@ -64,7 +64,8 @@ export function useAquarium(preyCount: number) {
       if (t) [t.w, t.h] = [width, height];
       else tankRef.current = warmTank(width, height, randRef.current);
       waterRef.current ??= makeWater();
-      drawTank(canvas.getContext("2d")!, tankRef.current!, dpr, waterRef.current);
+      const ctx = canvas.getContext("2d");
+      if (ctx) drawTank(ctx, tankRef.current!, dpr, waterRef.current);
     };
     fit();
     const ro = new ResizeObserver(fit);
@@ -85,8 +86,8 @@ export function useAquarium(preyCount: number) {
 
   useEffect(() => {
     if (!running) return;
-    const canvas = canvasRef.current!;
-    const ctx = canvas.getContext("2d")!;
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return;
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     let raf = 0;
     let last = performance.now();
