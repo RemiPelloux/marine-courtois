@@ -1,9 +1,13 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeAll, afterAll } from "vitest";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { buildScene, LEVELS } from "@/components/fly-hunt/scene";
 import { FlyHunt } from "@/components/fly-hunt/FlyHunt";
 
 const wildOf = (seed: number, level = LEVELS[0]) => buildScene(seed, level).flies.filter((f) => f.kind === "wild");
+
+// each visit draws its tree with Math.random; pinned to 0 here, the game plays tree 1
+beforeAll(() => vi.spyOn(Math, "random").mockReturnValue(0));
+afterAll(() => vi.restoreAllMocks());
 
 describe("fly hunt scene", () => {
   it("draws the same tree for the same seed and a new one for the next", () => {
@@ -67,6 +71,16 @@ describe("FlyHunt", () => {
     fireEvent.click(screen.getByRole("button", { name: /Grand lâcher/ }));
     expect(screen.getByText("aucune erreur")).toBeInTheDocument();
     expect(container.querySelectorAll("[data-fly]")).toHaveLength(LEVELS[2].sterile + 1);
+  });
+
+  it("starts each visit on a random tree", async () => {
+    vi.resetModules();
+    vi.spyOn(Math, "random").mockReturnValue(0.42);
+    const { FlyHunt: FreshVisit } = await import("@/components/fly-hunt/FlyHunt");
+    const { container } = render(<FreshVisit />);
+    const [hidden] = wildOf(1 + Math.floor(0.42 * 1e6));
+    expect(container.querySelector(".fh-target")).toHaveAttribute("data-fly", String(hidden.id));
+    vi.spyOn(Math, "random").mockReturnValue(0);
   });
 
   it("shows the fly to find in the corner of the tree", () => {
