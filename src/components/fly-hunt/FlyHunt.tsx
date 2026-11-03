@@ -26,7 +26,7 @@ function useHunt(level: Level, seed: number) {
   const [hops, setHops] = useState<Record<number, number>>({});
   const [revealed, setRevealed] = useState(false);
   const misses = Object.values(hops).reduce((a, b) => a + b, 0);
-  const over = revealed || found.length === level.find;
+  const over = revealed || found.length > 0;
   const seconds = useClock(!over && found.length + misses > 0);
 
   const pick = (e: MouseEvent<SVGSVGElement>) => {
@@ -95,7 +95,7 @@ function HuntGame({ level, seed, onRestart }: { level: Level; seed: number; onRe
   return (
     <div ref={ref} className="space-y-4">
       <HuntBoard hunt={hunt} className={cn(play && "fh-buzz", hunt.over && "fh-over")} />
-      <HuntStatus level={level} hunt={hunt} actions={{ reveal: hunt.reveal, restart: onRestart }} />
+      <HuntStatus hunt={hunt} actions={{ reveal: hunt.reveal, restart: onRestart }} />
       {hunt.over && <p className="text-note max-w-2xl leading-relaxed">{t.done}</p>}
     </div>
   );
@@ -104,7 +104,7 @@ function HuntGame({ level, seed, onRestart }: { level: Level; seed: number; onRe
 /**
  * Play the female: find the one wild male in an orange tree flooded with
  * released sterile males, after the drawings of the thesis defence. Three
- * levels: more sterile males, more look-alikes, smaller flies.
+ * release sizes: the more sterile males, the harder he is to find.
  */
 export function FlyHunt() {
   const t = HUNT_COPY[useLang()];
@@ -115,7 +115,7 @@ export function FlyHunt() {
     <div className="space-y-4">
       <div>
         <p className="label text-accent-deep">{t.kicker}</p>
-        <p className="text-note mt-1 max-w-2xl leading-relaxed">{t.task(level.find, level.flies - level.find)}</p>
+        <p className="text-note mt-1 max-w-2xl leading-relaxed">{t.task(level.sterile)}</p>
       </div>
       <HuntLevels current={levelIndex} onPick={setLevelIndex} />
       <HuntGame key={`${levelIndex}-${seed}`} level={level} seed={seed} onRestart={() => setSeed((s) => s + 1)} />
