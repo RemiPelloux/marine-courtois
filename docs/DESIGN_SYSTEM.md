@@ -60,7 +60,6 @@ Couche « éditoriale cinématique » (anime.js, `useAnimeScope` qui ne s'exécu
 | Titres découpés en lignes qui montent hors d'un masque | `KineticTitle` (via `PageHeader`, `SectionHeading`) | toutes les pages |
 | Phrase éclairée mot à mot au défilement | `ScrubText` | accueil (introduction), À propos |
 | Défilement horizontal épinglé des six axes | `ResearchRail` (CSS `.rail*` dans `globals.css`) | accueil, Recherche ; liste verticale sur mobile |
-| Figure de thèse qui suit le curseur | `HoverPreview` | listes de publications, pointeur fin uniquement |
 | Bandes colorées qui s'ouvrent au défilement | `SectionFlow` | accueil |
 | Transitions de page et titre qui se transforme de la liste à la fiche | `<ViewTransition>` de React (layout, `PageHeader morphName`) | navigation interne |
 

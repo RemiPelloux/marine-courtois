@@ -1,5 +1,3 @@
-import { HoverPreview } from "@/components/interactions/HoverPreview";
-import { publicationPreviews } from "@/data/research-rail";
 import { PageHeader } from "@/components/editorial/PageHeader";
 import { PublicationIndex } from "@/components/interactions/PublicationIndex";
 import { ButtonLink } from "@/components/ui/Links";
@@ -77,9 +75,7 @@ export default async function PublicationsPage() {
         }
       />
       <section aria-label={a11y.indexDesPublications} className="site-gutter mx-auto max-w-site py-16 md:py-20">
-        <HoverPreview previews={publicationPreviews(publications, lang)}>
-          <PublicationIndex publications={publications} headingLevel="h2" />
-        </HoverPreview>
+        <PublicationIndex publications={publications} headingLevel="h2" />
         <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
           <SourceNote ids={["orcid", "pubRF", "pubPolyandry", "pubInvasion", "thesesFr"]} label={t.verified} />
           <ExportBibtex bibtex={publications.map(toBibtex).join("\n\n")} />

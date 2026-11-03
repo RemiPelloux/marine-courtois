@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { PUBLICATIONS } from "@/data/publications";
 import { RESEARCH_THEMES } from "@/data/research";
-import { publicationPreviews, researchRailItems } from "@/data/research-rail";
+import { researchRailItems } from "@/data/research-rail";
 import { ResearchRail, railShift } from "@/components/interactions/ResearchRail";
 import { ScrubText } from "@/components/editorial/ScrubText";
 import { KineticTitle } from "@/components/editorial/KineticTitle";
@@ -34,16 +33,6 @@ describe("railShift", () => {
   });
   it("does not move a track narrower than the viewport", () => {
     expect(railShift(1)).toBe(0);
-  });
-});
-
-describe("publicationPreviews", () => {
-  const previews = publicationPreviews(PUBLICATIONS);
-  it("gives the thesis the figure of its first research theme", () => {
-    expect(previews["these-2025"]?.src).toBe(researchRailItems()[0].figure?.src);
-  });
-  it("gives no preview to a publication whose themes have no figure", () => {
-    expect(previews["pub-2026-functional-response"]).toBeUndefined();
   });
 });
 
