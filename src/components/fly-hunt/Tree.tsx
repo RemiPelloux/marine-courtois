@@ -4,7 +4,7 @@ import type { Blob, Fruit, Scene } from "@/components/fly-hunt/scene";
 const MASS = ["#2f6a2b", "#3a7a31", "#47883a"];
 const LEAF = ["#5c9c3e", "#6fae47", "#3f8031"];
 const FRONT = ["#7ab84c", "#5f9f3f"];
-/** red and white flowers too, so a patch of red is not enough to spot the sterile male */
+/** red and white flowers too, so a patch of red is not enough to spot the wild male */
 const FLOWER = ["#fbf6ee", "#f2d43a", "#e58fb0", "#d9302a"];
 
 const TRUNK =

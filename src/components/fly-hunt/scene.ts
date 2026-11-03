@@ -1,24 +1,25 @@
 import { mulberry32 } from "@/lib/utils/random";
 
 /**
- * Layout of the fly hunt: an orange tree full of wild flies, with a few
- * released sterile males hidden among them and decoys that share one of their
- * marks. Everything comes from a seed and a level, so the server and the
+ * Layout of the fly hunt: an orange tree flooded with released sterile males,
+ * with one wild male hidden among them and sterile look-alikes that share one
+ * of his marks. The female's goal is to find him: only with him do her eggs develop. Everything comes from a seed and a level, so the server and the
  * browser draw the same tree and "new game" is a new seed.
  */
 export const VIEW = { w: 800, h: 500 };
 
 /**
- * sterile: red and white stripes and a red and white hat. Each decoy gets one
- * of the two wrong: the hat on a purple jumper, the jumper without a hat,
- * pink or orange stripes, a navy hat, or a plain red jumper.
+ * wild: the male to find, red and white stripes and a red and white hat.
+ * sterile: the released males in purple. Each look-alike gets one of his two
+ * marks wrong: the hat on a purple jumper, the jumper without a hat, pink or
+ * orange stripes, a navy hat, or a plain red jumper.
  */
-export type FlyKind = "sterile" | "wild" | "hat" | "stripes" | "pink" | "orange" | "navy" | "plain";
-type Decoy = Exclude<FlyKind, "sterile" | "wild">;
-/** `cover`: leaves laid over the sterile male's jumper, so only his hat and a few stripes show. */
+export type FlyKind = "wild" | "sterile" | "hat" | "stripes" | "pink" | "orange" | "navy" | "plain";
+type Decoy = Exclude<FlyKind, "wild" | "sterile">;
+/** `cover`: leaves laid over the wild male's jumper, so only his hat and a few stripes show. */
 export type Level = { find: number; flies: number; decoys: Partial<Record<Decoy, number>>; size: number; cover: number };
 
-/** One sterile male per tree; each level adds wild flies and look-alikes, and shrinks them all. */
+/** One wild male per tree; each level releases more sterile males and look-alikes, and shrinks them all. */
 export const LEVELS: Level[] = [
   { find: 1, flies: 110, decoys: { hat: 12, stripes: 10, pink: 8, orange: 6 }, size: 0.56, cover: 0 },
   { find: 1, flies: 160, decoys: { hat: 16, stripes: 14, pink: 12, orange: 10, navy: 8 }, size: 0.48, cover: 1 },
@@ -61,11 +62,11 @@ function flySpot(rand: Rand, taken: Point[], gap: number): Point {
   return p;
 }
 
-/** Kinds in a shuffled order: the sterile males first, then each decoy, then wild flies. */
+/** Kinds in a shuffled order: the wild male first, then each look-alike, then the sterile males. */
 function kindsFor(rand: Rand, level: Level): FlyKind[] {
-  const kinds: FlyKind[] = [...Array<FlyKind>(level.find).fill("sterile")];
+  const kinds: FlyKind[] = [...Array<FlyKind>(level.find).fill("wild")];
   for (const [kind, n] of Object.entries(level.decoys) as [Decoy, number][]) kinds.push(...Array<FlyKind>(n).fill(kind));
-  while (kinds.length < level.flies) kinds.push("wild");
+  while (kinds.length < level.flies) kinds.push("sterile");
   for (let i = kinds.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [kinds[i], kinds[j]] = [kinds[j], kinds[i]];
@@ -76,9 +77,9 @@ function kindsFor(rand: Rand, level: Level): FlyKind[] {
 function placeFlies(rand: Rand, level: Level): FlyPos[] {
   const flies: FlyPos[] = [];
   kindsFor(rand, level).forEach((kind, id) => {
-    const s = r1(level.size * (kind === "sterile" ? 0.95 : 0.9 + rand() * 0.3));
-    // a sterile male is never at the very back, so another fly can only hide part of it
-    const pose = { rot: Math.round(rand() * 50 - 25), flip: rand() < 0.5, z: kind === "sterile" ? 0.5 + rand() / 2 : rand() };
+    const s = r1(level.size * (kind === "wild" ? 0.95 : 0.9 + rand() * 0.3));
+    // the wild male is never at the very back, so another fly can only hide part of him
+    const pose = { rot: Math.round(rand() * 50 - 25), flip: rand() < 0.5, z: kind === "wild" ? 0.5 + rand() / 2 : rand() };
     flies.push({ id, ...flySpot(rand, flies, 44 * level.size), s, ...pose, kind });
   });
   return flies;
@@ -86,15 +87,15 @@ function placeFlies(rand: Rand, level: Level): FlyPos[] {
 
 /**
  * Leaves in front of the flies hide some of them in part. Scattered leaves keep
- * off the sterile male; on harder levels a few are laid on his jumper on purpose,
+ * off the wild male; on harder levels a few are laid on his jumper on purpose,
  * below the hat, so he is never hidden entirely.
  */
 function frontLeaves(rand: Rand, flies: FlyPos[], cover: number) {
-  const sterile = flies.filter((f) => f.kind === "sterile");
-  const scattered = blobs(rand, 60, INNER, [9, 13], 2).filter((l) => !sterile.some((f) => near(f, l, 16)));
+  const targets = flies.filter((f) => f.kind === "wild");
+  const scattered = blobs(rand, 60, INNER, [9, 13], 2).filter((l) => !targets.some((f) => near(f, l, 16)));
   // lying almost flat across the jumper (fly units: the body is centred 6 below the origin, the hat 30 above)
   const lay = (f: FlyPos, i: number): Blob => ({ x: r1(f.x + (i ? 6 : -6) * f.s), y: r1(f.y + (8 + rand() * 8) * f.s), r: r1(26 * f.s), tone: i % 2, rot: Math.round(rand() * 50 - 25) });
-  const laid = sterile.flatMap((f) => Array.from({ length: cover }, (_, i) => lay(f, i)));
+  const laid = targets.flatMap((f) => Array.from({ length: cover }, (_, i) => lay(f, i)));
   return [...scattered, ...laid];
 }
 
