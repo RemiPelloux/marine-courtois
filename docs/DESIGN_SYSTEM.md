@@ -60,8 +60,9 @@ Couche « éditoriale cinématique » (anime.js, `useAnimeScope` qui ne s'exécu
 | Titres découpés en lignes qui montent hors d'un masque | `KineticTitle` (via `PageHeader`, `SectionHeading`) | toutes les pages |
 | Phrase éclairée mot à mot au défilement | `ScrubText` | accueil (introduction), À propos |
 | Défilement horizontal épinglé des six axes | `ResearchRail` (CSS `.rail*` dans `globals.css`) | accueil, Recherche ; liste verticale sur mobile |
-| Figure de thèse qui suit le curseur | `HoverPreview` | listes de publications, pointeur fin uniquement |
 | Bandes colorées qui s'ouvrent au défilement | `SectionFlow` | accueil |
 | Transitions de page et titre qui se transforme de la liste à la fiche | `<ViewTransition>` de React (layout, `PageHeader morphName`) | navigation interne |
+
+Sous deux publications, une animation ou un jeu : l'aquarium complet (`FishPanel` : densité de proies, captures par banc, liens vers l'article) sous l'article sur la réponse fonctionnelle, et la chasse aux mâles stériles (`FlyHunt`, `src/app/fly-hunt.css`) sous la thèse. Toutes les mouches sont le dessin de la soutenance (`public/figures/fly`) : l'original pour le mâle stérile, le même dessin recoloré ou sans bonnet pour les sauvages et les sosies. Un seul mâle stérile par arbre et trois niveaux (de 1 stérile pour 109 sauvages à 1 pour 209), avec six sortes de sosies (bonnet sans le pull, pull sans le bonnet, rayures roses ou orange, bonnet bleu, pull rouge uni) et, aux niveaux 2 et 3, des feuilles posées sur son pull, un chronomètre et un compte d'erreurs. Les mouches battent des ailes une fois à l'entrée dans l'écran puis au survol ; mouvement réduit : tout reste immobile.
 
 Sans JavaScript, les titres réapparaissent après 2,5 s (`kinetic-failsafe`) et le rail reste une liste verticale.

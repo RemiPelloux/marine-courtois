@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils/cn";
 import { copy, type Lang } from "@/i18n/config";
 import { useLang } from "@/i18n/client";
 import { SpeciesText } from "@/components/ui/Species";
+import { RowMedia } from "@/components/interactions/publications/RowMedia";
 
 type TypeLabels = Record<Publication["publicationType"], string>;
 
@@ -171,6 +172,7 @@ export function PublicationRow({ p, H, expanded, onToggle }: RowProps) {
         <div className="md:col-span-2 md:text-right">
           <SummaryToggle id={p.id} expanded={expanded} onToggle={onToggle} lang={lang} />
         </div>
+        <RowMedia id={p.id} />
       </article>
     </li>
   );

@@ -3,6 +3,7 @@ import { Instrument_Serif, Montserrat, IBM_Plex_Mono } from "next/font/google";
 import "katex/dist/katex.min.css";
 import "../globals.css";
 import "../puzzle.css";
+import "../fly-hunt.css";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { PageTransition } from "@/components/layout/PageTransition";

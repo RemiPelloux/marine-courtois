@@ -52,13 +52,3 @@ export function researchRailItems(lang: Lang = "fr"): RailItem[] {
     };
   });
 }
-
-/** Thesis figure of the first detail page a publication belongs to, keyed by publication id. */
-export function publicationPreviews(publications: { id: string; researchSlugs: string[] }[], lang: Lang = "fr"): Record<string, RailFigure> {
-  const bySlug = new Map(researchRailItems(lang).map((t) => [t.slug, t.figure]));
-  const entries = publications.flatMap((p) => {
-    const figure = p.researchSlugs.map((s) => bySlug.get(s)).find(Boolean);
-    return figure ? [[p.id, figure] as const] : [];
-  });
-  return Object.fromEntries(entries);
-}

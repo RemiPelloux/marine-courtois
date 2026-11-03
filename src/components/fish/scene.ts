@@ -18,7 +18,8 @@ export function makeWater(seed = 21): Water {
 function makePreySprite() {
   const c = document.createElement("canvas");
   c.width = c.height = 24;
-  const g = c.getContext("2d")!;
+  const g = c.getContext("2d");
+  if (!g) return null;
   const halo = g.createRadialGradient(12, 12, 0, 12, 12, 12);
   halo.addColorStop(0, "rgba(214, 236, 255, 0.95)");
   halo.addColorStop(0.25, "rgba(143, 193, 234, 0.7)");

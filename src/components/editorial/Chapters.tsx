@@ -9,8 +9,6 @@ import { CodeSection } from "@/components/scientific/Sections";
 import { ProtectedEmail } from "@/components/interactions/ProtectedEmail";
 import { RESEARCHER, RESEARCH_SEQUENCE } from "@/data/researcher";
 import { PublicationIndex } from "@/components/interactions/PublicationIndex";
-import { HoverPreview } from "@/components/interactions/HoverPreview";
-import { publicationPreviews } from "@/data/research-rail";
 import { publicationsIn } from "@/data/publications";
 import { communicationsIn } from "@/data/communications";
 import { formatDate } from "@/lib/utils/format";
@@ -83,9 +81,7 @@ export async function PublicationsChapter() {
     <section id="publications" aria-labelledby="publications-titre" className="site-gutter mx-auto max-w-site scroll-mt-20 py-16 md:py-24">
       <SectionHeading title={<span id="publications-titre">{t.pubTitle}</span>} intro={t.pubIntro} />
       <div className="mt-14">
-        <HoverPreview previews={publicationPreviews(publications, lang)}>
-          <PublicationIndex publications={publications} showFilters={false} highlightFeatured={false} />
-        </HoverPreview>
+        <PublicationIndex publications={publications} showFilters={false} highlightFeatured={false} />
       </div>
       <CommunicationsSummary lang={lang} t={t} />
       <div className="mt-10">
